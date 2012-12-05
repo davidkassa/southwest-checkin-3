@@ -38,8 +38,8 @@ import urlparse
 import httplib
 import smtplib
 import getpass
-from BeautifulSoup import BeautifulSoup
-from BeautifulSoup import Tag
+from bs4 import BeautifulSoup
+from bs4 import Tag
 
 try:
   from email.mime.multipart import MIMEMultipart
@@ -57,7 +57,7 @@ RETRY_INTERVAL = 5
 # How soon before the designated time should we try to check in?
 CHECKIN_WINDOW = 3*60
 
-# Email confuration
+# Email configuration
 should_send_email = True
 email_from = None
 email_to = None
@@ -78,7 +78,7 @@ else:  # gmail config
 
 # ========================================================================
 # fixed page locations and parameters
-base_url = 'https://www.southwest.com'
+base_url = 'http://www.southwest.com'
 checkin_url = urlparse.urljoin(base_url, '/flight/retrieveCheckinDoc.html')
 retrieve_url = urlparse.urljoin(base_url, '/flight/lookup-air-reservation.html')
 
@@ -181,13 +181,27 @@ def dlog(str):
 # ========================================================================
 
 class Flight(object):
+  """ Attributes:
+        legs: a list of FlightLegs
+  """
   def __init__(self):
     self.legs = []
 
 class FlightLeg(object):
+  """ Attributes:
+        flight_number: the flight number, format: '#123'
+        depart: a FlightLegLocation for the departure city
+        arrive: a FlightLegLocation for the arrival city
+  """
   pass
 
-class FlightStop(object):
+class FlightLegLocation(object):
+  """ Attributes:
+        airport: airport 3-letter code
+        tz: timezone
+        dt: departure or arrival time
+        dt_utc: departure or arrival time in UTC
+  """
   pass
 
 class Reservation(object):
@@ -240,7 +254,7 @@ def PostUrl(url, params):
   return (resp.read(), resp.geturl())
   
 def FindAllByTagClass(soup, tag, klass):
-  return soup.findAll(tag, 
+  return soup.find_all(tag, 
       attrs = { 'class': re.compile(re.escape(klass)) })
 
 def FindByTagClass(soup, tag, klass):
@@ -248,7 +262,7 @@ def FindByTagClass(soup, tag, klass):
       attrs = { 'class': re.compile(re.escape(klass)) })
       
 def FindNextSiblingByTagClass(soup, tag, klass):
-  return soup.findNextSibling(tag, 
+  return soup.find_next_sibling(tag, 
       attrs = { 'class': re.compile(re.escape(klass)) })
 
 class HtmlFormParser(object):
@@ -273,16 +287,18 @@ class HtmlFormParser(object):
     self.inputs = []
     self.formaction = ''
 
-    soup = BeautifulSoup(data)
+    soup = BeautifulSoup(data, "lxml")
+
     form = soup.find('form', id=id)
     if not form:
+      print("Couldn't find the HTML form to lookup the flight! Did the web page change?")
       return
 
     self.formaction = form.get('action', None)
     self.submit_url = urlparse.urljoin(page_url, self.formaction)
 
     # find all inputs
-    for i in form.findAll('input'):
+    for i in form.find_all('input'):
       input = HtmlFormParser.Input(i)
       if input.name:
         self.inputs.append(input)
@@ -333,52 +349,99 @@ class HtmlFormParser(object):
         cb.checked = True
         break
 
-class FlightInfoParser(object):
+class ReservationInfoParser(object):
+  """ This class finds the relevant information for departure and
+      returning flights in a reservation.
+
+      Attributes:
+        flights = array of Flights
+  """
+
   def __init__(self, data):
-    soup = BeautifulSoup(data)
+    
+    soup = BeautifulSoup(data, "lxml")
     self.flights = []
-    for td in FindAllByTagClass(soup, 'td', 'flightInfoDetails'):
-      self.flights.append(self._parseFlightInfo(td))
+    
+    # The table containing departure flights
+    airItineraryDepartTable = soup.find('table', id="airItinerarydepart")
+    # The table containing return flights
+    airItineraryReturnTable = soup.find('table', id="airItineraryreturn")
+    
+    dlog("Checking reservation departure flights...")
+    if airItineraryDepartTable:
+      self.flights.append(self._parseFlightInfo(airItineraryDepartTable))
+    else:
+      dlog("Can't find a departure flight...")
+    
+    dlog("Checking reservation return flights...")
+    if airItineraryReturnTable:
+      self.flights.append(self._parseFlightInfo(airItineraryReturnTable))
+    else:
+      dlog("You don't have a return flight.")
 
   def _parseFlightInfo(self, soup):
+    """ For each reservation, get the date, and each flight leg with airport code, 
+        departure and arrival times
+    """
+
     flight = Flight()
 
-    flight_date_str = FindByTagClass(soup, 'span', 'travelDateTime').string
+    # Get flight reservation date from first flight leg
+    flight_date_str = FindByTagClass(soup, 'div', 'departureLongDate').string.strip()
     day = date(*time_module.strptime(flight_date_str, '%A, %B %d, %Y')[0:3])
+    dlog("Reservation Date: " + str(day))
 
-    td = FindNextSiblingByTagClass(soup, 'td', 'flightRouting')
-    
-    tr = td.find('tr')
-    while tr:
+    # Each flight leg is represented in a row in the HTML table.
+    # Each row includes arrival and departure times and flight number.
+    rows = soup.find_all('tr')
+    for tr in rows:
       flight_leg = FlightLeg()
       flight.legs.append(flight_leg)
-      flight_leg.depart = self._parseFlightStop(day, tr)
-      tr = tr.findNextSibling('tr')
-      flight_leg.arrive = self._parseFlightStop(day, tr)
+
+      # Get flight number
+      flight_leg.flight_number = FindByTagClass(tr, 'td', 'flightNumberCell').contents[1]
+
+      # List of arrival and departure details for each airport
+      segmentLegDetails = FindAllByTagClass(tr, 'div', 'segmentLegDetails')
+      dlog("Parsing Departure:")
+      flight_leg.depart = self._parseFlightLegDetails(day, segmentLegDetails[0])
+      dlog("Parsing Arrival:")
+      flight_leg.arrive = self._parseFlightLegDetails(day, segmentLegDetails[1])
 
       if flight_leg.arrive.dt_utc < flight_leg.depart.dt_utc:
         flight_leg.arrive.dt = flight_leg.arrive.tz.normalize(
           flight_leg.arrive.dt.replace(day = flight_leg.arrive.dt.day+1))
         flight_leg.arrive.dt_utc = flight_leg.arrive.dt.astimezone(utc)
-
-      tr = tr.findNextSibling('tr')
  
     return flight
 
-  def _parseFlightStop(self, day, soup):
-    flight_stop = FlightStop()
-    stop_td = FindByTagClass(soup, 'td', 'routingDetailsStops')
-    s = ''.join(stop_td.findAll(text=True))
-    flight_stop.airport = re.findall('\(([A-Z]{3})\)', s)[0]
-    flight_stop.tz = airport_timezone_map[flight_stop.airport]
+  def _parseFlightLegDetails(self, day, legDetails):
+    '''
+      Return a FlightLegLocation with parsed leg location information
+    '''
+    f = FlightLegLocation()
+    # Get airport code
+    departure_airport = FindByTagClass(legDetails, 'div', 'segmentStation')
+    f.airport = re.findall('[A-Z]{3}', str(departure_airport))[0]
+    dlog("Airport Code: " + f.airport)
+    # Cannot get the find method with regex working
+    # f.airport = departure_airport.find(text=re.compile('[A-Z]{3}'))
     
-    detail_td = FindByTagClass(soup, 'td', 'routingDetailsTimes')
-    s = ''.join(detail_td.findAll(text=True)).strip()
-    flight_time = time(*time_module.strptime(s, '%I:%M %p')[3:5])
-    flight_stop.dt = flight_stop.tz.localize(
+    # Get timezone 
+    f.tz = airport_timezone_map[f.airport]
+    
+    # Get time
+    segmentTime = FindByTagClass(legDetails, 'div', 'segmentTime').string.strip()
+    # Add AM/PM
+    segmentTime += " " + FindByTagClass(legDetails, 'div', 'segmentTimeAMPM').string.strip()
+    # Create time() object
+    flight_time = time(*time_module.strptime(segmentTime, '%I:%M %p')[3:5])
+    dlog("Time: " + str(flight_time))
+    f.dt = f.tz.localize(
       datetime.combine(day, flight_time), is_dst=None)
-    flight_stop.dt_utc = flight_stop.dt.astimezone(utc)
-    return flight_stop
+    f.dt_utc = f.dt.astimezone(utc)
+    
+    return f
     
 
 # this routine extracts the departure date and time
@@ -395,8 +458,7 @@ def getFlightTimes(res):
   # submit the request to pull up the reservations on this confirmation number
   (reservations, _) = form.submit()
 
-  flights = FlightInfoParser(reservations)
-  res.flights = flights.flights
+  res.flights = ReservationInfoParser(reservations).flights
 
   return res.flights
 
@@ -430,7 +492,7 @@ def getBoardingPass(res):
   # finally, lets check in the flight and make our success file
   (checkinresult, form_url) = form.submit()
 
-  soup = BeautifulSoup(checkinresult)
+  soup = BeautifulSoup(checkinresult, "lxml")
   pos_boxes = FindAllByTagClass(soup, 'div', 'boardingPosition')
   pos = []
   for box in pos_boxes:
@@ -471,6 +533,7 @@ def getFlightInfo(res, flights):
 
 def displayFlightInfo(res, flights, do_send_email=False):
   message = getFlightInfo(res, flights)
+  print "Flight Info:\n"
   print message
   if do_send_email:
     send_email('Waiting for SW flight', message);
@@ -520,7 +583,7 @@ def send_email(subject, message, boarding_pass = None):
         msg.attach(msg_bp)
       smtp.sendmail(email_from, to, msg.as_string())
       
-      print 'EMail sent successfully.'
+      print 'Email sent successfully.'
       smtp.close()
     except:
       print 'Error sending email!'
