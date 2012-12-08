@@ -51,6 +51,8 @@ except:
 from datetime import datetime,date,timedelta,time
 from pytz import timezone,utc
 
+import codecs
+
 # If we are unable to check in, how soon should we retry?
 RETRY_INTERVAL = 5
 
@@ -173,6 +175,10 @@ class Error(Exception):
 
 # ========================================================================
 
+# Save html data from accessed web pages for debugging purposes
+debug_html_files = False
+
+# Log debug messages to console
 verbose = False
 def dlog(str):
   if verbose:
@@ -288,6 +294,11 @@ class HtmlFormParser(object):
     self.formaction = ''
 
     soup = BeautifulSoup(data, "lxml")
+    # Write to file for debug purposes
+    if debug_html_files:
+      f = codecs.open('html_data_' + str(datetime.now()) + '.html', encoding='utf-8', mode='w+')
+      f.write(str(data))
+      f.close
 
     form = soup.find('form', id=id)
     if not form:
@@ -476,9 +487,11 @@ def getBoardingPass(res):
   form.setTextField('lastName', res.last_name)
 
   # submit the request to pull up the reservations
+  dlog("Submitting the form for the checkin page...")
   (reservations, form_url) = form.submit()
     
   # parse the returned reservations page
+  dlog("Parsing the checkin options page...\nURL: " + form_url)
   form = HtmlFormParser(reservations, form_url, 'checkinOptions')
   
   # Need to check all of the passengers
@@ -491,6 +504,10 @@ def getBoardingPass(res):
 
   # finally, lets check in the flight and make our success file
   (checkinresult, form_url) = form.submit()
+  if debug_html_files:
+    f = codecs.open('html_checkin_success_' + str(datetime.now()) + '.html', encoding='utf-8', mode='w+')
+    f.write(str(checkinresult))
+    f.close
 
   soup = BeautifulSoup(checkinresult, "lxml")
   pos_boxes = FindAllByTagClass(soup, 'div', 'boardingPosition')
@@ -507,7 +524,7 @@ def getBoardingPass(res):
     pos.append('%s%d' % (group, num))
 
   # Add a base tag to the soup
-  tag = Tag(soup, 'base', [('href', urlparse.urljoin(form_url, '.'))])
+  tag = soup.new_tag('base', href=urlparse.urljoin(form_url, '.'))
   soup.head.insert(0, tag)
 
   return (', '.join(pos), str(soup))
@@ -533,7 +550,7 @@ def getFlightInfo(res, flights):
 
 def displayFlightInfo(res, flights, do_send_email=False):
   message = getFlightInfo(res, flights)
-  print "Flight Info:\n"
+  print "Flight Info:"
   print message
   if do_send_email:
     send_email('Waiting for SW flight', message);
