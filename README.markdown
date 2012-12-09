@@ -10,30 +10,32 @@ passenger name, will do the following:
 * Optionally send email with the boarding pass as an attachment
 * Repeat with any unchecked in flights
 
-If you don't have the script email you, you will still need to go back to the
-southwest site to print your boarding pass, but you should have a decent place
-in line.
+If you don't have the script email you, you will still need to print your boarding pass, but you should have a decent place in line.
 
-If things look broken, please let me know and I'll try to fix it. Most of the
-time it is hard to fix the script without an active reservation though so
-letting me know in that 24 hour period with your confirmation code is probably
-the best way to keep the script working.
-
-You can let me know by sending email to joe.github@bedafamily.com. Hopefully
-that address won't be completely spammed up.
+If southwest changes the checkin process, the script might stop working. If you see a bug, file an issue or fork and create a pull request with the fix.
 
 ## Installation ##
 
-This scripts depends on a couple of other python libraries. The easiest way to
-install is to use easy_install.
+The easiest way to install the dependencies is with [pip](http://pypi.python.org/pypi/pip), a python package manager. It is also good practice to isolate your environment with a [virtual environment](http://www.virtualenv.org/en/latest/). If you are unfamiliar with pip or virtualenv, I would recommend reading [this](http://mirnazim.org/writings/python-ecosystem-introduction/).
 
-    $ easy_install BeautifulSoup
-    $ easy_install pytz
+    $ pip install -r requirements.txt
 
 ## Usage ##
 
-    $ sw_checkin_email.py John Doe ABC123
+Run the script:
 
-You will have to leave your terminal open while the script is waiting. You may
-want to look into using [nohup or disown](http://www.basicallytech.com/blog/index.php?/archives/70-Shell-stuff-job-control-and-screen.html#bash_disown)
-so that you can log out while the script runs.
+    $ python sw_checkin_email.py John Doe ABC123
+
+Run the script in the background:
+
+    $ python sw_checkin_email.py John Doe ABC123 &
+
+Run the script in the background and log to file:
+
+    $ python sw_checkin_email.py John Doe ABC123 > sw_checkin_email.log 2>&1 &
+
+Run the script in the background, log to file, and allow yourself to logout (you cannot retake ownership of this command and must use `kill` to stop it)
+
+    $ nohup python sw_checkin_email.py John Doe ABC123 &> sw_checkin_email.log
+
+For more expanation on these commands, you may want to read about [nohup and disown](http://www.basicallytech.com/blog/index.php?/archives/70-Shell-stuff-job-control-and-screen.html#bash_disown).
