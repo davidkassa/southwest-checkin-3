@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block title %}Southwest Checkin{% endblock %}
+{% block body %}
+  <div class="centered styled-box">
+    <h1 class="text-centered">Southwest Checkin</h1>
+    <form action="{{ url_for('checkin') }}" method=post class=add-entry>
+      <dl>
+        <dt>Confirmation Number:
+        <dd><input type=text size=5 name=confirmation-number>
+        <dt>First name:
+        <dd><input type=text size=25 name=firstname>
+        <dt>Last name:
+        <dd><input type=text size=25 name=lastname>
+        <dt>Email:
+        <dd><input type=text size=25 name=email>        
+        <dd id="submit-checkin"><input class="btn btn-southwest" type=submit value="Automate your checkin">
+      </dl>
+    </form>
+    <div class="text-centered">
+      <h5><a href="{{ url_for('search') }}">Already automated your checkin? Click here.</a></h5>
+    </div>
+  </div>
+{% endblock %}
