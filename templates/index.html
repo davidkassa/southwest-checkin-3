@@ -2,17 +2,28 @@
 {% block title %}Southwest Checkin{% endblock %}
 {% block body %}
   <div class="centered styled-box">
-    <h1 class="text-centered">Southwest Checkin</h1>
+    <h1 class="text-centered"><a href="/">Southwest Checkin</a></h1>
+    <ul class="errors">
+      {% if form.errors %}
+        <h2>Oops! Please correct the 
+      {% endif %}
+      {% for error in form.errors %}
+          <span style="color:red;">{{ error }}</span>
+      {% endfor %}
+      {% if form.errors %}
+        field(s).</h2>
+      {% endif %}
+    </ul>
     <form action="{{ url_for('checkin') }}" method=post class=add-entry>
       <dl>
-        <dt>Confirmation Number:
-        <dd><input type=text size=5 name=confirmation-number>
-        <dt>First name:
-        <dd><input type=text size=25 name=firstname>
-        <dt>Last name:
-        <dd><input type=text size=25 name=lastname>
-        <dt>Email:
-        <dd><input type=text size=25 name=email>        
+        <dt>{{ form.code.label }}
+        <dd>{{ form.code }}
+        <dt>{{ form.firstname.label }}
+        <dd>{{ form.firstname }}
+        <dt>{{ form.lastname.label }}
+        <dd>{{ form.lastname }}
+        <dt>{{ form.email.label }}
+        <dd>{{ form.email }}       
         <dd id="submit-checkin"><input class="btn btn-southwest" type=submit value="Automate your checkin">
       </dl>
     </form>

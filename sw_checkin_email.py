@@ -50,14 +50,14 @@ except:
 
 from datetime import datetime,date,timedelta,time
 from pytz import timezone,utc
-
+from threading import Timer
 import codecs
 
 # If we are unable to check in, how soon should we retry?
 RETRY_INTERVAL = 5
 
 # How soon before the designated time should we try to check in?
-CHECKIN_WINDOW = 3*60
+CHECKIN_WINDOW = 60
 
 # Email configuration
 should_send_email = True
@@ -211,10 +211,11 @@ class FlightLegLocation(object):
   pass
 
 class Reservation(object):
-  def __init__(self, first_name, last_name, code):
+  def __init__(self, first_name, last_name, code, email=None):
     self.first_name = first_name
     self.last_name = last_name
     self.code = code
+    self.email = email
 
 # =========== function definitions =======================================
 
@@ -301,22 +302,27 @@ class HtmlFormParser(object):
       f.close
 
     form = soup.find('form', id=id)
-    if not form:
-      print("Couldn't find the HTML form to lookup the flight! Did the web page change?")
-      return
+    print
+    if form == None:
+      print("Couldn't find the HTML form to lookup the flight! Did the web page change? Or are we too early?")
+    else:
+      self.formaction = form.get('action', None)
+      self.submit_url = urlparse.urljoin(page_url, self.formaction)
 
-    self.formaction = form.get('action', None)
-    self.submit_url = urlparse.urljoin(page_url, self.formaction)
-
-    # find all inputs
-    for i in form.find_all('input'):
-      input = HtmlFormParser.Input(i)
-      if input.name:
-        self.inputs.append(input)
+      # find all inputs
+      for i in form.find_all('input'):
+        input = HtmlFormParser.Input(i)
+        if input.name:
+          self.inputs.append(input)
           
   def submit(self):
     """Submit the form and return the (contents, url)."""
-    return PostUrl(self.submit_url, self.getParams())
+    try:
+      post = PostUrl(self.submit_url, self.getParams())
+    except:
+      print 'The form post failed.'
+      return None
+    return post
           
   def validateSubmitButtons(self):
     """Ensures that one and only one submit is 'checked'."""
@@ -451,6 +457,9 @@ class ReservationInfoParser(object):
     f.dt = f.tz.localize(
       datetime.combine(day, flight_time), is_dst=None)
     f.dt_utc = f.dt.astimezone(utc)
+
+    # Added formatted date
+    f.dt_formatted = DateTimeToString(f.dt)
     
     return f
     
@@ -479,6 +488,8 @@ def getBoardingPass(res):
 
   # parse the data
   form = HtmlFormParser(swdata, form_url, 'itineraryLookup')
+  if not hasattr(form, 'submit_url'): # The form was not created correctly
+    return None
 
   # load the parameters into the text boxes by name
   # where the names are obtained from the parser
@@ -493,6 +504,8 @@ def getBoardingPass(res):
   # parse the returned reservations page
   dlog("Parsing the checkin options page...\nURL: " + form_url)
   form = HtmlFormParser(reservations, form_url, 'checkinOptions')
+  if not hasattr(form, 'submit_url'): # The form was not created correctly
+    return None
   
   # Need to check all of the passengers
   for i in form.inputs:
@@ -560,25 +573,40 @@ def TryCheckinFlight(res, flight, sch, attempt):
   print 'Trying to checkin flight at %s' % DateTimeToString(datetime.now(utc))
   print 'Attempt #%s' % attempt
   displayFlightInfo(res, [flight])
-  (position, boarding_pass) = getBoardingPass(res)
+  try:
+    (position, boarding_pass) = getBoardingPass(res)
+  except:
+    position = None
   if position:
+    flight.success = True
+    flight.position = position
     message = ''
     message += 'SUCCESS.  Checked in at position %s\r\n' % position
     message += getFlightInfo(res, [flight])
     print message
-    send_email('Flight checked in!', message, boarding_pass)
+    if hasattr(res, 'email'):
+      send_email('Flight checked in!', message, boarding_pass, res.email)
+    else:
+      send_email('Flight checked in!', message, boarding_pass)
   else:
     if attempt > (CHECKIN_WINDOW * 2) / RETRY_INTERVAL:
       print 'FAILURE.  Too many failures, giving up.'
     else:
       print 'FAILURE.  Scheduling another try in %d seconds' % RETRY_INTERVAL
-      sch.enterabs(time_module.time() + RETRY_INTERVAL, 1,
-                   TryCheckinFlight, (res, flight, sch, attempt + 1))
+      if (sch): # Traditional scheduler - command line
+        sch.enterabs(time_module.time() + RETRY_INTERVAL, 1,
+                     TryCheckinFlight, (res, flight, sch, attempt + 1))
+      else: # Async timer - Flask
+        Timer(RETRY_INTERVAL, TryCheckinFlight, (res, flight, None, attempt + 1)).start()
       
-def send_email(subject, message, boarding_pass = None):
+def send_email(subject, message, boarding_pass=None, email=None):
   if not should_send_email:
     return
-  
+
+  global email_to
+  if email != None:
+    email_to = email
+
   for to in [string.strip(s) for s in string.split(email_to, ',')]:
     try:
       smtp = smtplib.SMTP(smtp_server, 587)

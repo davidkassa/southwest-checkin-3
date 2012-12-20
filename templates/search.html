@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block title %}Southwest Checkin{% endblock %}
+{% block body %}
+  <div class="centered styled-box">
+    <h1 class="text-centered">Southwest Checkin</h1>
+    <ul class="errors">
+      {% if form.errors %}
+        <h2>Oops! Please correct the 
+      {% endif %}
+      {% for error in form.errors %}
+          <span style="color:red;">{{ error }}</span>
+      {% endfor %}
+      {% if form.errors %}
+        field(s).</h2>
+      {% endif %}
+    </ul>
+    <form style="margin-left:0;" class="text-centered" action="{{ url_for('search') }}" method=post class=add-entry>
+      <dl>
+        <dt>{{ form.code.label }}
+        <dd>{{ form.code }}     
+        <dd style="margin-left:0;" id="submit-checkin"><input class="btn btn-southwest" type=submit value="Check Your Flight">
+      </dl>
+    </form>
+  </div>
+{% endblock %}

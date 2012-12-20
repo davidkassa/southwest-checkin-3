@@ -17,6 +17,27 @@ html, body {
    margin-top: -195px;
 }
 
+#status {
+  text-align: left;
+  display: inline-block;
+  width: auto;
+  margin: 50px auto;
+  padding: 0 20px;
+}
+
+#status ul {
+  list-style-type: none;
+}
+
+.flights {
+  font-size: 12px;
+  margin-bottom: 20px;
+}
+
+.flight-legs {
+  margin-bottom: 10px;
+}
+
 .red-bottom, .orange-top {
   z-index: -99;
   left: 0;
@@ -58,12 +79,16 @@ html, body {
   text-align: center; 
 }
 
+.highlight {
+  color: #d42424;
+}
+
 .centered form {
-  margin-left: 68px;
+  margin-left: 91px;
 }
 
 #submit-checkin {
-  margin: 15px 0 0 24px;
+  margin: 15px 0 0 4px;
 }
 
 form, input {
