@@ -67,12 +67,14 @@ email_to = None
 # SMTP server config
 if False:  # local config
   smtp_server = 'localhost'
+  smtp_port = 25
   smtp_auth = False
   smtp_user = email_from
   smtp_password = ''  # if blank, we will prompt first and send test message       
   smtp_use_tls = False
 else:  # gmail config
   smtp_server = 'smtp.gmail.com'
+  smtp_port = 587
   smtp_auth = True
   smtp_user = email_from
   smtp_password = ''  # if blank, we will prompt first and send test message
@@ -609,7 +611,7 @@ def send_email(subject, message, boarding_pass=None, email=None):
 
   for to in [string.strip(s) for s in string.split(email_to, ',')]:
     try:
-      smtp = smtplib.SMTP(smtp_server, 587)
+      smtp = smtplib.SMTP(smtp_server, smtp_port)
       smtp.ehlo()
       if smtp_use_tls:
         smtp.starttls()
