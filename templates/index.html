@@ -1,8 +1,8 @@
 {% extends "layout.html" %}
 {% block title %}Southwest Checkin{% endblock %}
 {% block body %}
-  <div class="centered styled-box">
-    <h1 class="text-centered"><a href="/">Southwest Checkin</a></h1>
+  <div>
+    <h1 class="text-centered logo"><a href="/">Southwest Check In</a></h1>
     <ul class="errors">
       {% if form.errors %}
         <h2>Oops! Please correct the 
@@ -28,7 +28,7 @@
       </dl>
     </form>
     <div class="text-centered">
-      <h5><a href="{{ url_for('search') }}">Already automated your checkin? Click here.</a></h5>
+      <h5><a href="{{ url_for('search') }}">Already automated your checkin?</a></h5>
     </div>
   </div>
 {% endblock %}

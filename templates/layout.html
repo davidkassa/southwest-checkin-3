@@ -6,8 +6,12 @@
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
   </head>
   <body>
-    <div class="orange-top"></div>    
+    <div class="orange-top"></div>
     <div class="red-bottom"></div>
-    {% block body %}{% endblock %}
+      <div class="centered-container">        
+        <div class="styled-box centered">        
+          {% block body %}{% endblock %}
+        </div>
+      </div>
   </body>
-  </html>
+</html>

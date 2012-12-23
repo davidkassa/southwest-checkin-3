@@ -1,5 +1,7 @@
 html, body {
+  z-index: -1;
   font-family: 'Merriweather', serif;
+  background-color: #d42424;
   height: 100%;
   width: 100%;
   position: relative;
@@ -7,14 +9,23 @@ html, body {
   padding: 0;
 }
 
+.centered-container {
+  text-align: center;
+  height: 100%;
+}
+
+.centered-container:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  margin-right: -0.25em;
+}
+
 .centered {
-   width: 380px;
-   height: 390px;
-   position: absolute;
-   left: 50%;
-   top: 50%; 
-   margin-left: -190px;
-   margin-top: -195px;
+  display: inline-block;
+  vertical-align: middle;
+  padding: 0 20px;
 }
 
 #status {
@@ -39,7 +50,7 @@ html, body {
 }
 
 .red-bottom, .orange-top {
-  z-index: -99;
+  z-index: -2;
   left: 0;
   position: absolute;
   height: 50%;
@@ -79,12 +90,17 @@ html, body {
   text-align: center; 
 }
 
-.highlight {
-  color: #d42424;
+.logo {
+  font-family: Helvetica, sans-serif;
+  font-weight: bold;
 }
 
-.centered form {
-  margin-left: 91px;
+.logo a, logo a:active {
+  color: black;
+}
+
+.highlight {
+  color: #d42424;
 }
 
 #submit-checkin {
@@ -93,6 +109,10 @@ html, body {
 
 form, input {
   font-size: 18px;
+}
+
+dt {
+  margin-top: 10px;
 }
 
 dd {

@@ -2,10 +2,23 @@
 {% block title %}Southwest Checkin - Status{% endblock %}
 {% block body %}
   <div class="text-centered">
-    <div id="status" class="styled-box">
-      <h1 class="text-centered"><a href="/">Southwest Checkin</a> - Status</h1>
+    <div id="status">
+      <h1 class="text-centered logo"><a href="/">Southwest Check In</a></h1>
       <div>
-        <div><h2 class="text-centered">Your first automatic checkin is at: <span class="highlight">{{ flights[0].sched_time_local_formatted }}</span></h2></div>
+        <div>
+          <h2 class="text-centered">
+            Your first automatic checkins are at: 
+            <span class="highlight">
+              <ul>
+                {% for flight in flights %}
+                  {% if flight.sched_time_local_formatted %}
+                    <li>{{ flight.sched_time_local_formatted }}</li>
+                  {% endif %}
+                {% endfor %}
+              </ul>
+            </span>
+          </h2>
+        </div>
         <div><h3 class="text-centered">Confirmation Code: {{ res.code }}</h3></div>
         <div><h3 class="text-centered">Passenger Name: {{ res.first_name }} {{ res.last_name }}</h3></div>
         <ul class="flights">
@@ -19,14 +32,19 @@
                 {% if flight.success %}
                   <span style="color:green"><b>You've been checked into this flight at position {{ flight.position }}</b></span>
                 {% else %}
+                  {% if flight.sched_time_local_formatted %}
                   <li>
                     <b>Automatically checking you in at:</b> {{ flight.sched_time_local_formatted }}
                   </li>
+                  {% endif %}
                 {% endif %}
               </ul>
             </li>
           {% endfor %}
         </ul>
+      </div>
+      <div class="text-centered">
+        <h5><a href="{{ url_for('search') }}">Search for a different checkin</a></h5>
       </div>
     </div>
   </div>

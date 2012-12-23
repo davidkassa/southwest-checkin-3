@@ -382,19 +382,21 @@ class ReservationInfoParser(object):
     self.flights = []
     
     # The table containing departure flights
-    airItineraryDepartTable = soup.find('table', id="airItinerarydepart")
+    airItineraryDepartTable = soup.find_all('table', id="airItinerarydepart")
     # The table containing return flights
-    airItineraryReturnTable = soup.find('table', id="airItineraryreturn")
+    airItineraryReturnTable = soup.find_all('table', id="airItineraryreturn")
     
     dlog("Checking reservation departure flights...")
     if airItineraryDepartTable:
-      self.flights.append(self._parseFlightInfo(airItineraryDepartTable))
+      for item in airItineraryDepartTable:
+        self.flights.append(self._parseFlightInfo(item))
     else:
       dlog("Can't find a departure flight...")
     
     dlog("Checking reservation return flights...")
     if airItineraryReturnTable:
-      self.flights.append(self._parseFlightInfo(airItineraryReturnTable))
+        for item in airItineraryReturnTable:
+          self.flights.append(self._parseFlightInfo(item))
     else:
       dlog("You don't have a return flight.")
 
