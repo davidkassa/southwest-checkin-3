@@ -6,6 +6,7 @@
 
 """
 
+import os
 from flask import Flask, render_template, request, redirect, url_for, abort
 app = Flask(__name__)
 app.debug = True
@@ -154,4 +155,6 @@ def status(code):
   return render_template('status.html', res=res, flights=res.flights)
 
 if __name__ == '__main__':
-  app.run()
+  # Bind to PORT if defined, otherwise default to 5000.
+  port = int(os.environ.get('PORT', 5000))
+  app.run(host='0.0.0.0', port=port)
