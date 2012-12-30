@@ -3,17 +3,17 @@
 {% block body %}
   <div>
     <h1 class="text-centered logo"><a href="/">Southwest Check In</a></h1>
-    <ul class="errors">
-      {% if form.errors %}
-        <h2>Oops! Please correct the 
-      {% endif %}
-      {% for error in form.errors %}
-          <span style="color:red;">{{ error }}</span>
-      {% endfor %}
-      {% if form.errors %}
-        field(s).</h2>
-      {% endif %}
-    </ul>
+    {% if form.errors %}
+      <h2>Houston, we have a problem.</h2>
+      <!-- http://wtforms.simplecodes.com/docs/1.0.2/crash_course.html#displaying-errors -->
+      <ul class="errors">
+        {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+          {% for error in field_errors %}
+            <li style="color:red">{{ form[field_name].label }}: {{ error }}</li>
+          {% endfor %}
+        {% endfor %}
+      </ul>
+    {% endif %}
     <form action="{{ url_for('checkin') }}" method=post class=add-entry>
       <dl>
         <dt>{{ form.code.label }}

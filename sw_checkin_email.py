@@ -53,6 +53,19 @@ from pytz import timezone,utc
 from threading import Timer
 import codecs
 
+from models import Reservation, Flight, FlightLeg, FlightLegLocation
+
+# Store all data in a database?
+STORE_DATABASE = True
+db_filename = 'southwest-checkin.db'
+
+from db import Database
+if STORE_DATABASE:
+  db = Database(db_filename)
+else:
+  db = Database()
+db.create_all()
+
 # If we are unable to check in, how soon should we retry?
 RETRY_INTERVAL = 5
 
@@ -186,39 +199,6 @@ def dlog(str):
   if verbose:
     print 'DEBUG: %s' % str
 
-# ========================================================================
-
-class Flight(object):
-  """ Attributes:
-        legs: a list of FlightLegs
-  """
-  def __init__(self):
-    self.legs = []
-
-class FlightLeg(object):
-  """ Attributes:
-        flight_number: the flight number, format: '#123'
-        depart: a FlightLegLocation for the departure city
-        arrive: a FlightLegLocation for the arrival city
-  """
-  pass
-
-class FlightLegLocation(object):
-  """ Attributes:
-        airport: airport 3-letter code
-        tz: timezone
-        dt: departure or arrival time
-        dt_utc: departure or arrival time in UTC
-  """
-  pass
-
-class Reservation(object):
-  def __init__(self, first_name, last_name, code, email=None):
-    self.first_name = first_name
-    self.last_name = last_name
-    self.code = code
-    self.email = email
-
 # =========== function definitions =======================================
 
 # build our cookie based opener
@@ -232,7 +212,6 @@ def ReadUrl(url):
 
   dlog('GET to %s' % url)
   dlog('  headers: %s' % headers)
-
 
   try:
     req = urllib2.Request(url=url, headers=headers)
@@ -388,10 +367,12 @@ class ReservationInfoParser(object):
     
     dlog("Checking reservation departure flights...")
     if airItineraryDepartTable:
+      self.exists = True
       for item in airItineraryDepartTable:
         self.flights.append(self._parseFlightInfo(item))
     else:
-      dlog("Can't find a departure flight...")
+      print "Can't find a departure flight... are we sure this reservation exists?"
+      self.exists = False
     
     dlog("Checking reservation return flights...")
     if airItineraryReturnTable:
@@ -404,7 +385,6 @@ class ReservationInfoParser(object):
     """ For each reservation, get the date, and each flight leg with airport code, 
         departure and arrival times
     """
-
     flight = Flight()
 
     # Get flight reservation date from first flight leg
@@ -420,7 +400,8 @@ class ReservationInfoParser(object):
       flight.legs.append(flight_leg)
 
       # Get flight number
-      flight_leg.flight_number = FindByTagClass(tr, 'td', 'flightNumberCell').contents[1]
+      parent = FindByTagClass(tr, 'td', 'flightNumberCell')
+      flight_leg.flight_number = parent.contents[3].contents[0]
 
       # List of arrival and departure details for each airport
       segmentLegDetails = FindAllByTagClass(tr, 'div', 'segmentLegDetails')
@@ -470,21 +451,27 @@ class ReservationInfoParser(object):
 
 # this routine extracts the departure date and time
 def getFlightTimes(res):
-  (swdata, form_url) = ReadUrl(retrieve_url)
+  if res.new:
+    (swdata, form_url) = ReadUrl(retrieve_url)
 
-  form = HtmlFormParser(swdata, form_url, 'pnrFriendlyLookup_check_form')
+    form = HtmlFormParser(swdata, form_url, 'pnrFriendlyLookup_check_form')
 
-  # load the parameters into the text boxes
-  form.setTextField('confirmationNumberFirstName', res.first_name)
-  form.setTextField('confirmationNumberLastName', res.last_name)
-  form.setTextField('confirmationNumber', res.code)
+    # load the parameters into the text boxes
+    form.setTextField('confirmationNumberFirstName', res.first_name)
+    form.setTextField('confirmationNumberLastName', res.last_name)
+    form.setTextField('confirmationNumber', res.code)
 
-  # submit the request to pull up the reservations on this confirmation number
-  (reservations, _) = form.submit()
+    # submit the request to pull up the reservations on this confirmation number
+    (reservations, _) = form.submit()
 
-  res.flights = ReservationInfoParser(reservations).flights
-
-  return res.flights
+    info = ReservationInfoParser(reservations)
+    if info.exists:
+      res.flights = info.flights
+      res.new = False
+      db.Session.commit()
+      return True
+    else:
+      return False
 
 def getBoardingPass(res):
   # read the southwest checkin web site
@@ -549,6 +536,7 @@ def getBoardingPass(res):
 def DateTimeToString(time):
   return time.strftime('%I:%M%p %b %d %y %Z');
 
+
 # print some information to the terminal for confirmation purposes
 def getFlightInfo(res, flights):
   message = ''
@@ -557,9 +545,11 @@ def getFlightInfo(res, flights):
 
   for (i, flight) in enumerate(flights):
     message += 'Flight %d:\n' % (i+1, )
+    if flight.success:
+      message += '  Flight was successfully checked in at %s\n' % flight.position
     for leg in flight.legs:
-      message += '  Departs: %s %s (%s)\n  Arrives: %s %s (%s)\n' \
-          % (leg.depart.airport, DateTimeToString(leg.depart.dt),
+      message += '  Flight Number: %s\n    Departs: %s %s (%s)\n    Arrives: %s %s (%s)\n' \
+          % (leg.flight_number, leg.depart.airport, DateTimeToString(leg.depart.dt),
              DateTimeToString(leg.depart.dt_utc),
              leg.arrive.airport, DateTimeToString(leg.arrive.dt),
              DateTimeToString(leg.arrive.dt_utc))
@@ -572,7 +562,9 @@ def displayFlightInfo(res, flights, do_send_email=False):
   if do_send_email:
     send_email('Waiting for SW flight', message);
 
-def TryCheckinFlight(res, flight, sch, attempt):
+def TryCheckinFlight(res_id, flight_id, sch, attempt):
+  res = session.query(Reservation).filter_by(id=res_id).one()
+  flight = session.query(Flight).filter_by(id=flight_id).one()
   print '-='*30
   print 'Trying to checkin flight at %s' % DateTimeToString(datetime.now(utc))
   print 'Attempt #%s' % attempt
@@ -588,6 +580,7 @@ def TryCheckinFlight(res, flight, sch, attempt):
     message += 'SUCCESS.  Checked in at position %s\r\n' % position
     message += getFlightInfo(res, [flight])
     print message
+    db.Session.commit()
     if hasattr(res, 'email'):
       send_email('Flight checked in!', message, boarding_pass, res.email)
     else:
@@ -638,22 +631,72 @@ def send_email(subject, message, boarding_pass=None, email=None):
       print 'Error sending email!'
       print sys.exc_info()[1]
 
-# main program
+def scheduleAllFlights(res, blocking=False, scheduler=None):
+  """ Schedule all of the flights for checkin.  Schedule 1 minute before our clock
+      says we are good to go
+  """
+  for (i, flight) in enumerate(res.flights):
+    flight_time = time_module.mktime(flight.legs[0].depart.dt_utc.utctimetuple()) - time_module.timezone
+    if flight_time < time_module.time():
+      print 'Flight %s already left...' % (i+1)
+      flight.active = False
+    elif not flight.success:
+      flight.sched_time = flight_time - CHECKIN_WINDOW - 24*60*60
+      flight.sched_time_formatted = DateTimeToString(datetime.fromtimestamp(flight.sched_time, utc))
+      flight.seconds = flight.sched_time - time_module.time()
+      flight.sched_time_local_formatted = DateTimeToString(flight.legs[0].depart.dt - timedelta(seconds=CHECKIN_WINDOW))
+      db.Session.commit()
+      print 'Updated Schedule (UTC): %s' % flight.sched_time_formatted
+      print 'Updated Schedule (local): %s' % flight.sched_time_local_formatted     
+      if not blocking:
+        from threading import Timer
+        Timer(flight.seconds, TryCheckinFlight, (res.id, flight.id, None, 1)).start()
+        # DEBUG
+        # if flight == res.flights[0]:
+        #   Timer(5, TryCheckinFlight, (res, flight, None, 1)).start()
+      else:
+        scheduler.enterabs(flight.sched_time, 1, TryCheckinFlight, (res.id, flight.id, sch, 1))
+      print 'Flights scheduled.  Waiting...' 
+    else:
+      print 'Flight %s was successfully checked in at %s\n' % ((i+1), flight.position)
+  db.isReservationActive(res)
+
+def scheduleAllExistingReservations(confirm=False, blocking=False, scheduler=None):
+  """ Load all existing reservations' flights for automatic checkin """
+  reservations = db.getAllReservations()
+  for res in reservations:
+    if confirm:
+      yes = raw_input('Would you like to schedule reservation %s for %s %s [Y/n]? ' % (res.code, res.first_name, res.last_name)).lower()
+      if yes == 'y' or yes == '' or yes == 'yes':
+        scheduleAllFlights(res, blocking, scheduler)
+
+# ========================================================================
+
 def main():
   if (len(sys.argv) - 1) % 3 != 0 or len(sys.argv) < 4:
-    print 'Please provide name and confirmation code:'
-    print '   %s (<firstname> <lastname> <confirmation code>)+' % sys.argv[0]
-    sys.exit(1)
-
-  reservations = []
+    yes = raw_input('Would you like to schedule an existing reservation from the database [Y/n]? ').lower()
+    if yes == 'y' or yes == '' or yes == 'yes':
+      sch = sched.scheduler(time_module.time, time_module.sleep)
+      scheduleAllExistingReservations(confirm=True, blocking=True, scheduler=sch)
+      sys.exit(1)
+    else:    
+      print 'Please provide name and confirmation code:'
+      print '   %s <firstname> <lastname> <confirmation code> [...]' % sys.argv[0]
+      sys.exit(1)
 
   args = sys.argv[1:]
   while len(args):
     (firstname, lastname, code) = args[0:3]
-    reservations.append(Reservation(firstname, lastname, code))
+    res = db.findReservation(code)
+    if res:
+      print 'Reservation %s is already in the system...' % code
+    else:
+      res = db.addReservation(firstname, lastname, code)
     del args[0:3]
 
   global smtp_user, smtp_password, email_from, email_to, should_send_email
+
+  sch = sched.scheduler(time_module.time, time_module.sleep)
   
   if should_send_email:
     if not email_from:
@@ -668,28 +711,18 @@ def main():
     else:
       should_send_email = False
 
-  sch = sched.scheduler(time_module.time, time_module.sleep)
-
-  # get the departure times in a tuple
-  for res in reservations:
-    getFlightTimes(res)
-
-    # print some information to the terminal for confirmation purposes
-    displayFlightInfo(res, res.flights, True)
-
-    # Schedule all of the flights for checkin.  Schedule 3 minutes before our clock
-    # says we are good to go
-    for flight in res.flights:
-      flight_time = time_module.mktime(flight.legs[0].depart.dt_utc.utctimetuple()) - time_module.timezone
-      if flight_time < time_module.time():
-        print 'Flight already left!'
+  for res in db.Session.query(Reservation):
+    if res.active:
+      success = getFlightTimes(res)
+      if success:
+        displayFlightInfo(res, res.flights, True)
+        scheduleAllFlights(res, blocking=True, scheduler=sch)
       else:
-        sched_time = flight_time - CHECKIN_WINDOW - 24*60*60
-        print 'Update Sched: %s' % DateTimeToString(datetime.fromtimestamp(sched_time, utc))
-        sch.enterabs(sched_time, 1, TryCheckinFlight, (res, flight, sch, 1))
-    
+        db.isReservationActive(res)
+        if res.active:
+          db.deleteReservation(res)
+
   print 'Current time: %s' % DateTimeToString(datetime.now(utc))
-  print 'Flights scheduled.  Waiting...'
   sch.run()
 
 if __name__=='__main__':

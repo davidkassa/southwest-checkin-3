@@ -40,9 +40,14 @@ html, body {
   list-style-type: none;
 }
 
+.errors {
+  text-align: left;
+}
+
 .flights {
   font-size: 12px;
   margin-bottom: 20px;
+  padding-left: 0;
 }
 
 .flight-legs {
@@ -146,6 +151,10 @@ input[type="color"] {
      -moz-transition: border linear 0.2s, box-shadow linear 0.2s;
        -o-transition: border linear 0.2s, box-shadow linear 0.2s;
           transition: border linear 0.2s, box-shadow linear 0.2s;
+}
+
+a.btn {
+  text-decoration: none;
 }
 
 .btn {
@@ -269,6 +278,6 @@ input[type="color"] {
 
 .btn-southwest:active,
 .btn-southwest.active {
-  background-color: #942a25 \9;
+  background-color: #942a25;
 }
 

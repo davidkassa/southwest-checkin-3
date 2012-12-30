@@ -1,0 +1,98 @@
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import (Column, Integer, ForeignKey, 
+  String, Float, DateTime, Boolean)
+from sqlalchemy.orm import relationship, backref
+
+Base = declarative_base()
+
+class FlightLegLocation(Base):
+  """ Attributes:
+        airport: airport 3-letter code
+        tz: timezone
+        dt: departure or arrival time
+        dt_utc: departure or arrival time in UTC
+  """
+  __tablename__ = 'flight_leg_location'
+  id = Column(Integer, primary_key=True)
+  # flightleg_id = Column(Integer, ForeignKey('flight_leg.id'))
+  airport = Column(String(3))
+  # tz: don't store this in the database
+  dt = Column(DateTime())
+  dt_formatted = Column(String())
+  dt_utc = Column(DateTime())
+  
+
+class FlightLeg(Base):
+  """ Attributes:
+        flight_number: the flight number, format: '#123'
+        depart: a FlightLegLocation for the departure city
+        arrive: a FlightLegLocation for the arrival city
+
+      Reference for multiple joins (depart and arrive):
+        http://docs.sqlalchemy.org/en/rel_0_7/orm/relationships.html#setting-the-primaryjoin-and-secondaryjoin
+  """
+  __tablename__ = 'flight_leg'
+  id = Column(Integer, primary_key=True)
+  flight_id = Column(Integer, ForeignKey('flight.id'))
+  flight_number = Column(String(4))
+  
+  depart_id = Column(Integer, ForeignKey("flight_leg_location.id"))
+  arrive_id = Column(Integer, ForeignKey("flight_leg_location.id"))
+  depart = relationship("FlightLegLocation",
+                    primaryjoin="FlightLegLocation.id==FlightLeg.depart_id")
+  arrive = relationship("FlightLegLocation",
+                    primaryjoin="FlightLegLocation.id==FlightLeg.arrive_id")
+
+  # depart = relationship("FlightLegLocation", uselist=False, backref='flight') #, foreign_keys=[depart_id])
+  # arrive = relationship("FlightLegLocation", uselist=False) #, foreign_keys=[arrive_id])
+
+  def __repr__(self):
+    return '<Flight Leg: %r>' % self.flight_number
+
+
+class Flight(Base):
+  """ Attributes:
+        legs: a list of FlightLegs
+  """
+  __tablename__ = 'flight'
+  id = Column(Integer, primary_key=True)
+  reservation_id = Column(Integer, ForeignKey('reservation.id'))
+  legs = relationship("FlightLeg", backref='flight')
+  active = Column(Boolean(), default=True)
+  success = Column(Boolean(), default=False)
+  position = Column(String())
+  sched_time = Column(Float())
+  sched_time_formatted = Column(String())
+  sched_time_local_formatted = Column(String())
+  seconds = Column(Float())
+
+
+class Reservation(Base):
+  __tablename__ = 'reservation'
+  id = Column(Integer, primary_key=True)
+  first_name = Column(String())
+  last_name = Column(String())
+  code = Column(String(6), unique=True)
+  active = Column(Boolean(), default=True)
+  new = Column(Boolean(), default=True)
+  email = Column(String())
+  flights = relationship("Flight", backref='reservation', cascade="all, delete, delete-orphan")
+
+  def __init__(self, first_name, last_name, code, email=None):
+    self.first_name = first_name
+    self.last_name = last_name
+    self.code = code
+    self.email = email
+
+  def __repr__(self):
+    return '<Reservation: %r>' % self.code
+
+  def isReservationActive(self):
+    if len(self.flights) > 0:
+      active = False
+      for flight in self.flights:
+        if flight.active: 
+          active = True
+      self.active = active
+    else:
+      self.active = False

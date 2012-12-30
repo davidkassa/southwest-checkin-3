@@ -7,16 +7,20 @@
       <div>
         <div>
           <h2 class="text-centered">
-            Your first automatic checkins are at: 
-            <span class="highlight">
-              <ul>
-                {% for flight in flights %}
-                  {% if flight.sched_time_local_formatted %}
-                    <li>{{ flight.sched_time_local_formatted }}</li>
-                  {% endif %}
-                {% endfor %}
-              </ul>
-            </span>
+            {% if res.active %}
+              Your first automatic checkins are at: 
+              <span class="highlight">
+                <ul>
+                  {% for flight in flights %}
+                    {% if flight.sched_time_local_formatted %}
+                      <li>{{ flight.sched_time_local_formatted }}</li>
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+              </span>
+            {% else %}
+              <span class="highlight">All your flights have left!</span>
+            {% endif %}
           </h2>
         </div>
         <div><h3 class="text-centered">Confirmation Code: {{ res.code }}</h3></div>
@@ -43,9 +47,8 @@
           {% endfor %}
         </ul>
       </div>
-      <div class="text-centered">
-        <h5><a href="{{ url_for('search') }}">Search for a different checkin</a></h5>
-      </div>
     </div>
+    <div><a href="{{ url_for('delete_reservation', code=res.code) }}" class="btn btn-southwest">Remove automatic check in</a></div>
+    {% include 'search_for_checkin_footer.html' %}
   </div>
 {% endblock %}
