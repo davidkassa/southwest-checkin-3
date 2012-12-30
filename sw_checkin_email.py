@@ -57,11 +57,17 @@ from models import Reservation, Flight, FlightLeg, FlightLegLocation
 
 # Store all data in a database?
 STORE_DATABASE = True
+# Heroku Postgres
+heroku = False
+# SQLite
 db_filename = 'southwest-checkin.db'
 
 from db import Database
 if STORE_DATABASE:
-  db = Database(db_filename)
+  if heroku:
+    db = Database(heroku=True)
+  else:
+    db = Database(db_filename)
 else:
   db = Database()
 db.create_all()

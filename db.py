@@ -5,9 +5,13 @@ from models import Base, Reservation
 class Database:
   """ An interface to a SQLAlchemy database """
 
-  def __init__(self, name=':memory:'):
+  def __init__(self, sqlite_name=':memory:', heroku=False):
     """ Initialize the database """
-    self.url = 'sqlite:///' + name
+    if heroku:
+      import os
+      self.url = os.environ['DATABASE_URL']
+    else:
+      self.url = 'sqlite:///' + sqlite_name
     self.engine = create_engine(self.url)
     session_factory = sessionmaker(bind=self.engine)
     # The scoped_session is thread safe
