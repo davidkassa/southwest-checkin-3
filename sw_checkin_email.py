@@ -633,9 +633,10 @@ def send_email(subject, message, boarding_pass=None, email=None):
       
       print 'Email sent successfully.'
       smtp.close()
-    except:
+    except Exception, e:
       print 'Error sending email!'
       print sys.exc_info()[1]
+      raise
 
 def scheduleAllFlights(res, blocking=False, scheduler=None):
   """ Schedule all of the flights for checkin.  Schedule 1 minute before our clock
