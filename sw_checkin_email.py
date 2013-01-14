@@ -662,7 +662,7 @@ def scheduleAllFlights(res, blocking=False, scheduler=None):
         # if flight == res.flights[0]:
         #   Timer(5, TryCheckinFlight, (res, flight, None, 1)).start()
       else:
-        scheduler.enterabs(flight.sched_time, 1, TryCheckinFlight, (res.id, flight.id, sch, 1))
+        scheduler.enterabs(flight.sched_time, 1, TryCheckinFlight, (res.id, flight.id, scheduler, 1))
       print 'Flights scheduled.  Waiting...' 
     else:
       print 'Flight %s was successfully checked in at %s\n' % ((i+1), flight.position)
