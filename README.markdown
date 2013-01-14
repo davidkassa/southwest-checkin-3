@@ -9,9 +9,9 @@ Here are some of the features of the application:
 * Checks the passenger in for all flights (departure and arrival) exactly 24 hours before the flight leaves
 * Informs the user via email after successful check in and includes boarding position and boarding pass
 * Checks in all passengers for that reservation
-* Stores the information in a database in case the web interface of CLI is restarted
+* Stores the information in a database in case the web interface or CLI is restarted
 
-If southwest changes the check in process, the parser might need to be updated. If you see a bug, file an issue or fork and create a pull request with the fix.
+If southwest changes the checkin process, the parser might need to be updated. If you see a bug, file an issue or fork and create a pull request with the fix.
 
 
 ## Installation ##
@@ -23,7 +23,7 @@ The easiest way to install the dependencies is with [pip](http://pypi.python.org
 
 ## Web interface usage ##
 
-Enter a first and lastname, confirmation number, and email. The system will attempt to locate your reservation and add it to the system for automatic checkin. You will receive an email when you add your reservation to the system and again on successful checkins for your flights. Under a normal round trip scenario, you will be checked in for departure and arrival.
+Enter a first and last name, confirmation number, and email. The system will attempt to locate your reservation and add it to the system for automatic checkin. You will receive an email when you add your reservation to the system and again on successful checkins for your flights. Under a normal round trip scenario, you will be checked in for departure and arrival.
 
 To cancel the automatic checkin, simply [search](http://southwest-checkin.herokuapp.com/search) for the reservation and cancel it.
 
@@ -36,9 +36,15 @@ Configuring the from email address and password in `sw_checkin_email.py` is requ
 
 ## CLI Usage ##
 
-Run the script:
+You can kick off an automatic checkin with the following command. Run the script:
 
     $ python sw_checkin_email.py John Doe ABC123
+
+Storing the reservations in a database is optional (on by default). If an active reservation is contained in the database, you can resume the automatic checkin by running the following command. It will prompt to ask if you would like to resume any of the previously added reservations.
+
+    $ python sw_checkin_email.py
+
+There are also several useful ways of running the script in the background.
 
 Run the script in the background:
 
