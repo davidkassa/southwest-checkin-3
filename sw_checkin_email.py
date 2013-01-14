@@ -569,8 +569,8 @@ def displayFlightInfo(res, flights, do_send_email=False):
     send_email('Waiting for SW flight', message);
 
 def TryCheckinFlight(res_id, flight_id, sch, attempt):
-  res = session.query(Reservation).filter_by(id=res_id).one()
-  flight = session.query(Flight).filter_by(id=flight_id).one()
+  res = db.Session.query(Reservation).filter_by(id=res_id).one()
+  flight = db.Session.query(Flight).filter_by(id=flight_id).one()
   print '-='*30
   print 'Trying to checkin flight at %s' % DateTimeToString(datetime.now(utc))
   print 'Attempt #%s' % attempt

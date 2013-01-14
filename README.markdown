@@ -7,11 +7,11 @@ Southwest Checkin automatically checks a passenger into their flights for a give
 Here are some of the features of the application:
 
 * Checks the passenger in for all flights (departure and arrival) exactly 24 hours before the flight leaves
-* Informs the user via email after successful checkin and includes boarding location and boarding pass
+* Informs the user via email after successful check in and includes boarding position and boarding pass
 * Checks in all passengers for that reservation
-* Stores the information in a database
+* Stores the information in a database in case the web interface of CLI is restarted
 
-If southwest changes the checkin process, the application parser might need to be updated. If you see a bug, file an issue or fork and create a pull request with the fix.
+If southwest changes the check in process, the parser might need to be updated. If you see a bug, file an issue or fork and create a pull request with the fix.
 
 
 ## Installation ##
@@ -52,6 +52,7 @@ For more expanation on these commands, you may want to read about [nohup and dis
 ## Technical Details ##
 
 - The application was written in [Python](http://www.python.org/)
+- [Beautiful Soup 4](http://www.crummy.com/software/BeautifulSoup/) scrapes southwest.com
 - The web interface was written using [Flask](http://flask.pocoo.org/)
 - The database layer was written using [SQLAlchemy](http://www.sqlalchemy.org/)
 - The [live app](http://southwest-checkin.herokuapp.com/) is hosted on a [Heroku](http://www.heroku.com/) free dyno and uses [Heroku Postgres Dev](https://addons.heroku.com/heroku-postgresql) to host the database and [New Relic](https://addons.heroku.com/newrelic) for app statistics
