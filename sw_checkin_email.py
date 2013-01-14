@@ -421,6 +421,7 @@ class ReservationInfoParser(object):
           flight_leg.arrive.dt.replace(day = flight_leg.arrive.dt.day+1))
         flight_leg.arrive.dt_utc = flight_leg.arrive.dt.astimezone(utc)
         flight_leg.arrive.dt_formatted = DateTimeToString(flight_leg.arrive.dt)
+        flight_leg.arrive.dt_utc_formatted = DateTimeToString(flight_leg.arrive.dt_utc)
  
     return flight
 
@@ -555,11 +556,11 @@ def getFlightInfo(res, flights):
     if flight.success:
       message += '  Flight was successfully checked in at %s\n' % flight.position
     for leg in flight.legs:
-      message += '  Flight Number: %s\n    Departs: %s %s (%s UTC)\n    Arrives: %s %s (%s UTC)\n' \
-          % (leg.flight_number, leg.depart.airport, DateTimeToString(leg.depart.dt),
-             DateTimeToString(leg.depart.dt_utc),
-             leg.arrive.airport, DateTimeToString(leg.arrive.dt),
-             DateTimeToString(leg.arrive.dt_utc))
+      message += '  Flight Number: %s\n    Departs: %s %s (%s)\n    Arrives: %s %s (%s)\n' \
+          % (leg.flight_number, leg.depart.airport, leg.depart.dt_formatted,
+             leg.depart.dt_utc_formatted,
+             leg.arrive.airport, leg.arrive.dt_formatted,
+             leg.arrive.dt_utc_formatted)
   return message
 
 def displayFlightInfo(res, flights, do_send_email=False):
@@ -654,9 +655,9 @@ def scheduleAllFlights(res, blocking=False, scheduler=None):
       flight.sched_time = flight_time - seconds_before
       flight.sched_time_formatted = DateTimeToString(flight.legs[0].depart.dt_utc.replace(tzinfo=utc) - timedelta(seconds=seconds_before))
       flight.seconds = flight.sched_time - time_module.time()
-      # Retrieve timezone and apply it because datetimes are stored as naive (no timeone information)
+      # Retrieve timezone and apply it because datetimes are stored as naive (no timezone information)
       tz = airport_timezone_map[flight.legs[0].depart.airport]
-      flight.sched_time_local_formatted = DateTimeToString(tz.localize(flight.legs[0].depart.dt, is_dst=None)- timedelta(seconds=seconds_before))
+      flight.sched_time_local_formatted = DateTimeToString(flight.legs[0].depart.dt_utc.replace(tzinfo=utc).astimezone(tz) - timedelta(seconds=seconds_before))
       db.Session.commit()
       print "Flight time: %s" % flight.legs[0].depart.dt_formatted
       print 'Checkin scheduled at (UTC): %s' % flight.sched_time_formatted
