@@ -23,9 +23,15 @@ The easiest way to install the dependencies is with [pip](http://pypi.python.org
 
 ## Web interface usage ##
 
-Enter a first and lastname, confirmation number, and email. The system will attempt to locate your reservation and add it to the system for automatic checkin. You will receive an email when you add your reservation to the system and again on your successful checkins for your flights. Under a normal round trip scenario, you will be checked in for departure and arrival.
+Enter a first and lastname, confirmation number, and email. The system will attempt to locate your reservation and add it to the system for automatic checkin. You will receive an email when you add your reservation to the system and again on successful checkins for your flights. Under a normal round trip scenario, you will be checked in for departure and arrival.
 
 To cancel the automatic checkin, simply [search](http://southwest-checkin.herokuapp.com/search) for the reservation and cancel it.
+
+To run the development server on `localhost:5000`:
+
+    $ python server.py
+
+Configuring the from email address and password in `sw_checkin_email.py` is required for the web interface.
 
 
 ## CLI Usage ##
