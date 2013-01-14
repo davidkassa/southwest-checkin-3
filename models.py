@@ -18,9 +18,10 @@ class FlightLegLocation(Base):
   # flightleg_id = Column(Integer, ForeignKey('flight_leg.id'))
   airport = Column(String(3))
   # tz: don't store this in the database
-  dt = Column(DateTime())
+  dt = Column(DateTime(timezone=True))
   dt_formatted = Column(String())
-  dt_utc = Column(DateTime())
+  dt_utc = Column(DateTime(timezone=True))
+  dt_utc_formatted = Column(String())
   
 
 class FlightLeg(Base):

@@ -200,7 +200,7 @@ class Error(Exception):
 debug_html_files = False
 
 # Log debug messages to console
-verbose = False
+verbose = True
 def dlog(str):
   if verbose:
     print 'DEBUG: %s' % str
@@ -450,6 +450,7 @@ class ReservationInfoParser(object):
       datetime.combine(day, flight_time), is_dst=None)
     f.dt_utc = f.dt.astimezone(utc)
     # Formatted datetime
+    f.dt_utc_formatted = DateTimeToString(f.dt_utc)
     f.dt_formatted = DateTimeToString(f.dt)
     
     return f
@@ -651,9 +652,11 @@ def scheduleAllFlights(res, blocking=False, scheduler=None):
     elif not flight.success:
       seconds_before = CHECKIN_WINDOW + 24*60*60 # how many seconds before the flight time do we check in
       flight.sched_time = flight_time - seconds_before
-      flight.sched_time_formatted = DateTimeToString(flight.legs[0].depart.dt_utc - timedelta(seconds=seconds_before))
+      flight.sched_time_formatted = DateTimeToString(flight.legs[0].depart.dt_utc.replace(tzinfo=utc) - timedelta(seconds=seconds_before))
       flight.seconds = flight.sched_time - time_module.time()
-      flight.sched_time_local_formatted = DateTimeToString(flight.legs[0].depart.dt - timedelta(seconds=seconds_before))
+      # Retrieve timezone and apply it because datetimes are stored as naive (no timeone information)
+      tz = airport_timezone_map[flight.legs[0].depart.airport]
+      flight.sched_time_local_formatted = DateTimeToString(tz.localize(flight.legs[0].depart.dt, is_dst=None)- timedelta(seconds=seconds_before))
       db.Session.commit()
       print "Flight time: %s" % flight.legs[0].depart.dt_formatted
       print 'Checkin scheduled at (UTC): %s' % flight.sched_time_formatted
