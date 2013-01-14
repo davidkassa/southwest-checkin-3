@@ -420,6 +420,7 @@ class ReservationInfoParser(object):
         flight_leg.arrive.dt = flight_leg.arrive.tz.normalize(
           flight_leg.arrive.dt.replace(day = flight_leg.arrive.dt.day+1))
         flight_leg.arrive.dt_utc = flight_leg.arrive.dt.astimezone(utc)
+        flight_leg.arrive.dt_formatted = DateTimeToString(flight_leg.arrive.dt)
  
     return flight
 
@@ -448,8 +449,7 @@ class ReservationInfoParser(object):
     f.dt = f.tz.localize(
       datetime.combine(day, flight_time), is_dst=None)
     f.dt_utc = f.dt.astimezone(utc)
-
-    # Added formatted date
+    # Formatted datetime
     f.dt_formatted = DateTimeToString(f.dt)
     
     return f
@@ -554,7 +554,7 @@ def getFlightInfo(res, flights):
     if flight.success:
       message += '  Flight was successfully checked in at %s\n' % flight.position
     for leg in flight.legs:
-      message += '  Flight Number: %s\n    Departs: %s %s (%s)\n    Arrives: %s %s (%s)\n' \
+      message += '  Flight Number: %s\n    Departs: %s %s (%s UTC)\n    Arrives: %s %s (%s UTC)\n' \
           % (leg.flight_number, leg.depart.airport, DateTimeToString(leg.depart.dt),
              DateTimeToString(leg.depart.dt_utc),
              leg.arrive.airport, DateTimeToString(leg.arrive.dt),
@@ -644,17 +644,20 @@ def scheduleAllFlights(res, blocking=False, scheduler=None):
   """
   for (i, flight) in enumerate(res.flights):
     flight_time = time_module.mktime(flight.legs[0].depart.dt_utc.utctimetuple()) - time_module.timezone
+    dlog("Flight time (s via mktime): %s" % flight_time)
     if flight_time < time_module.time():
       print 'Flight %s already left...' % (i+1)
       flight.active = False
     elif not flight.success:
-      flight.sched_time = flight_time - CHECKIN_WINDOW - 24*60*60
-      flight.sched_time_formatted = DateTimeToString(datetime.fromtimestamp(flight.sched_time, utc))
+      seconds_before = CHECKIN_WINDOW + 24*60*60 # how many seconds before the flight time do we check in
+      flight.sched_time = flight_time - seconds_before
+      flight.sched_time_formatted = DateTimeToString(flight.legs[0].depart.dt_utc - timedelta(seconds=seconds_before))
       flight.seconds = flight.sched_time - time_module.time()
-      flight.sched_time_local_formatted = DateTimeToString(flight.legs[0].depart.dt - timedelta(seconds=CHECKIN_WINDOW))
+      flight.sched_time_local_formatted = DateTimeToString(flight.legs[0].depart.dt - timedelta(seconds=seconds_before))
       db.Session.commit()
-      print 'Updated Schedule (UTC): %s' % flight.sched_time_formatted
-      print 'Updated Schedule (local): %s' % flight.sched_time_local_formatted     
+      print "Flight time: %s" % flight.legs[0].depart.dt_formatted
+      print 'Checkin scheduled at (UTC): %s' % flight.sched_time_formatted
+      print 'Checkin scheduled at (local): %s' % flight.sched_time_local_formatted     
       if not blocking:
         from threading import Timer
         Timer(flight.seconds, TryCheckinFlight, (res.id, flight.id, None, 1)).start()

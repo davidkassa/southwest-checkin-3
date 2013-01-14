@@ -11,6 +11,7 @@ class FlightLegLocation(Base):
         tz: timezone
         dt: departure or arrival time
         dt_utc: departure or arrival time in UTC
+        dt_formatted: departure or arrival time formatted to string
   """
   __tablename__ = 'flight_leg_location'
   id = Column(Integer, primary_key=True)
