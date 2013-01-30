@@ -78,8 +78,12 @@ RETRY_INTERVAL = 5
 # How soon before the designated time should we try to check in?
 CHECKIN_WINDOW = 60
 
+# Admin
+username='admin'
+password='secret'
+
 # Email configuration
-should_send_email = True
+should_send_email = False
 email_from = None
 email_to = None
 

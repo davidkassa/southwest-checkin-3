@@ -30,7 +30,7 @@
 """
 
 import os
-from flask import Flask, render_template, request, redirect, url_for, abort
+from flask import Flask, render_template, request, redirect, url_for, abort, Response
 
 app = Flask(__name__)
 app.debug = True
@@ -55,6 +55,7 @@ from bs4 import Tag
 from datetime import datetime,date,timedelta,time
 from pytz import timezone,utc
 import codecs
+from functools import wraps
 
 try:
   from email.mime.multipart import MIMEMultipart
@@ -64,6 +65,27 @@ except:
   from email.MIMEText import MIMEText
 
 from sw_checkin_email import *
+
+
+def is_admin():
+  auth = request.authorization
+  if not auth or not (auth.username == username
+                      and auth.password == password):
+    return False
+  return True
+
+def requires_authentication(func):
+  """ function decorator for handling authentication """
+  @wraps(func)
+  def _auth_decorator(*args, **kwargs):
+      """ does the wrapping """
+      if not is_admin():
+          return Response("Could not authenticate you", 
+                          401, 
+                          {"WWW-Authenticate":'Basic realm="Login Required"'})
+      return func(*args, **kwargs)
+
+  return _auth_decorator
 
 # ========================================================================
 
@@ -153,6 +175,7 @@ def display_message(message):
   return render_template('message.html', message=message)
 
 @app.route('/all')
+@requires_authentication
 def all_reservations():
   try:
     reservations = db.getAllReservations()
