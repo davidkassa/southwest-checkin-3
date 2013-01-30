@@ -394,27 +394,27 @@ class ReservationInfoParser(object):
     flight = Flight()
 
     # Get flight reservation date from first flight leg
-    flight_date_str = FindByTagClass(soup, 'div', 'departureLongDate').string.strip()
+    flight_date_str = FindByTagClass(soup, 'span', 'travelDateTime').string.strip()
     day = date(*time_module.strptime(flight_date_str, '%A, %B %d, %Y')[0:3])
     dlog("Reservation Date: " + str(day))
 
     # Each flight leg is represented in a row in the HTML table.
     # Each row includes arrival and departure times and flight number.
-    rows = soup.find_all('tr')
-    for tr in rows:
+    for tr in soup.find_all("tr", recursive=False):
       flight_leg = FlightLeg()
       flight.legs.append(flight_leg)
 
       # Get flight number
-      parent = FindByTagClass(tr, 'td', 'flightNumberCell')
-      flight_leg.flight_number = parent.contents[3].contents[0]
+      parent = FindByTagClass(tr, 'td', 'flightNumber')
+      flight_leg.flight_number = parent.strong.contents[0]
+      print "Found flight", flight_leg.flight_number
 
       # List of arrival and departure details for each airport
-      segmentLegDetails = FindAllByTagClass(tr, 'div', 'segmentLegDetails')
+      flight_leg_soup = soup.find('table', 'airItineraryFlightRouting').find_all('tr')
       dlog("Parsing Departure:")
-      flight_leg.depart = self._parseFlightLegDetails(day, segmentLegDetails[0])
+      flight_leg.depart = self._parseFlightLegDetails(day, flight_leg_soup[0])
       dlog("Parsing Arrival:")
-      flight_leg.arrive = self._parseFlightLegDetails(day, segmentLegDetails[1])
+      flight_leg.arrive = self._parseFlightLegDetails(day, flight_leg_soup[1])
 
       if flight_leg.arrive.dt_utc < flight_leg.depart.dt_utc:
         flight_leg.arrive.dt = flight_leg.arrive.tz.normalize(
@@ -431,7 +431,7 @@ class ReservationInfoParser(object):
     '''
     f = FlightLegLocation()
     # Get airport code
-    departure_airport = FindByTagClass(legDetails, 'div', 'segmentStation')
+    departure_airport = FindByTagClass(legDetails, 'td', 'routingDetailsStops')
     f.airport = re.findall('[A-Z]{3}', str(departure_airport))[0]
     dlog("Airport Code: " + f.airport)
     # Cannot get the find method with regex working
@@ -441,11 +441,9 @@ class ReservationInfoParser(object):
     f.tz = airport_timezone_map[f.airport]
     
     # Get time
-    segmentTime = FindByTagClass(legDetails, 'div', 'segmentTime').string.strip()
-    # Add AM/PM
-    segmentTime += " " + FindByTagClass(legDetails, 'div', 'segmentTimeAMPM').string.strip()
+    segmentTime = FindByTagClass(legDetails, 'td', 'routingDetailsTimes').strong.span.contents[0]
     # Create time() object
-    flight_time = time(*time_module.strptime(segmentTime, '%I:%M %p')[3:5])
+    flight_time = time(*time_module.strptime(segmentTime.strip(), '%I:%M %p')[3:5])
     dlog("Time: " + str(flight_time))
     f.dt = f.tz.localize(
       datetime.combine(day, flight_time), is_dst=None)
@@ -660,16 +658,17 @@ def scheduleAllFlights(res, blocking=False, scheduler=None):
       flight.sched_time_local_formatted = DateTimeToString(flight.legs[0].depart.dt_utc.replace(tzinfo=utc).astimezone(tz) - timedelta(seconds=seconds_before))
       db.Session.commit()
       print "Flight time: %s" % flight.legs[0].depart.dt_formatted
-      print 'Checkin scheduled at (UTC): %s' % flight.sched_time_formatted
-      print 'Checkin scheduled at (local): %s' % flight.sched_time_local_formatted     
       if not blocking:
         from threading import Timer
+        print "Scheduling checkin for flight at", flight.legs[0].depart.dt_formatted, "(local), ", flight.legs[0].depart.dt_utc_formatted, "(UTC) in", int(flight.seconds/60/60), "hrs", int(flight.seconds/60%60),  "mins from now..."
         Timer(flight.seconds, TryCheckinFlight, (res.id, flight.id, None, 1)).start()
         # DEBUG
         # if flight == res.flights[0]:
         #   Timer(5, TryCheckinFlight, (res, flight, None, 1)).start()
       else:
         scheduler.enterabs(flight.sched_time, 1, TryCheckinFlight, (res.id, flight.id, scheduler, 1))
+      print 'Checkin scheduled at (UTC): %s' % flight.sched_time_formatted
+      print 'Checkin scheduled at (local): %s' % flight.sched_time_local_formatted     
       print 'Flights scheduled.  Waiting...' 
     else:
       print 'Flight %s was successfully checked in at %s\n' % ((i+1), flight.position)
