@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block title %}Southwest Checkin - Status{% endblock %}
+{% block body %}
+  <div class="text-centered">
+    <div id="status">
+      <h1 class="text-centered logo"><a href="/">Southwest Check In</a></h1>
+      <div class="text-centered">
+        <h2>Reservations</h2>
+        <ul>
+          {% for res in reservations %}
+            <li>
+              Reservation <b>{{res.code}}</b> for {{res.first_name}} {{res.last_name}} is 
+              {% if res.active %}
+                <span class="highlight">active</span>
+              {% else %}
+                not active
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+{% endblock %}
