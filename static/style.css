@@ -40,6 +40,10 @@ html, body {
   list-style-type: none;
 }
 
+table { text-align: center; }
+th { font-weight: bold; text-decoration: underline; }
+td { padding: 5px; }
+
 .errors {
   text-align: left;
 }

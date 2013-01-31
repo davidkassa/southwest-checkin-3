@@ -6,18 +6,26 @@
       <h1 class="text-centered logo"><a href="/">Southwest Check In</a></h1>
       <div class="text-centered">
         <h2>Reservations</h2>
-        <ul>
+        <table><tbody>
+          <th>Reservation</th><th>Name</th><th>Active</th><th>Scheduled Checkins</th>
           {% for res in reservations %}
-            <li>
-              Reservation <b>{{res.code}}</b> for {{res.first_name}} {{res.last_name}} is 
+            <tr>
+              <td><b>{{res.code}}</b></td><td>{{res.first_name}} {{res.last_name}}</td>
               {% if res.active %}
-                <span class="highlight">active</span>
+                <td><span class="highlight">active</span></td>
+                <td><ul>
+                  {% for flight in res.flights %}
+                    {% if flight.sched_time_local_formatted %}
+                      <li>{{ flight.sched_time_local_formatted }}</li>
+                    {% endif %}
+                  {% endfor %}
+                </ul></td>
               {% else %}
-                not active
+                <td>not active</td><td></td>
               {% endif %}
-            </li>
+            </tr>
           {% endfor %}
-        </ul>
+        </tbody></table>
       </div>
     </div>
   </div>
