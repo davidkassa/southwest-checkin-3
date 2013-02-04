@@ -36,7 +36,7 @@ class FlightLeg(Base):
   __tablename__ = 'flight_leg'
   id = Column(Integer, primary_key=True)
   flight_id = Column(Integer, ForeignKey('flight.id'))
-  flight_number = Column(String(4))
+  flight_number = Column(String(6))
   
   depart_id = Column(Integer, ForeignKey("flight_leg_location.id"))
   arrive_id = Column(Integer, ForeignKey("flight_leg_location.id"))
