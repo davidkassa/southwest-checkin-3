@@ -178,7 +178,7 @@ def display_message(message):
 @requires_authentication
 def all_reservations():
   try:
-    reservations = db.getAllReservations()
+    reservations = db.getAllReservations(active=False)
   except:
     return abort(500)
   return render_template('all_reservations.html', reservations=reservations)

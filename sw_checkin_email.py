@@ -111,6 +111,22 @@ retrieve_url = urlparse.urljoin(base_url, '/flight/lookup-air-reservation.html')
 
 # ========================================================================
 
+class Error(Exception):
+  pass
+
+# ========================================================================
+
+# Save html data from accessed web pages for debugging purposes
+debug_html_files = False
+
+# Log debug messages to console
+verbose = False
+def dlog(str):
+  if verbose:
+    print 'DEBUG: %s' % str
+
+# ========================================================================
+
 # Common US time zones
 tz_alaska = timezone('US/Alaska')
 tz_aleutian = timezone('US/Aleutian')
@@ -192,22 +208,6 @@ airport_timezone_map = {
   'TUL': tz_central,
   'TUS': tz_arizona,
 }
-
-# ========================================================================
-
-class Error(Exception):
-  pass
-
-# ========================================================================
-
-# Save html data from accessed web pages for debugging purposes
-debug_html_files = False
-
-# Log debug messages to console
-verbose = True
-def dlog(str):
-  if verbose:
-    print 'DEBUG: %s' % str
 
 # =========== function definitions =======================================
 
@@ -661,19 +661,22 @@ def scheduleAllFlights(res, blocking=False, scheduler=None):
       tz = airport_timezone_map[flight.legs[0].depart.airport]
       flight.sched_time_local_formatted = DateTimeToString(flight.legs[0].depart.dt_utc.replace(tzinfo=utc).astimezone(tz) - timedelta(seconds=seconds_before))
       db.Session.commit()
-      print "Flight time: %s" % flight.legs[0].depart.dt_formatted
+      dlog("Flight time: %s" % flight.legs[0].depart.dt_formatted)
       if not blocking:
         from threading import Timer
-        print "Scheduling checkin for flight at", flight.legs[0].depart.dt_formatted, "(local), ", flight.legs[0].depart.dt_utc_formatted, "(UTC) in", int(flight.seconds/60/60), "hrs", int(flight.seconds/60%60),  "mins from now..."
-        Timer(flight.seconds, TryCheckinFlight, (res.id, flight.id, None, 1)).start()
+        print "Scheduling check in for flight at", flight.legs[0].depart.dt_formatted, "(local), ", flight.legs[0].depart.dt_utc_formatted, "(UTC) in", int(flight.seconds/60/60), "hrs", int(flight.seconds/60%60),  "mins from now..."
+        t = Timer(flight.seconds, TryCheckinFlight, (res.id, flight.id, None, 1))
+        t.daemon = True
+        t.start()
         # DEBUG
         # if flight == res.flights[0]:
         #   Timer(5, TryCheckinFlight, (res, flight, None, 1)).start()
       else:
         scheduler.enterabs(flight.sched_time, 1, TryCheckinFlight, (res.id, flight.id, scheduler, 1))
-      print 'Checkin scheduled at (UTC): %s' % flight.sched_time_formatted
-      print 'Checkin scheduled at (local): %s' % flight.sched_time_local_formatted     
-      print 'Flights scheduled.  Waiting...' 
+        print "Scheduling check in for flight at", flight.legs[0].depart.dt_formatted, "(local), ", flight.legs[0].depart.dt_utc_formatted, "(UTC)"
+      dlog('Checkin scheduled at (UTC): %s' % flight.sched_time_formatted)
+      dlog('Checkin scheduled at (local): %s' % flight.sched_time_local_formatted)   
+      dlog('Flights scheduled.  Waiting...')
     else:
       print 'Flight %s was successfully checked in at %s\n' % ((i+1), flight.position)
   db.isReservationActive(res)
@@ -686,6 +689,9 @@ def scheduleAllExistingReservations(confirm=False, blocking=False, scheduler=Non
       yes = raw_input('Would you like to schedule reservation %s for %s %s [Y/n]? ' % (res.code, res.first_name, res.last_name)).lower()
       if yes == 'y' or yes == '' or yes == 'yes':
         scheduleAllFlights(res, blocking, scheduler)
+    else:
+      print "Checking reservation %s for %s %s" % (res.code, res.first_name, res.last_name)
+      scheduleAllFlights(res, blocking, scheduler)
 
 # ========================================================================
 
