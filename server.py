@@ -179,9 +179,12 @@ def display_message(message):
 def all_reservations():
   try:
     reservations = db.getAllReservations(active=False)
-  except:
+  except Exception, e:
+    print e
     return abort(500)
-  return render_template('all_reservations.html', reservations=reservations)
+  import threading
+  count = threading.activeCount()
+  return render_template('all_reservations.html', reservations=reservations, count=count)
 
 @app.route('/delete/<code>', methods=['GET', 'POST'])
 def delete_reservation(code):
