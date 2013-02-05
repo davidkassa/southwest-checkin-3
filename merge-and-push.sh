@@ -10,7 +10,8 @@ elif [ $1 = "develop" ]; then
     git push origin develop
     git checkout develop
 elif [ $1 = "heroku" ]; then
-    git fetch origin
+    git checkout master
+    git pull origin master
     git checkout heroku
     git rebase master
     echo "Push to Heroku? [yN]"
