@@ -602,9 +602,11 @@ def TryCheckinFlight(res_id, flight_id, sch, attempt):
       print 'FAILURE.  Scheduling another try in %d seconds' % RETRY_INTERVAL
       if (sch): # Traditional scheduler - command line
         sch.enterabs(time_module.time() + RETRY_INTERVAL, 1,
-                     TryCheckinFlight, (res, flight, sch, attempt + 1))
+                     TryCheckinFlight, (res.id, flight.id, sch, attempt + 1))
       else: # Async timer - Flask
-        Timer(RETRY_INTERVAL, TryCheckinFlight, (res, flight, None, attempt + 1)).start()
+        t = Timer(RETRY_INTERVAL, TryCheckinFlight, (res.id, flight.id, None, attempt + 1))
+        t.daemon = True
+        t.start()
       
 def send_email(subject, message, boarding_pass=None, email=None):
   if not should_send_email:
@@ -663,7 +665,6 @@ def scheduleAllFlights(res, blocking=False, scheduler=None):
       db.Session.commit()
       dlog("Flight time: %s" % flight.legs[0].depart.dt_formatted)
       if not blocking:
-        from threading import Timer
         print "Scheduling check in for flight at", flight.legs[0].depart.dt_formatted, "(local), ", flight.legs[0].depart.dt_utc_formatted, "(UTC) in", int(flight.seconds/60/60), "hrs", int(flight.seconds/60%60),  "mins from now..."
         t = Timer(flight.seconds, TryCheckinFlight, (res.id, flight.id, None, 1))
         t.daemon = True
