@@ -31,6 +31,7 @@
 
 import os
 from flask import Flask, render_template, request, redirect, url_for, abort, Response
+from functools import wraps
 
 app = Flask(__name__)
 app.debug = True
@@ -39,7 +40,6 @@ app.debug = True
 
 import re
 import sys
-import time as time_module
 import datetime
 import sched
 import string
@@ -55,14 +55,6 @@ from bs4 import Tag
 from datetime import datetime,date,timedelta,time
 from pytz import timezone,utc
 import codecs
-from functools import wraps
-
-try:
-  from email.mime.multipart import MIMEMultipart
-  from email.mime.text import MIMEText
-except:
-  from email.MIMEMultipart import MIMEMultipart
-  from email.MIMEText import MIMEText
 
 from sw_checkin_email import *
 
@@ -100,9 +92,7 @@ class CheckinForm(Form):
     email = TextField('Email', [validators.Required(message='you didn\'t enter your email address')])
 
 class SearchForm(Form):
-    code = TextField('Confirmation Number', [
-      validators.Length(min=6, max=6, message='it must be 6 characters'),
-      validators.Required(message='you didn\'t enter a confirmation number')])
+    query = TextField('Confirmation Number', [validators.Required(message='you didn\'t enter a confirmation number')])
 
 # ========================================================================
 
@@ -123,7 +113,7 @@ def checkin():
     res = db.findReservation(form.code.data)
     if res:
       print 'Reservation %s is already in the system...' % res.code
-      return status(res.code)
+      return flight_status(res.code)
 
     res = db.addReservation(form.firstname.data, form.lastname.data, form.code.data, form.email.data)
     print 'Created', res
@@ -139,7 +129,7 @@ def checkin():
       scheduleAllFlights(res)
       print 'Current time: %s' % DateTimeToString(datetime.now(utc))
 
-      return status(res.code)
+      return flight_status(res.code)
     else:
       db.isReservationActive(res)
       if not res.active:
@@ -151,24 +141,39 @@ def checkin():
 @app.route('/search', methods=['GET', 'POST'])
 def search():
   if request.method == 'GET':
-    return render_template('search.html', form=CheckinForm())
+    return render_template('search.html', form=SearchForm())
   if request.method == 'POST':
     form = SearchForm(request.form)
     if form.validate():
-      try:
-        res = db.findReservation(form.code.data)
-      except:
-        return display_message("We can't find that reservation!")
-      return render_template('status.html', res=res, flights=res.flights)
+      # reservations = db.findReservationByLastName(form.query.data)
+      # if reservations != None:
+      #   return redirect(url_for("user_status", last_name=form.query.data))
+      return redirect(url_for("flight_status", code=form.query.data))
     return render_template('search.html', form=form)
 
-@app.route('/status')
-def status(code):
+@app.route('/flights/<code>', methods=['GET'])
+def flight_status(code):
   try:
     res = db.findReservation(code)
   except:
     return display_message("We can't find that reservation!")
   return render_template('status.html', res=res, flights=res.flights)
+
+@app.route('/flights/<code>', methods=['DELETE'])
+def flight_delete(code):
+  res = db.findReservation(code)
+  if res != None:
+    mes = "%s will no longer be checked in." % res.code
+    db.deleteReservation(res)
+    return display_message(mes)
+  return abort(400)
+
+# @app.route('/users/<last_name>', methods=['GET'])
+# def user_status(last_name):
+#   reservations = db.findReservationByLastName(last_name)
+#   if reservations != None:
+#     return render_template('user.html', reservations=reservations, count=count)
+#   return display_message("We can't find that last name!")
 
 @app.route('/message')
 def display_message(message):
@@ -177,24 +182,12 @@ def display_message(message):
 @app.route('/all')
 @requires_authentication
 def all_reservations():
-  try:
-    reservations = db.getAllReservations(active=False)
-  except Exception, e:
-    print e
-    return abort(500)
-  import threading
-  count = threading.activeCount()
-  return render_template('all_reservations.html', reservations=reservations, count=count)
-
-@app.route('/delete/<code>', methods=['GET', 'POST'])
-def delete_reservation(code):
-  try:
-    res = db.findReservation(code)
-  except:
-    return abort(400)
-  mes = "%s will no longer be checked in." % res.code
-  db.deleteReservation(res)
-  return display_message(mes)
+  reservations = db.getAllReservations(active=False)
+  if reservations != None:
+    import threading
+    count = threading.activeCount()
+    return render_template('all_reservations.html', reservations=reservations, count=count)
+  return abort(500)
 
 if __name__ == '__main__':
   # Bind to PORT if defined, otherwise default to 5000.

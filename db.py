@@ -39,6 +39,12 @@ class Database:
       return None
     return res
 
+  def findReservationsByEmail(self, email):
+    reservations = self.Session.query(Reservation).filter_by(email = email).all()
+    if len(reservations) == 0:
+      return None
+    return reservations
+
   def isReservationActive(self, res):
     res.isReservationActive()
     self.Session.commit()
@@ -46,9 +52,12 @@ class Database:
       print 'Reservation %s is no longer active.' % res.code
 
   def getAllReservations(self, active=True):
-    if active:
-      return self.Session.query(Reservation).filter_by(active = True).all()
-    else:
-      return self.Session.query(Reservation).all()
+    try:
+      if active:
+        return self.Session.query(Reservation).filter_by(active = True).all()
+      else:
+        return self.Session.query(Reservation).all()
+    except:
+      return None
 
 

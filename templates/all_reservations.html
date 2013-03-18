@@ -10,7 +10,7 @@
           <th>Reservation</th><th>Name</th><th>Active</th><th>Scheduled Checkins</th>
           {% for res in reservations %}
             <tr>
-              <td><b>{{res.code}}</b></td><td>{{res.first_name}} {{res.last_name}}</td>
+              <td><b><a href="/flights/{{res.code}}">{{res.code}}</a></b></td><td>{{res.first_name}} {{res.last_name}}</td>
               {% if res.active %}
                 <td><span class="highlight">active</span></td>
                 <td><ul>
@@ -26,7 +26,7 @@
             </tr>
           {% endfor %}
         </tbody></table>
-        Active check-in threads: {{count - 1}}
+        Active threads: {{count}}
       </div>
     </div>
   </div>

@@ -23,8 +23,9 @@
             {% endif %}
           </h2>
         </div>
-        <div><h3 class="text-centered">Confirmation Code: {{ res.code }}</h3></div>
-        <div><h3 class="text-centered">Passenger Name: {{ res.first_name }} {{ res.last_name }}</h3></div>
+        <div><strong class="text-centered">Confirmation Code: {{ res.code }}</strong></div>
+        <div><strong class="text-centered">Passenger Name: {{ res.first_name }} {{ res.last_name }}</strong></div>
+        <div><strong class="text-centered">Passenger Email: {{ res.email }}</strong></div>
         <ul class="flights">
           {% for flight in flights %}
             <li>Flight {{ loop.index }}:
@@ -48,7 +49,7 @@
         </ul>
       </div>
     </div>
-    <div><a href="{{ url_for('delete_reservation', code=res.code) }}" class="btn btn-southwest">Remove automatic check in</a></div>
+    <div><a href="{{ url_for('flight_delete', code=res.code) }}" class="btn btn-southwest">Remove automatic check in</a></div>
     {% include 'search_for_checkin_footer.html' %}
   </div>
 {% endblock %}
