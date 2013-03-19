@@ -55,19 +55,24 @@ import codecs
 
 from models import Reservation, Flight, FlightLeg, FlightLegLocation
 
-# Store all data in a database?
+# Store all data in a database? Otherwise, use memory
 STORE_DATABASE = True
+
 # Heroku Postgres
 heroku = False
+# Local Postgres
+postgres = 'postgresql://postgres:password@localhost/southwest-checkin' # else False
 # SQLite
-db_filename = 'southwest-checkin.db'
+sqlite = 'southwest-checkin.db'
 
 from db import Database
 if STORE_DATABASE:
   if heroku:
     db = Database(heroku=True)
+  elif postgres:
+    db = Database(postgres=postgres)
   else:
-    db = Database(db_filename)
+    db = Database(sqlite=sqlite)
 else:
   db = Database()
 db.create_all()
