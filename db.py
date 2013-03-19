@@ -10,11 +10,15 @@ class Database:
     if heroku:
       import os
       self.url = os.environ['DATABASE_URL']
+      self.engine = create_engine(self.url)
     elif postgres:
       self.url = postgres
+      self.engine = create_engine(self.url)
     else:
       self.url = 'sqlite:///' + sqlite
-    self.engine = create_engine(self.url)
+      from sqlalchemy.pool import StaticPool
+      self.engine = create_engine(self.url, connect_args={'check_same_thread':False},
+                    poolclass=StaticPool) # special args for memory db -> http://docs.sqlalchemy.org/en/rel_0_7/dialects/sqlite.html#using-a-memory-database-in-multiple-threads
     session_factory = sessionmaker(bind=self.engine)
     # The scoped_session is thread safe
     self.Session = scoped_session(session_factory)

@@ -2,8 +2,6 @@
 
 # The MIT License
 #
-# Copyright (c) 2008 Joe Beda
-#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
@@ -21,9 +19,6 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
-
-# Based on script by Ken Washington
-#   http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/496790
 
 import re
 import sys
@@ -55,82 +50,15 @@ import codecs
 
 from models import Reservation, Flight, FlightLeg, FlightLegLocation
 
-# Store all data in a database? Otherwise, use memory
-STORE_DATABASE = True
-
-# Heroku Postgres
-heroku = False
-# Local Postgres
-postgres = 'postgresql://postgres:password@localhost/southwest-checkin' # else False
-# SQLite
-sqlite = 'southwest-checkin.db'
-
-from db import Database
-if STORE_DATABASE:
-  if heroku:
-    db = Database(heroku=True)
-  elif postgres:
-    db = Database(postgres=postgres)
-  else:
-    db = Database(sqlite=sqlite)
-else:
-  db = Database()
-db.create_all()
-
-# If we are unable to check in, how soon should we retry?
-RETRY_INTERVAL = 5
-
-# How soon before the designated time should we try to check in?
-CHECKIN_WINDOW = 60
-
-# Admin
-username='admin'
-password='secret'
-
-# Email configuration
-should_send_email = False
-email_from = None
-email_to = None
-
-# SMTP server config
-if False:  # local config
-  smtp_server = 'localhost'
-  smtp_port = 25
-  smtp_auth = False
-  smtp_user = email_from
-  smtp_password = ''  # if blank, we will prompt first and send test message       
-  smtp_use_tls = False
-else:  # gmail config
-  smtp_server = 'smtp.gmail.com'
-  smtp_port = 587
-  smtp_auth = True
-  smtp_user = email_from
-  smtp_password = ''  # if blank, we will prompt first and send test message
-  smtp_use_tls = True
+# Load settings
+config = {}
+execfile("settings.py", config)
 
 # ========================================================================
-# fixed page locations and parameters
+
 base_url = 'http://www.southwest.com'
 checkin_url = urlparse.urljoin(base_url, '/flight/retrieveCheckinDoc.html')
 retrieve_url = urlparse.urljoin(base_url, '/flight/lookup-air-reservation.html')
-
-# ========================================================================
-
-class Error(Exception):
-  pass
-
-# ========================================================================
-
-# Save html data from accessed web pages for debugging purposes
-debug_html_files = False
-
-# Log debug messages to console
-verbose = False
-def dlog(str):
-  if verbose:
-    print 'DEBUG: %s' % str
-
-# ========================================================================
 
 # Common US time zones
 tz_alaska = timezone('US/Alaska')
@@ -216,6 +144,23 @@ airport_timezone_map = {
 
 # =========== function definitions =======================================
 
+# Log debug messages to console
+def dlog(str):
+  if config["VERBOSE"]:
+    print 'DEBUG: %s' % str
+
+from db import Database
+if config["STORE_DATABASE"]:
+  if config["HEROKU"]:
+    db = Database(heroku=True)
+  elif config["POSTGRES"] != '':
+    db = Database(postgres=config["POSTGRES"])
+  else:
+    db = Database(sqlite=config["SQLITE"])
+else:
+  db = Database()
+db.create_all()
+
 # build our cookie based opener
 opener = urllib2.build_opener(urllib2.HTTPCookieProcessor())
 
@@ -292,7 +237,7 @@ class HtmlFormParser(object):
 
     soup = BeautifulSoup(data, "lxml")
     # Write to file for debug purposes
-    if debug_html_files:
+    if config["DEBUG_HTML_FILES"]:
       f = codecs.open('html_data_' + str(datetime.now()) + '.html', encoding='utf-8', mode='w+')
       f.write(str(data))
       f.close
@@ -523,7 +468,7 @@ def getBoardingPass(res):
 
   # finally, lets check in the flight and make our success file
   (checkinresult, form_url) = form.submit()
-  if debug_html_files:
+  if config["DEBUG_HTML_FILES"]:
     f = codecs.open('html_checkin_success_' + str(datetime.now()) + '.html', encoding='utf-8', mode='w+')
     f.write(str(checkinresult))
     f.close
@@ -600,47 +545,48 @@ def TryCheckinFlight(res_id, flight_id, sch, attempt):
       send_email('Flight checked in!', message, boarding_pass, res.email)
     else:
       send_email('Flight checked in!', message, boarding_pass)
+    send_email('%s %s was checked in' % (res.first_name, res.last_name), message, boarding_pass, config["ADMIN_EMAIL"])
   else:
-    if attempt > (CHECKIN_WINDOW * 2) / RETRY_INTERVAL:
+    if attempt > (config["CHECKIN_WINDOW"] * 2) / config["RETRY_INTERVAL"]:
       print 'FAILURE.  Too many failures, giving up.'
     else:
-      print 'FAILURE.  Scheduling another try in %d seconds' % RETRY_INTERVAL
+      print 'FAILURE.  Scheduling another try in %d seconds' % config["RETRY_INTERVAL"]
       if (sch): # Traditional scheduler - command line
-        sch.enterabs(time_module.time() + RETRY_INTERVAL, 1,
+        sch.enterabs(time_module.time() + config["RETRY_INTERVAL"], 1,
                      TryCheckinFlight, (res.id, flight.id, sch, attempt + 1))
       else: # Async timer - Flask
-        t = Timer(RETRY_INTERVAL, TryCheckinFlight, (res.id, flight.id, None, attempt + 1))
+        t = Timer(config["RETRY_INTERVAL"], TryCheckinFlight, (res.id, flight.id, None, attempt + 1))
         t.daemon = True
         t.start()
       
 def send_email(subject, message, boarding_pass=None, email=None):
-  if not should_send_email:
+  if not config["SEND_EMAIL"] and not config["SEND_ADMIN_EMAIL"]:
     return
 
-  global email_to
+  # global config["EMAIL_TO"]
   if email != None:
-    email_to = email
+    config["EMAIL_TO"] = email
 
-  for to in [string.strip(s) for s in string.split(email_to, ',')]:
+  for to in [string.strip(s) for s in string.split(config["EMAIL_TO"], ',')]:
     try:
-      smtp = smtplib.SMTP(smtp_server, smtp_port)
+      smtp = smtplib.SMTP(config["SMTP_SERVER"], config["SMTP_PORT"])
       smtp.ehlo()
-      if smtp_use_tls:
+      if config["SMTP_USE_TLS"]:
         smtp.starttls()
       smtp.ehlo()
-      if smtp_auth:
-        smtp.login(smtp_user, smtp_password)
+      if config["SMTP_AUTH"]:
+        smtp.login(config["SMTP_USER"], config["SMTP_PASSWORD"])
       print 'Sending mail to %s.' % to
       msg = MIMEMultipart('mixed')
       msg['Subject'] = subject
       msg['To'] = to
-      msg['From'] = email_from
+      msg['From'] = config["EMAIL_FROM"]
       msg.attach(MIMEText(message, 'plain'))
       if boarding_pass:
         msg_bp = MIMEText(boarding_pass, 'html')
         msg_bp.add_header('content-disposition', 'attachment', filename='boarding_pass.html')
         msg.attach(msg_bp)
-      smtp.sendmail(email_from, to, msg.as_string())
+      smtp.sendmail(config["EMAIL_FROM"], to, msg.as_string())
       
       print 'Email sent successfully.'
       smtp.close()
@@ -660,7 +606,7 @@ def scheduleAllFlights(res, blocking=False, scheduler=None):
       print 'Flight %s already left...' % (i+1)
       flight.active = False
     elif not flight.success:
-      seconds_before = CHECKIN_WINDOW + 24*60*60 # how many seconds before the flight time do we check in
+      seconds_before = config["CHECKIN_WINDOW"] + 24*60*60 # how many seconds before the flight time do we check in
       flight.sched_time = flight_time - seconds_before
       flight.sched_time_formatted = DateTimeToString(flight.legs[0].depart.dt_utc.replace(tzinfo=utc) - timedelta(seconds=seconds_before))
       flight.seconds = flight.sched_time - time_module.time()
@@ -723,22 +669,22 @@ def main():
       res = db.addReservation(firstname, lastname, code)
     del args[0:3]
 
-  global smtp_user, smtp_password, email_from, email_to, should_send_email
+  # global config["SMTP_USER"], config["SMTP_PASSWORD"], config["EMAIL_FROM"], config["EMAIL_TO"], config["SEND_EMAIL"]
 
   sch = sched.scheduler(time_module.time, time_module.sleep)
   
-  if should_send_email:
-    if not email_from:
-      email_from = raw_input('Email from: ');
-    if email_from:
-      if not email_to:
-        email_to = raw_input('Email to: ');
-      if not smtp_user:
-        smtp_user = email_from
-      if not smtp_password and smtp_auth:
-        smtp_password = getpass.getpass('Email Password: ');
+  if config["SEND_EMAIL"]:
+    if not config["EMAIL_FROM"]:
+      config["EMAIL_FROM"] = raw_input('Email from: ');
+    if config["EMAIL_FROM"]:
+      if not config["EMAIL_TO"]:
+        config["EMAIL_TO"] = raw_input('Email to: ');
+      if not config["SMTP_USER"]:
+        config["SMTP_USER"] = config["EMAIL_FROM"]
+      if not config["SMTP_PASSWORD"] and config["SMTP_AUTH"]:
+        config["SMTP_PASSWORD"] = getpass.getpass('Email Password: ');
     else:
-      should_send_email = False
+      config["SEND_EMAIL"] = False
 
   for res in db.Session.query(Reservation):
     if res.active:

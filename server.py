@@ -58,11 +58,12 @@ import codecs
 
 from sw_checkin_email import *
 
+scheduleAllExistingReservations()
 
 def is_admin():
   auth = request.authorization
-  if not auth or not (auth.username == username
-                      and auth.password == password):
+  if not auth or not (auth.username == config["ADMIN_USERNAME"]
+                      and auth.password == config["ADMIN_PASSWORD"]):
     return False
   return True
 
@@ -96,11 +97,6 @@ class SearchForm(Form):
 
 # ========================================================================
 
-db.create_all()
-scheduleAllExistingReservations()
-
-# ========================================================================
-
 @app.route('/')
 def index():
   return render_template('index.html', form=CheckinForm())
@@ -116,6 +112,10 @@ def checkin():
       return flight_status(res.code)
 
     res = db.addReservation(form.firstname.data, form.lastname.data, form.code.data, form.email.data)
+    if config["SEND_ADMIN_EMAIL"]:
+      admin_message = "First: %s\nLast: %s\nEmail: %s\nConfirmation Number: %s\nTime: %s" % (
+        form.firstname.data, form.lastname.data, form.email.data, form.code.data, datetime.now())
+      send_email('An automatic southwest check in has been initiated', admin_message, boarding_pass=None, email=config["ADMIN_EMAIL"])
     print 'Created', res
     if not res.active:
       return message('It looks like all of your flights have already taken off :(')
@@ -123,7 +123,7 @@ def checkin():
     success = getFlightTimes(res)
     if success:
       message = getFlightInfo(res, res.flights)
-      if should_send_email:
+      if config["SEND_EMAIL"]:
         send_email('Waiting for SW flight', message, boarding_pass=None, email=res.email);
 
       scheduleAllFlights(res)
@@ -159,7 +159,7 @@ def flight_status(code):
     return display_message("We can't find that reservation!")
   return render_template('status.html', res=res, flights=res.flights)
 
-@app.route('/flights/<code>', methods=['DELETE'])
+@app.route('/delete/<code>', methods=['POST'])
 def flight_delete(code):
   res = db.findReservation(code)
   if res != None:
