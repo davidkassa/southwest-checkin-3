@@ -390,7 +390,7 @@ class ReservationInfoParser(object):
       print "Found flight", flight_leg.flight_number
 
       # List of arrival and departure details for each airport
-      flight_leg_soup = soup.find('table', 'airItineraryFlightRouting').find_all('tr')
+      flight_leg_soup = tr.find('table', 'airItineraryFlightRouting').find_all('tr')
       dlog("Parsing Departure:")
       flight_leg.depart = self._parseFlightLegDetails(day, flight_leg_soup[0])
       dlog("Parsing Arrival:")
