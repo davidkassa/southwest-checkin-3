@@ -201,17 +201,43 @@ def PostUrl(url, params):
 
   return (resp.read(), resp.geturl())
   
-def FindAllByTagClass(soup, tag, klass):
-  return soup.find_all(tag, 
+def FindAllByTagClass(soup, tag, klass, get_text=False):
+  result = soup.find_all(tag, 
       attrs = { 'class': re.compile(re.escape(klass)) })
+  if get_text:
+    return strip_tags(unicode(result))
+  else:
+    return result
 
-def FindByTagClass(soup, tag, klass):
-  return soup.find(tag, 
+def FindByTagClass(soup, tag, klass, get_text=False):
+  result = soup.find(tag, 
       attrs = { 'class': re.compile(re.escape(klass)) })
+  if get_text:
+    return strip_tags(unicode(result))
+  else:
+    return result
       
 def FindNextSiblingByTagClass(soup, tag, klass):
   return soup.find_next_sibling(tag, 
       attrs = { 'class': re.compile(re.escape(klass)) })
+
+from HTMLParser import HTMLParser
+
+# A clean solution for stripping tags, which BS4 doesn't do
+# Credit: http://stackoverflow.com/a/925630/1114945
+class MLStripper(HTMLParser):
+    def __init__(self):
+        self.reset()
+        self.fed = []
+    def handle_data(self, d):
+        self.fed.append(d)
+    def get_data(self):
+        return ''.join(self.fed)
+
+def strip_tags(html):
+    s = MLStripper()
+    s.feed(html)
+    return s.get_data()
 
 class HtmlFormParser(object):
   class Input(object):
@@ -395,7 +421,7 @@ class ReservationInfoParser(object):
     f.tz = airport_timezone_map[f.airport]
     
     # Get time
-    segmentTime = FindByTagClass(legDetails, 'td', 'routingDetailsTimes').strong.span.contents[0]
+    segmentTime = FindByTagClass(legDetails, 'td', 'routingDetailsTimes', get_text=True)
     # Create time() object
     flight_time = time(*time_module.strptime(segmentTime.strip(), '%I:%M %p')[3:5])
     dlog("Time: " + str(flight_time))
