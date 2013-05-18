@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-STORE_DATABASE = False # Store all data in a heroku/pgres/sqlite database? Otherwise, use memory
+STORE_DATABASE = True # Store all data in a database? Otherwise, use memory
 HEROKU = False # Use heroku postgres?
 POSTGRES = '' # i.e. 'postgresql://postgres:password@localhost/southwest-checkin'
-SQLITE = '' # i.e. 'southwest-checkin.db'
-RETRY_INTERVAL = 5 # If we are unable to check in, how soon should we retry?
-CHECKIN_WINDOW = 60 # How soon before the designated time should we try to check in?
+SQLITE = 'southwest-checkin.db' # i.e. 'southwest-checkin.db'
+RETRY_INTERVAL = 5 # If we are unable to check in, how soon should we retry? (seconds)
+CHECKIN_WINDOW = 60 # How soon before the designated time should we try to check in? (seconds)
 SEND_EMAIL = False # Send email to the users?
 EMAIL_FROM = None
 EMAIL_TO = None # configure to address if using as a script

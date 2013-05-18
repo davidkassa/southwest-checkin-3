@@ -20,6 +20,7 @@ The easiest way to install the dependencies is with [pip](http://pypi.python.org
 
     $ pip install -r requirements.txt
 
+You will also need a `settings.py`. You can create this by copying `default_settings.py`. By default, it will store the data in a SQlite database.
 
 ## Web interface usage ##
 
