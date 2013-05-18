@@ -23,23 +23,28 @@
             {% endif %}
           </h2>
         </div>
-        <div><strong class="text-centered">Confirmation Code: {{ res.code }}</strong></div>
-        <div><strong class="text-centered">Passenger Name: {{ res.first_name }} {{ res.last_name }}</strong></div>
-        <div><strong class="text-centered">Passenger Email: {{ res.email }}</strong></div>
+        <div><strong>Confirmation Code: {{ res.code }}</strong></div>
+        <div><strong>Passenger Name: {{ res.first_name }} {{ res.last_name }}</strong></div>
+        <div><strong>Passenger Email: {{ res.email }}</strong></div>
         <ul class="flights">
           {% for flight in flights %}
-            <li>Flight {{ loop.index }}:
+            <li><h2>Flights on {{ flight.sched_time_local_formatted.partition(' ')[2] }}</h2>
               <ul class="flight-legs">
                 {% for leg in flight.legs %}
-                  <li>Departs: {{ leg.depart.airport }} {{ leg.depart.dt_formatted }}</li>
-                  <li>Arrives: {{ leg.arrive.airport }} {{ leg.arrive.dt_formatted }}</li>
+                  <li>
+                    Flight {{ leg.flight_number }}
+                    <ul class="flight-legs">
+                      <li>Departs: {{ leg.depart.airport }} {{ leg.depart.dt_formatted }}</li>
+                      <li>Arrives: {{ leg.arrive.airport }} {{ leg.arrive.dt_formatted }}</li>                  
+                    </ul>
+                  </li>
                 {% endfor %}
                 {% if flight.success %}
                   <span style="color:green"><b>You've been checked into this flight at position {{ flight.position }}</b></span>
                 {% else %}
                   {% if flight.sched_time_local_formatted %}
                   <li>
-                    <b>Automatically checking you in at:</b> {{ flight.sched_time_local_formatted }}
+                    <h3>Automatically checking you in at: {{ flight.sched_time_local_formatted }}</h3>
                   </li>
                   {% endif %}
                 {% endif %}
