@@ -354,18 +354,23 @@ class ReservationInfoParser(object):
     dlog("Checking reservation departure flights...")
     if airItineraryDepartTable:
       self.exists = True
-      for item in airItineraryDepartTable:
-        self.flights.append(self._parseFlightInfo(item))
+      self._addFlights(airItineraryDepartTable)
     else:
       print "Can't find a departure flight... are we sure this reservation exists?"
       self.exists = False
     
     dlog("Checking reservation return flights...")
     if airItineraryReturnTable:
-        for item in airItineraryReturnTable:
-          self.flights.append(self._parseFlightInfo(item))
+      self._addFlights(airItineraryReturnTable)
     else:
       dlog("You don't have a return flight.")
+
+  def _addFlights(self, table):
+    for item in table:
+      flight = self._parseFlightInfo(item)
+      # If we already have the flight number, don't add it again
+      if not any(flight.legs[0].flight_number in f.legs[0].flight_number for f in self.flights):
+        self.flights.append(flight)
 
   def _parseFlightInfo(self, soup):
     """ For each reservation, get the date, and each flight leg with airport code, 
@@ -386,7 +391,7 @@ class ReservationInfoParser(object):
 
       # Get flight number
       parent = FindByTagClass(tr, 'td', 'flightNumber')
-      flight_leg.flight_number = parent.strong.contents[0]
+      flight_leg.flight_number = strip_tags(unicode(parent.strong))
       print "Found flight", flight_leg.flight_number
 
       # List of arrival and departure details for each airport
