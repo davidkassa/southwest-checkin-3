@@ -366,7 +366,6 @@ class ReservationInfoParser(object):
       dlog("You don't have a return flight.")
 
   def _addFlights(self, table):
-    print("ITEM COUNT", len(table))
     for item in table:
       flight = self._parseFlightInfo(item)
       # If we already have the flight number, don't add it again
