@@ -28,7 +28,14 @@
         <div><strong>Passenger Email: {{ res.email }}</strong></div>
         <ul class="flights">
           {% for flight in flights %}
-            <li><h2>Flights on {{ flight.sched_time_local_formatted.partition(' ')[2] }}</h2>
+            <li>
+              <h2>
+                  {% if flight.sched_time_local_formatted %}
+                    Flights on {{ flight.sched_time_local_formatted.partition(' ')[2] }}
+                  {% else %}
+                    Other Flights
+                  {% endif %}
+              </h2>
               <ul class="flight-legs">
                 {% for leg in flight.legs %}
                   <li>
