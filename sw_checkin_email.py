@@ -200,9 +200,9 @@ def PostUrl(url, params):
     raise Error('Cannot POST: %s' % url, e)
 
   return (resp.read(), resp.geturl())
-  
+
 def FindAllByTagClass(soup, tag, klass, get_text=False):
-  result = soup.find_all(tag, 
+  result = soup.find_all(tag,
       attrs = { 'class': re.compile(re.escape(klass)) })
   if get_text:
     return strip_tags(unicode(result))
@@ -210,15 +210,15 @@ def FindAllByTagClass(soup, tag, klass, get_text=False):
     return result
 
 def FindByTagClass(soup, tag, klass, get_text=False):
-  result = soup.find(tag, 
+  result = soup.find(tag,
       attrs = { 'class': re.compile(re.escape(klass)) })
   if get_text:
     return strip_tags(unicode(result))
   else:
     return result
-      
+
 def FindNextSiblingByTagClass(soup, tag, klass):
-  return soup.find_next_sibling(tag, 
+  return soup.find_next_sibling(tag,
       attrs = { 'class': re.compile(re.escape(klass)) })
 
 from HTMLParser import HTMLParser
@@ -246,17 +246,17 @@ class HtmlFormParser(object):
       self.name = tag.get('name', '')
       self.value = tag.get('value', '')
       # default checked to true for hidden and text inputs
-      default_checked = not(self.type == 'checkbox' or self.type == 'radio' 
+      default_checked = not(self.type == 'checkbox' or self.type == 'radio'
           or self.type == 'submit')
       self.checked = tag.get('checked', default_checked)
-      
+
     def __str__(self):
       return repr(self.__dict__)
-      
+
     def addToParams(self, params):
       if self.checked:
         params.append((self.name, self.value))
-      
+
   def __init__(self, data, page_url, id):
     self.inputs = []
     self.formaction = ''
@@ -281,7 +281,7 @@ class HtmlFormParser(object):
         input = HtmlFormParser.Input(i)
         if input.name:
           self.inputs.append(input)
-          
+
   def submit(self):
     """Submit the form and return the (contents, url)."""
     try:
@@ -290,7 +290,7 @@ class HtmlFormParser(object):
       print 'The form post failed.'
       return None
     return post
-          
+
   def validateSubmitButtons(self):
     """Ensures that one and only one submit is 'checked'."""
     numChecked = 0
@@ -299,34 +299,34 @@ class HtmlFormParser(object):
         numChecked += 1
     if numChecked > 1:
       raise Error('Too many submit buttons checked on form!')
-    
+
     # None checked, default to the first one
     if numChecked == 0:
       for i in self.inputs:
         if i.type == 'submit':
           i.checked = True
           break
-  
+
   def setSubmit(self, name, value=None):
     for i in self.inputs:
       if i.type == 'submit' and i.name == name:
         if value == None or i.value == value:
           i.checked = True
           break
-  
+
   def getParams(self):
     self.validateSubmitButtons()
     params = []
     for i in self.inputs:
       i.addToParams(params)
     return params
-    
+
   def setTextField(self, name, value):
     for i in self.inputs:
       if i.type == 'text' and i.name == name:
         i.value = value
         break
-    
+
   def setAllCheckboxes(self, name):
     for i in self.inputs:
       if i.type == 'checkbox' and i.name == name:
@@ -342,15 +342,15 @@ class ReservationInfoParser(object):
   """
 
   def __init__(self, data):
-    
+
     soup = BeautifulSoup(data, "lxml")
     self.flights = []
-    
+
     # The table containing departure flights
     airItineraryDepartTable = soup.find_all('table', id="airItinerarydepart")
     # The table containing return flights
     airItineraryReturnTable = soup.find_all('table', id="airItineraryreturn")
-    
+
     dlog("Checking reservation departure flights...")
     if airItineraryDepartTable:
       self.exists = True
@@ -358,7 +358,7 @@ class ReservationInfoParser(object):
     else:
       print "Can't find a departure flight... are we sure this reservation exists?"
       self.exists = False
-    
+
     dlog("Checking reservation return flights...")
     if airItineraryReturnTable:
       self._addFlights(airItineraryReturnTable)
@@ -366,6 +366,7 @@ class ReservationInfoParser(object):
       dlog("You don't have a return flight.")
 
   def _addFlights(self, table):
+    print("ITEM COUNT", len(table))
     for item in table:
       flight = self._parseFlightInfo(item)
       # If we already have the flight number, don't add it again
@@ -373,7 +374,7 @@ class ReservationInfoParser(object):
         self.flights.append(flight)
 
   def _parseFlightInfo(self, soup):
-    """ For each reservation, get the date, and each flight leg with airport code, 
+    """ For each reservation, get the date, and each flight leg with airport code,
         departure and arrival times
     """
     flight = Flight()
@@ -407,7 +408,7 @@ class ReservationInfoParser(object):
         flight_leg.arrive.dt_utc = flight_leg.arrive.dt.astimezone(utc)
         flight_leg.arrive.dt_formatted = DateTimeToString(flight_leg.arrive.dt)
         flight_leg.arrive.dt_utc_formatted = DateTimeToString(flight_leg.arrive.dt_utc)
- 
+
     return flight
 
   def _parseFlightLegDetails(self, day, legDetails):
@@ -421,10 +422,10 @@ class ReservationInfoParser(object):
     dlog("Airport Code: " + f.airport)
     # Cannot get the find method with regex working
     # f.airport = departure_airport.find(text=re.compile('[A-Z]{3}'))
-    
-    # Get timezone 
+
+    # Get timezone
     f.tz = airport_timezone_map[f.airport]
-    
+
     # Get time
     segmentTime = FindByTagClass(legDetails, 'td', 'routingDetailsTimes', get_text=True)
     # Create time() object
@@ -436,9 +437,9 @@ class ReservationInfoParser(object):
     # Formatted datetime
     f.dt_utc_formatted = DateTimeToString(f.dt_utc)
     f.dt_formatted = DateTimeToString(f.dt)
-    
+
     return f
-    
+
 
 # this routine extracts the departure date and time
 def getFlightTimes(res):
@@ -482,18 +483,18 @@ def getBoardingPass(res):
   # submit the request to pull up the reservations
   dlog("Submitting the form for the checkin page...")
   (reservations, form_url) = form.submit()
-    
+
   # parse the returned reservations page
   dlog("Parsing the checkin options page...\nURL: " + form_url)
   form = HtmlFormParser(reservations, form_url, 'checkinOptions')
   if not hasattr(form, 'submit_url'): # The form was not created correctly
     return None
-  
+
   # Need to check all of the passengers
   for i in form.inputs:
     if i.type == 'checkbox' and i.name.startswith('checkinPassengers'):
       i.checked = True
-  
+
   # This is the button to press
   form.setSubmit('printDocuments')
 
@@ -589,7 +590,13 @@ def TryCheckinFlight(res_id, flight_id, sch, attempt):
         t = Timer(config["RETRY_INTERVAL"], TryCheckinFlight, (res.id, flight.id, None, attempt + 1))
         t.daemon = True
         t.start()
-      
+
+
+
+
+
+
+
 def send_email(subject, message, boarding_pass=None, email=None):
   if not config["SEND_EMAIL"] and not config["SEND_ADMIN_EMAIL"]:
     return
@@ -618,7 +625,7 @@ def send_email(subject, message, boarding_pass=None, email=None):
         msg_bp.add_header('content-disposition', 'attachment', filename='boarding_pass.html')
         msg.attach(msg_bp)
       smtp.sendmail(config["EMAIL_FROM"], to, msg.as_string())
-      
+
       print 'Email sent successfully.'
       smtp.close()
     except Exception, e:
@@ -658,7 +665,7 @@ def scheduleAllFlights(res, blocking=False, scheduler=None):
         scheduler.enterabs(flight.sched_time, 1, TryCheckinFlight, (res.id, flight.id, scheduler, 1))
         print "Scheduling check in for flight at", flight.legs[0].depart.dt_formatted, "(local), ", flight.legs[0].depart.dt_utc_formatted, "(UTC)"
       dlog('Checkin scheduled at (UTC): %s' % flight.sched_time_formatted)
-      dlog('Checkin scheduled at (local): %s' % flight.sched_time_local_formatted)   
+      dlog('Checkin scheduled at (local): %s' % flight.sched_time_local_formatted)
       dlog('Flights scheduled.  Waiting...')
     else:
       print 'Flight %s was successfully checked in at %s\n' % ((i+1), flight.position)
@@ -685,7 +692,7 @@ def main():
       sch = sched.scheduler(time_module.time, time_module.sleep)
       scheduleAllExistingReservations(confirm=True, blocking=True, scheduler=sch)
       sys.exit(1)
-    else:    
+    else:
       print 'Please provide name and confirmation code:'
       print '   %s <firstname> <lastname> <confirmation code> [...]' % sys.argv[0]
       sys.exit(1)
@@ -703,7 +710,7 @@ def main():
   # global config["SMTP_USER"], config["SMTP_PASSWORD"], config["EMAIL_FROM"], config["EMAIL_TO"], config["SEND_EMAIL"]
 
   sch = sched.scheduler(time_module.time, time_module.sleep)
-  
+
   if config["SEND_EMAIL"]:
     if not config["EMAIL_FROM"]:
       config["EMAIL_FROM"] = raw_input('Email from: ');
