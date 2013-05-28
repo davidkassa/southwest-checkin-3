@@ -151,12 +151,12 @@ def dlog(str):
 
 from db import Database
 if config["STORE_DATABASE"]:
-  if config["HEROKU"]:
+  if config["HEROKU_DB"]:
     db = Database(heroku=True)
-  elif config["POSTGRES"] != '':
-    db = Database(postgres=config["POSTGRES"])
+  elif config["POSTGRES_DB"] != '':
+    db = Database(postgres=config["POSTGRES_DB"])
   else:
-    db = Database(sqlite=config["SQLITE"])
+    db = Database(sqlite=config["SQLITE_DB"])
 else:
   db = Database()
 db.create_all()
