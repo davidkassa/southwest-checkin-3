@@ -51,8 +51,8 @@ import codecs
 from models import Reservation, Flight, FlightLeg, FlightLegLocation
 
 # Load settings
-config = {}
-execfile("settings.py", config)
+from settings import Config
+config = Config()
 
 # ========================================================================
 
