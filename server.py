@@ -58,6 +58,9 @@ import codecs
 
 from sw_checkin_email import *
 
+app.create_jinja_environment()
+app.jinja_env.globals["GOOGLE_ANALYTICS"] = config["GOOGLE_ANALYTICS"]
+
 scheduleAllExistingReservations()
 
 def is_admin():

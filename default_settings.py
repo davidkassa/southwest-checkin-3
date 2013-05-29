@@ -21,3 +21,4 @@ SMTP_PASSWORD = ''
 SMTP_USE_TLS = True
 DEBUG_HTML_FILES = False # Save html data from accessed web pages for debugging purposes
 VERBOSE = False # Log debug messages to console
+GOOGLE_ANALYTICS = False
