@@ -1,24 +1,24 @@
 """
-  
+
   Name:         server.py
   Author:       Aaron Ortbals
   Description:  Using Flask, provide a simple server and interface to sw_checkin_email.py
   License:
 
     The MIT License
-   
+
     Copyright (c) 2012 Aaron Ortbals
-   
+
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
     in the Software without restriction, including without limitation the rights
     to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
     copies of the Software, and to permit persons to whom the Software is
     furnished to do so, subject to the following conditions:
-   
+
     The above copyright notice and this permission notice shall be included in
     all copies or substantial portions of the Software.
-   
+
     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
     FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -76,8 +76,8 @@ def requires_authentication(func):
   def _auth_decorator(*args, **kwargs):
       """ does the wrapping """
       if not is_admin():
-          return Response("Could not authenticate you", 
-                          401, 
+          return Response("Could not authenticate you",
+                          401,
                           {"WWW-Authenticate":'Basic realm="Login Required"'})
       return func(*args, **kwargs)
 
@@ -108,7 +108,7 @@ def index():
 def checkin():
   form = CheckinForm(request.form)
   if request.method == 'POST' and form.validate():
-    
+
     res = db.findReservation(form.code.data)
     if res:
       print 'Reservation %s is already in the system...' % res.code
@@ -122,7 +122,7 @@ def checkin():
     print 'Created', res
     if not res.active:
       return message('It looks like all of your flights have already taken off :(')
-    
+
     success = getFlightTimes(res)
     if success:
       message = getFlightInfo(res, res.flights)
