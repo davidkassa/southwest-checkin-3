@@ -112,7 +112,7 @@ def checkin():
     res = db.findReservation(form.code.data)
     if res:
       print 'Reservation %s is already in the system...' % res.code
-      return flight_status(res.code)
+      return redirect(url_for('flight_status', code=res.code))
 
     res = db.addReservation(form.firstname.data, form.lastname.data, form.code.data, form.email.data)
     if config["SEND_ADMIN_EMAIL"]:
@@ -132,7 +132,7 @@ def checkin():
       scheduleAllFlights(res)
       print 'Current time: %s' % DateTimeToString(datetime.now(utc))
 
-      return flight_status(res.code)
+      return redirect(url_for('flight_status', code=res.code))
     else:
       db.isReservationActive(res)
       if not res.active:
