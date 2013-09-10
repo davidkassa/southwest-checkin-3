@@ -20,7 +20,19 @@ The easiest way to install the dependencies is with [pip](http://pypi.python.org
 
     $ pip install -r requirements.txt
 
-You will also need a `settings.py`. You can create this by copying `default_settings.py`. By default, it will store the data in a SQlite database.
+You will also need to set the appropriate settings for the application. By default, the app will use any environment variables you have set, and fallback to `default_settings.py` for any environment variables that are not set.
+
+For example, in a bash shell I might configure email:
+
+    export SEND_EMAIL="True"
+    export EMAIL_FROM="my@email.com"
+    export SEND_ADMIN_EMAIL="True"
+    export ADMIN_EMAIL=$EMAIL_FROM
+    export SMTP_USER=$EMAIL_FROM
+    export SMTP_PASSWORD='mypassword'
+
+These settings will be used in the application. `default_settings.py` will be used for the rest of the configuration like the database, SMTP email port, and debug settings. Override these appropriately. This style of configuration makes it easy to keep sensitive configuration seperate from the public repository and also makes it easy to deploy these settings to Heroku.
+
 
 ## Web interface usage ##
 
