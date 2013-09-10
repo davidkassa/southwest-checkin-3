@@ -15,6 +15,22 @@ errors = []
 def record_error(message, e):
   errors.append([message, e])
 
+def remove_database():
+  if db_type == 'heroku':
+    try:
+      puts('Deleting test data from Heroku database...')
+      db.deleteReservation(res)
+    except Exception, e:
+      record_error('Failed on deletion', e)
+
+  if db_type == 'sqlite':
+    try:
+      puts('Deleting sqlite test database...')
+      from os import remove
+      remove('test.db')
+    except Exception, e:
+      record_error('Failed to delete test database', e)
+
 # ========================================================================
 # Arguments
 # ========================================================================
@@ -44,9 +60,6 @@ with indent(4):
     if value:
       puts(colored.blue(key))
 
-if args.contains('--database'):
-  puts('Database: %s' % db_type)
-
 # ========================================================================
 # Database
 # ========================================================================
@@ -58,10 +71,13 @@ if test['database']:
   from db import Database
 
   if db_type == 'memory':
+    print "Using a memory database..."
     db = Database()
   elif db_type == 'sqlite':
+    print "Using a sqlite database..."
     db = Database('test.db')
   elif db_type == 'heroku':
+    print "Using a heroku database..."
     db = Database(heroku=True)
 
   db.create_all()
@@ -73,6 +89,7 @@ if test['database']:
     db.Session.commit()
   except Exception, e:
     record_error('Failed on adding the reservation', e)
+    remove_database()
 
   puts('Adding a flight...')
   try:
@@ -84,6 +101,7 @@ if test['database']:
     db.Session.commit()
   except Exception, e:
     record_error('Failed on adding the flight', e)
+    remove_database()
 
   puts('Adding a flight leg...')
   try:
@@ -93,6 +111,7 @@ if test['database']:
     db.Session.commit()
   except Exception, e:
     record_error('Failed on adding a flight leg', e)
+    remove_database()
 
   puts('Adding a flight location...')
   try:
@@ -101,6 +120,7 @@ if test['database']:
     db.Session.commit()
   except Exception, e:
     record_error('Failed on adding the reservation', e)
+    remove_database()
 
   puts('Querying data...')
   try:
@@ -112,21 +132,29 @@ if test['database']:
         puts("First flight, first leg location's airport: %s" % instance.flights[0].legs[0].depart.airport)
   except Exception, e:
     record_error('Failed on querying', e)
+    remove_database()
 
-  if db_type == 'heroku':
-    try:
-      puts('Deleting test data from Heroku database...')
-      db.deleteReservation(res)
-    except Exception, e:
-      record_error('Failed on deletion', e)
 
-  if db_type == 'sqlite':
-    try:
-      puts('Deleting sqlite test database...')
-      from os import remove
-      remove('test.db')
-    except Exception, e:
-      record_error('Failed to delete test database', e)
+# ========================================================================
+# Celery
+# ========================================================================
+
+if test['database'] and db_type == 'sqlite':
+  try:
+    from tasks import *
+    flight = db.Session.query(Flight).first()
+    puts("Creating a celery task for %s..." % flight.id)
+    result2 = schedule_checkin(flight.id)
+  except Exception, e:
+    record_error('Failed on creating celery task', e)
+    remove_database()
+
+# ========================================================================
+# Remove database
+# ========================================================================
+
+if test['database']:
+  remove_database()
 
 # ========================================================================
 # Email
