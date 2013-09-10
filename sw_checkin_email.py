@@ -77,6 +77,7 @@ airport_timezone_map = {
   'ABQ': tz_mountain,
   'ALB': tz_eastern,
   'AMA': tz_central,
+  'ATL': tz_eastern,
   'AUS': tz_central,
   'BDL': tz_eastern,
   'BHM': tz_central,
