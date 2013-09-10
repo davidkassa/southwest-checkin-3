@@ -137,25 +137,21 @@ if test['email']:
 
   import getpass
   from datetime import datetime
-  from sw_checkin_email import (should_send_email, email_from,
-    smtp_user, smtp_password, smtp_auth, send_email)
+  from sw_checkin_email import *
 
   email_to = 'sw.automatic.checkin@gmail.com'
 
-  if should_send_email:
-      if not email_from:
+  if config["SEND_EMAIL"]:
+      if not config["EMAIL_FROM"]:
         record_error('There is no from email configured', 'From email address missing')
-      if email_from:
-        if not smtp_user:
-          smtp_user = email_from
-        if not smtp_password and smtp_auth:
+      if config["EMAIL_FROM"]:
+        if not config["SMTP_PASSWORD"]:
           record_error('There is no smtp password configured', 'SMTP password missing')
         try:
           send_email('Southwest Checkin Test ' + str(datetime.now()), 'Test email body', boarding_pass=None, email=email_to)
         except Exception, e:
           record_error('Failed sending email', e)
       else:
-        should_send_email = False
         record_error('Did not get user input to send email', 'The user did not enter a from email address')
 
 # ========================================================================
