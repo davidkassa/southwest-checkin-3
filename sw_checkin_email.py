@@ -73,14 +73,20 @@ tz_michigan = timezone('US/Michigan')
 tz_mountain = timezone('US/Mountain')
 tz_pacific = timezone('US/Pacific')
 
+# International Time Zones
+tz_aruba = timezone('America/Aruba')
+tz_bermuda = timezone('Atlantic/Bermuda')
+tz_sd = timezone('America/Santo_Domingo')
+tz_pr = timezone('America/Puerto_Rico')
+
 airport_timezone_map = {
   'ABQ': tz_mountain,
   'ALB': tz_eastern,
   'AMA': tz_central,
   'ATL': tz_eastern,
-  'AUA': tz_atlantic,
+  'AUA': tz_aruba,
   'AUS': tz_central,
-  'BDA': tz_atlantic,
+  'BDA': tz_bermuda,
   'BDL': tz_eastern,
   'BHM': tz_central,
   'BKG': tz_central,
@@ -148,7 +154,7 @@ airport_timezone_map = {
   'PHX': tz_arizona,
   'PIT': tz_eastern,
   'PNS': tz_central,
-  'PUJ': tz_atlantic,
+  'PUJ': tz_sd,
   'PVD': tz_eastern,
   'PWM': tz_eastern,
   'RDU': tz_eastern,
@@ -163,7 +169,7 @@ airport_timezone_map = {
   'SFO': tz_pacific,
   'SJC': tz_pacific,
   'SJD': tz_mountain,
-  'SJU': tz_atlantic,
+  'SJU': tz_pr,
   'SLC': tz_mountain,
   'SMF': tz_pacific,
   'SNA': tz_pacific,
@@ -634,8 +640,9 @@ def send_email(subject, message, boarding_pass=None, email=None):
   # global config["EMAIL_TO"]
   if email != None:
     config["EMAIL_TO"] = email
-
+  dlog( "Email " +  email)
   for to in [string.strip(s) for s in string.split(config["EMAIL_TO"], ',')]:
+    dlog( "Email Loop " +  to )
     try:
       smtp = smtplib.SMTP(config["SMTP_SERVER"], config["SMTP_PORT"])
       smtp.ehlo()
