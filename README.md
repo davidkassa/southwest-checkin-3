@@ -16,10 +16,10 @@ If southwest changes the checkin process, the parser might need to be updated. I
 
 ## Installation ##
 
-The easiest way to install the dependencies is with [pip](http://pypi.python.org/pypi/pip), a python package manager. (carful, there is a perl version) It is also good practice to isolate your environment with a [virtual environment](http://www.virtualenv.org/en/latest/). If you are unfamiliar with pip or virtualenv, I would recommend reading [this](http://mirnazim.org/writings/python-ecosystem-introduction/).
-The dependencies also require the libpq-dev, libxml2-dev, libxslt-dev, and python-dev libraies to be installed.
+The easiest way to install the dependencies is with [pip](http://pypi.python.org/pypi/pip), a python package manager. (careful, there is a perl version) It is also good practice to isolate your environment with a [virtual environment](http://www.virtualenv.org/en/latest/). If you are unfamiliar with pip or virtualenv, I would recommend reading [this](http://mirnazim.org/writings/python-ecosystem-introduction/).
+The dependencies also require the libpq-dev, libxml2-dev, libxslt-dev, and python-dev libraries to be installed.
 
-    $ apt-get install  libxml2-dev libxslt-dev libpq-dev python-dev
+    $ apt-get install libxml2-dev libxslt-dev libpq-dev python-dev
     $ apt-get install python-pip
     $ pip install -r requirements.txt
 
