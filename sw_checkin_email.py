@@ -642,7 +642,7 @@ def send_email(subject, message, boarding_pass=None, email=None):
     config["EMAIL_TO"] = email
   dlog( "Email " +  email)
   for to in [string.strip(s) for s in string.split(config["EMAIL_TO"], ',')]:
-    dlog( "Email Loop " +  to )
+    dlog( "Email Loop for " +  to )
     try:
       smtp = smtplib.SMTP(config["SMTP_SERVER"], config["SMTP_PORT"])
       smtp.ehlo()
