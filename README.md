@@ -32,7 +32,7 @@ For example, in a bash shell I might configure email:
     export SMTP_PASSWORD='mypassword'
 
 These settings will be used in the application. `default_settings.py` will be used for the rest of the configuration like the database, SMTP email port, and debug settings. Override these appropriately. This style of configuration makes it easy to keep sensitive configuration seperate from the public repository and also makes it easy to deploy these settings to Heroku.
-
+Note: If you use Gmail's two factor authentication, you will need a Application Specific password, not your normal password.
 
 ## Web interface usage ##
 
@@ -81,3 +81,12 @@ For more expanation on these commands, you may want to read about [nohup and dis
 - The web interface was written using [Flask](http://flask.pocoo.org/)
 - The database layer was written using [SQLAlchemy](http://www.sqlalchemy.org/)
 - The [live app](http://southwest-checkin.herokuapp.com/) is hosted on a [Heroku](http://www.heroku.com/) free dyno and uses [Heroku Postgres Dev](https://addons.heroku.com/heroku-postgresql) to host the database and [New Relic](https://addons.heroku.com/newrelic) for app statistics
+
+## Installation on Ubuntu 12.04 LTS ##
+
+Installation on a Ubuntu 12.04 LTS Server edition requires the libpq-dev, libxml2-dev, libxslt-dev, and python-dev libraries to be installed. There is a Perl pip, so you must specify the python pip program
+
+    $ apt-get install libxml2-dev libxslt-dev libpq-dev python-dev
+    $ apt-get install python-pip
+    
+    
