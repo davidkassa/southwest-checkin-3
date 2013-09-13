@@ -636,15 +636,13 @@ def TryCheckinFlight(res_id, flight_id, sch, attempt):
 
 
 def send_email(subject, message, boarding_pass=None, email=None):
-  if not config["SEND_EMAIL"] and not config["SEND_ADMIN_EMAIL"]:
-    return
+  if not config["SEND_EMAIL"] or not config["SEND_ADMIN_EMAIL"]: return
 
-  # global config["EMAIL_TO"]
   if email != None:
     config["EMAIL_TO"] = email
-  dlog( "Email " +  email)
+
+  dlog("Sending email to:" + email)
   for to in [string.strip(s) for s in string.split(config["EMAIL_TO"], ',')]:
-    dlog( "Email Loop for " +  to )
     try:
       smtp = smtplib.SMTP(config["SMTP_SERVER"], config["SMTP_PORT"])
       smtp.ehlo()
