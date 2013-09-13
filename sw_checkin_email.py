@@ -214,7 +214,8 @@ def ReadUrl(url):
     req = urllib2.Request(url=url, headers=headers)
     resp = opener.open(req)
   except Exception, e:
-    raise Error('Cannot GET: %s' % url, e)
+    print 'Cannot GET: %s' % url
+    raise e
 
   return (resp.read(), resp.geturl())
 
@@ -234,7 +235,8 @@ def PostUrl(url, params):
     req = urllib2.Request(url=url, data=str_params, headers=headers)
     resp = opener.open(req)
   except Exception, e:
-    raise Error('Cannot POST: %s' % url, e)
+    print 'Cannot POST: %s' % url
+    raise e
 
   return (resp.read(), resp.geturl())
 
@@ -335,7 +337,7 @@ class HtmlFormParser(object):
       if i.type == 'submit' and i.checked:
         numChecked += 1
     if numChecked > 1:
-      raise Error('Too many submit buttons checked on form!')
+      raise StandardError('Too many submit buttons checked on form!')
 
     # None checked, default to the first one
     if numChecked == 0:
