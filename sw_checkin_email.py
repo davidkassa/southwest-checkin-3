@@ -617,7 +617,7 @@ def TryCheckinFlight(res_id, flight_id, sch, attempt):
       send_email('Flight checked in!', message, boarding_pass)
     send_email('%s %s was checked in' % (res.first_name, res.last_name), message, boarding_pass, config["ADMIN_EMAIL"])
   else:
-    if attempt > (config["CHECKIN_WINDOW"] * 2) / config["RETRY_INTERVAL"]:
+    if attempt > config["MAX_RETRIES"]:
       print 'FAILURE.  Too many failures, giving up.'
     else:
       print 'FAILURE.  Scheduling another try in %d seconds' % config["RETRY_INTERVAL"]
