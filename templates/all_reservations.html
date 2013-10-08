@@ -7,7 +7,7 @@
       <div class="text-centered">
         <h2>Reservations</h2>
         <table><tbody>
-          <th>Reservation</th><th>Name</th><th>Active</th><th>Scheduled Checkins</th>
+          <th>Reservation</th><th>Name</th><th>Active</th><th>Scheduled Checkins</th><th>ID</th>
           {% for res in reservations %}
             <tr>
               <td><b><a href="/flights/{{res.code}}">{{res.code}}</a></b></td><td>{{res.first_name}} {{res.last_name}}</td>
@@ -16,13 +16,14 @@
                 <td><ul>
                   {% for flight in res.flights %}
                     {% if flight.sched_time_local_formatted %}
-                      <li>{{ flight.sched_time_local_formatted }}</li>
+                      <li>{{ flight.sched_time_local_formatted }} (ID: {{ flight.id }})</li>
                     {% endif %}
                   {% endfor %}
                 </ul></td>
               {% else %}
                 <td>not active</td><td></td>
               {% endif %}
+              <td>{{ res.id }}</td>
             </tr>
           {% endfor %}
         </tbody></table>

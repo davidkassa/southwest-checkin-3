@@ -54,6 +54,9 @@ from models import Reservation, Flight, FlightLeg, FlightLegLocation
 from settings import Config
 config = Config()
 
+from db import Database
+from tasks import *
+
 # ========================================================================
 
 base_url = 'http://www.southwest.com'
@@ -186,7 +189,6 @@ def dlog(str):
   if config["VERBOSE"]:
     print 'DEBUG: %s' % str
 
-from db import Database
 if config["STORE_DATABASE"]:
   if config["HEROKU_DB"]:
     db = Database(heroku=True)
@@ -592,6 +594,24 @@ def displayFlightInfo(res, flights, do_send_email=False):
   if do_send_email:
     send_email('Waiting for SW flight', message);
 
+def check_in_success(reservation, flight, boarding_pass):
+  flight.success = True
+  flight.position = position
+  db.Session.commit()
+  send_success_email(SuccessMessage(reservation, flight), boarding_pass, reservation)
+
+def success_message(reservation, flight):
+  message = ''
+  message += 'SUCCESS.  Checked in at position %s\r\n' % flight.position
+  message += getFlightInfo(res, [flight])
+
+def send_success_email(message, boarding_pass, reservation):
+  if hasattr(reservation, 'email'):
+    send_email('Flight checked in!', message, boarding_pass, reservation.email)
+  else:
+    send_email('Flight checked in!', message, boarding_pass)
+  send_email('%s %s was checked in' % (reservation.first_name, reservation.last_name), message, boarding_pass, config["ADMIN_EMAIL"])
+
 def TryCheckinFlight(res_id, flight_id, sch, attempt):
   res = db.Session.query(Reservation).filter_by(id=res_id).one()
   flight = db.Session.query(Flight).filter_by(id=flight_id).one()
@@ -628,12 +648,6 @@ def TryCheckinFlight(res_id, flight_id, sch, attempt):
         t = Timer(config["RETRY_INTERVAL"], TryCheckinFlight, (res.id, flight.id, None, attempt + 1))
         t.daemon = True
         t.start()
-
-
-
-
-
-
 
 def send_email(subject, message, boarding_pass=None, email=None):
   if not config["SEND_EMAIL"] or not config["SEND_ADMIN_EMAIL"]: return
@@ -690,7 +704,9 @@ def scheduleAllFlights(res, blocking=False, scheduler=None):
       flight.sched_time_local_formatted = DateTimeToString(flight.legs[0].depart.dt_utc.replace(tzinfo=utc).astimezone(tz) - timedelta(seconds=seconds_before))
       db.Session.commit()
       dlog("Flight time: %s" % flight.legs[0].depart.dt_formatted)
-      if not blocking:
+      if config["CELERY"]:
+        check_in_flight.apply_async([res.id, flight.id], countdown=flight.seconds)
+      elif not blocking:
         print "Scheduling check in for flight at", flight.legs[0].depart.dt_formatted, "(local), ", flight.legs[0].depart.dt_utc_formatted, "(UTC) in", int(flight.seconds/60/60), "hrs", int(flight.seconds/60%60),  "mins from now..."
         t = Timer(flight.seconds, TryCheckinFlight, (res.id, flight.id, None, 1))
         t.daemon = True

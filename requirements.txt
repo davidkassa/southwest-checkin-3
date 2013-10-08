@@ -11,6 +11,7 @@ celery==3.0.23
 celery-with-redis==3.0
 clint==0.3.1
 distribute==0.6.28
+flower==0.5.2
 gunicorn==0.17.0
 kombu==2.5.14
 lxml==3.0.1
@@ -19,4 +20,6 @@ psycopg2==2.4.6
 python-dateutil==2.1
 pytz==2012h
 redis==2.8.0
+requests==2.0.0
 six==1.4.1
+tornado==3.1.1

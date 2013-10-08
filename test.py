@@ -139,12 +139,12 @@ if test['database']:
 # Celery
 # ========================================================================
 
-if test['database'] and db_type == 'sqlite':
+if test['database']:
   try:
     from tasks import *
     flight = db.Session.query(Flight).first()
     puts("Creating a celery task for %s..." % flight.id)
-    result2 = schedule_checkin(flight.id)
+    result2 = test_celery.delay(flight.id)
   except Exception, e:
     record_error('Failed on creating celery task', e)
     remove_database()

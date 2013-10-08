@@ -1,18 +1,33 @@
 from celery import Celery
+
+from settings import Config
+config = Config()
+
 from models import Reservation, Flight, FlightLeg, FlightLegLocation
 from db import Database
+from sw_checkin_email import *
 
 celery = Celery('tasks')
 celery.config_from_object('celery_config')
 
-@celery.task
-def add(x, y):
-    return x + y
+@celery.task(default_retry_delay=config["RETRY_INTERVAL"], max_retries=config["MAX_RETRIES"])
+def test_celery(flight_id):
+  try:
+    db = Database('southwest-checkin.db')
+    flight = db.Session.query(Flight).get(flight_id)
+    return "Found flight %s" % flight.id
+  except Exception, exc:
+    raise schedule_checkin.retry(exc=exc)
 
-@celery.task
-def schedule_checkin(flight_id):
-  db = Database('test.db')
-  flight = db.Session.query(Flight).get(flight_id)
-  print "Found flight %s" % flight.id
-  # print "Scheduling check in for flight at", flight.legs[0].depart.dt_formatted, "(local), ", flight.legs[0].depart.dt_utc_formatted, "(UTC) in", int(flight.seconds/60/60), "hrs", int(flight.seconds/60%60),  "mins from now..."
-  # t = Timer(flight.seconds, TryCheckinFlight, (reservation.id, flight.id, None, 1))
+@celery.task(default_retry_delay=config["RETRY_INTERVAL"], max_retries=config["MAX_RETRIES"])
+def check_in_flight(reservation_id, flight_id):
+  reservation = db.Session.query(Reservation).get(reservation_id)
+  flight      = db.Session.query(Flight).get(flight_id)
+
+  (position, boarding_pass) = getBoardingPass(reservation)
+
+  if position:
+    check_in_success(reservation, flight, boarding_pass)
+  else:
+    print 'FAILURE. Scheduling another try in %d seconds' % config["RETRY_INTERVAL"]
+    raise check_in_flight.retry(reservation_id, flight_id)

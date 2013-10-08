@@ -1,6 +1,6 @@
-from tasks import add
+from tasks import *
+from datetime import datetime, timedelta
 
-result = add.delay(4, 4)
+tomorrow = datetime.now() + timedelta(days=1)
+test_celery.apply_async([2], eta=tomorrow)
 
-print result
-print result.ready()

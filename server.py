@@ -65,8 +65,7 @@ scheduleAllExistingReservations()
 
 def is_admin():
   auth = request.authorization
-  if not auth or not (auth.username == config["ADMIN_USERNAME"]
-                      and auth.password == config["ADMIN_PASSWORD"]):
+  if not auth or not (auth.username == config["ADMIN_USERNAME"] and auth.password == config["ADMIN_PASSWORD"]):
     return False
   return True
 
