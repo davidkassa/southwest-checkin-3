@@ -594,11 +594,11 @@ def displayFlightInfo(res, flights, do_send_email=False):
   if do_send_email:
     send_email('Waiting for SW flight', message);
 
-def check_in_success(reservation, flight, boarding_pass):
+def check_in_success(reservation, flight, boarding_pass, position):
   flight.success = True
   flight.position = position
   db.Session.commit()
-  send_success_email(SuccessMessage(reservation, flight), boarding_pass, reservation)
+  send_success_email(success_message(reservation, flight), boarding_pass, reservation)
 
 def success_message(reservation, flight):
   message = ''

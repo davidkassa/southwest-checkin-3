@@ -27,7 +27,7 @@ def check_in_flight(reservation_id, flight_id):
   (position, boarding_pass) = getBoardingPass(reservation)
 
   if position:
-    check_in_success(reservation, flight, boarding_pass)
+    check_in_success(reservation, flight, boarding_pass, position)
   else:
     print 'FAILURE. Scheduling another try in %d seconds' % config["RETRY_INTERVAL"]
     raise check_in_flight.retry(reservation_id, flight_id)
