@@ -17,7 +17,7 @@ def test_celery(flight_id):
     flight = db.Session.query(Flight).get(flight_id)
     return "Found flight %s" % flight.id
   except Exception, exc:
-    raise schedule_checkin.retry(exc=exc)
+    raise test_celery.retry(exc=exc)
 
 @celery.task(default_retry_delay=config["RETRY_INTERVAL"], max_retries=config["MAX_RETRIES"])
 def check_in_flight(reservation_id, flight_id):

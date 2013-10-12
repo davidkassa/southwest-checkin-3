@@ -603,7 +603,7 @@ def check_in_success(reservation, flight, boarding_pass, position):
 def success_message(reservation, flight):
   message = ''
   message += 'SUCCESS.  Checked in at position %s\r\n' % flight.position
-  message += getFlightInfo(res, [flight])
+  message += getFlightInfo(reservation, [flight])
 
 def send_success_email(message, boarding_pass, reservation):
   if hasattr(reservation, 'email'):
@@ -681,8 +681,7 @@ def send_email(subject, message, boarding_pass=None, email=None):
       smtp.close()
     except Exception, e:
       print 'Error sending email!'
-      print sys.exc_info()[1]
-      raise
+      raise e
 
 def scheduleAllFlights(res, blocking=False, scheduler=None):
   """ Schedule all of the flights for checkin.  Schedule 1 minute before our clock
