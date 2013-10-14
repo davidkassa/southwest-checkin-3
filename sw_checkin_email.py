@@ -397,9 +397,11 @@ class ReservationInfoParser(object):
     to all associated flights.
     '''
     
-    flights_with_relevant_confirmation_code = soup.find_all('div', {'class',"trip_retrieved_product"})
+    flights_with_relevant_confirmation_code = soup.find_all('div',
+        {'class',"trip_retrieved_product"})
     if len(flights_with_relevant_confirmation_code)>1:
-      raise Exception('We should only have one trip retrieved product! Something is wrong!')
+        raise Exception(
+            'We should only have one trip retrieved product! Something is wrong!')
     soup = flights_with_relevant_confirmation_code[0]
 
     # The table containing departure flights
@@ -655,10 +657,10 @@ def TryCheckinFlight(res_id, flight_id, sch, attempt):
 def send_email(subject, message, boarding_pass=None, email=None):
   if not config["SEND_EMAIL"] or not config["SEND_ADMIN_EMAIL"]: return
 
-  if email != None:
+  if email is not None:
     config["EMAIL_TO"] = email
 
-  dlog("Sending email to:" + email)
+  dlog("Sending email to:" + config["EMAIL_TO"])
   for to in [string.strip(s) for s in string.split(config["EMAIL_TO"], ',')]:
     try:
       smtp = smtplib.SMTP(config["SMTP_SERVER"], config["SMTP_PORT"])
