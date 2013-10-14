@@ -1,7 +1,5 @@
 # Southwest Checkin #
 
-(NOTE: See KNOWN ISSUES at the bottom of this file)
-
 Southwest Checkin automatically checks a passenger into their flights for a given confirmation number. The user will receive an email on successful check in. It contains both a command line interface (CLI) and a web interface. A live, usable version is hosted on Heroku:
 
 [Southwest Checkin on Heroku](http://southwest-checkin.herokuapp.com/)
@@ -83,13 +81,12 @@ Run the script in the background, log to file, and allow yourself to logout (you
 
     $ nohup python sw_checkin_email.py John Doe ABC123 &> sw_checkin_email.log
 
-For more expanation on these commands, you may want to read about [nohup and disown](http://www.basicallytech.com/blog/index.php?/archives/70-Shell-stuff-job-control-and-screen.html#bash_disown).
+For more explanation on these commands, you may want to read about [nohup and disown](http://www.basicallytech.com/blog/index.php?/archives/70-Shell-stuff-job-control-and-screen.html#bash_disown).
 
 ## KNOWN ISSUES ##
 
 When using the database, the script produces unpredictable results when run
-with more than one name/confirmation number (this also affects the web-based
-version, which should not be relied upon to check in).  CLI usage with
+with more than one name/confirmation number. CLI usage with
 the database disabled has been confirmed to work as of 10/5/2013.
 
     # Add to your bash startup (e.g. .profile, .bashrc)
