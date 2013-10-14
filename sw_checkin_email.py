@@ -384,6 +384,23 @@ class ReservationInfoParser(object):
 
     soup = BeautifulSoup(data, "lxml")
     self.flights = []
+    
+    '''
+    Since we only check in to flights with the given confirmation number, 
+    we do not want to include any 'associated products' with other confirmation 
+    numbers. The following 4 lines of code grab just the flights with our 
+    confirmation number, omitting any other flights.
+
+    NOTE: The 'associated products' (flights with differing confirmation 
+    numbers) are located inside the tag <h3 class="trip_associated_products">. 
+    We could use this to add a feature, wherein the user can opt to check in 
+    to all associated flights.
+    '''
+    
+    flights_with_relevant_confirmation_code = soup.find_all('div', {'class',"trip_retrieved_product"})
+    if len(flights_with_relevant_confirmation_code)>1:
+      raise Exception('We should only have one trip retrieved product! Something is wrong!')
+    soup = flights_with_relevant_confirmation_code[0]
 
     # The table containing departure flights
     airItineraryDepartTable = soup.find_all('table', id="airItinerarydepart")
