@@ -15,6 +15,7 @@ flower==0.5.2
 gunicorn==0.17.0
 kombu==2.5.14
 lxml==3.0.1
+mock==1.0.1
 newrelic==1.9.0.21
 psycopg2==2.4.6
 python-dateutil==2.1
