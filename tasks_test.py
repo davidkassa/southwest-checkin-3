@@ -1,8 +1,10 @@
 import unittest
-# from unittest.mock import MagicMock
+from mock import MagicMock
 
 from models import Reservation, Flight, FlightLeg, FlightLegLocation
 from db import Database
+
+from tasks import *
 
 class DatabaseTestCase(unittest.TestCase):
     def setUp(self):
@@ -59,6 +61,9 @@ class CreateFlightLegLocationTestCase(ReservationTestCase):
     def runTest(self):
         self.assertEqual(self.db.findReservation(self.code).flights[0].legs[0].depart.airport, 'AUS', 'Incorrect flight location.')
 
+class CheckInFlightTestCase(ReservationTestCase):
+    def runTest(self):
+        check_in_flight(self.reservation.id, self.reservation.flights[0])
 
 if __name__ == '__main__':
     unittest.main()
