@@ -2,5 +2,5 @@
 HTML/*
 *.db
 .DS_*
-
 dump.rdb
+fixtures/
