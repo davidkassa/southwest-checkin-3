@@ -684,6 +684,38 @@ def send_email(subject, message, boarding_pass=None, email=None):
       print 'Error sending email!'
       raise e
 
+def scheduleFlight(res, flight, blocking=False, scheduler=None):
+  flight_time = time_module.mktime(flight.legs[0].depart.dt_utc.utctimetuple()) - time_module.timezone
+  seconds_before = config["CHECKIN_WINDOW"] + 24*60*60 # how many seconds before the flight time do we check in
+  flight.sched_time = flight_time - seconds_before
+  flight.sched_time_formatted = DateTimeToString(flight.legs[0].depart.dt_utc.replace(tzinfo=utc) - timedelta(seconds=seconds_before))
+  flight.seconds = flight.sched_time - time_module.time()
+  # Retrieve timezone and apply it because datetimes are stored as naive (no timezone information)
+  tz = airport_timezone_map[flight.legs[0].depart.airport]
+  flight.sched_time_local_formatted = DateTimeToString(flight.legs[0].depart.dt_utc.replace(tzinfo=utc).astimezone(tz) - timedelta(seconds=seconds_before))
+  db.Session.commit()
+  dlog("Flight time: %s" % flight.legs[0].depart.dt_formatted)
+  if config["CELERY"]:
+    result = check_in_flight.apply_async([res.id, flight.id], countdown=flight.seconds)
+    flight.task_uuid = result.id
+    db.Session.commit()
+  elif not blocking:
+    result = "Scheduling check in for flight at", flight.legs[0].depart.dt_formatted, "(local), ", flight.legs[0].depart.dt_utc_formatted, "(UTC) in", int(flight.seconds/60/60), "hrs", int(flight.seconds/60%60),  "mins from now..."
+    t = Timer(flight.seconds, TryCheckinFlight, (res.id, flight.id, None, 1))
+    t.daemon = True
+    t.start()
+    # DEBUG
+    # if flight == res.flights[0]:
+    #   Timer(5, TryCheckinFlight, (res, flight, None, 1)).start()
+  else:
+    scheduler.enterabs(flight.sched_time, 1, TryCheckinFlight, (res.id, flight.id, scheduler, 1))
+    result = "Scheduling check in for flight at", flight.legs[0].depart.dt_formatted, "(local), ", flight.legs[0].depart.dt_utc_formatted, "(UTC)"
+  print result
+  dlog('Checkin scheduled at (UTC): %s' % flight.sched_time_formatted)
+  dlog('Checkin scheduled at (local): %s' % flight.sched_time_local_formatted)
+  dlog('Flights scheduled.  Waiting...')
+  return result
+
 def scheduleAllFlights(res, blocking=False, scheduler=None):
   """ Schedule all of the flights for checkin.  Schedule 1 minute before our clock
       says we are good to go
@@ -695,31 +727,7 @@ def scheduleAllFlights(res, blocking=False, scheduler=None):
       print 'Flight %s already left...' % (i+1)
       flight.active = False
     elif not flight.success:
-      seconds_before = config["CHECKIN_WINDOW"] + 24*60*60 # how many seconds before the flight time do we check in
-      flight.sched_time = flight_time - seconds_before
-      flight.sched_time_formatted = DateTimeToString(flight.legs[0].depart.dt_utc.replace(tzinfo=utc) - timedelta(seconds=seconds_before))
-      flight.seconds = flight.sched_time - time_module.time()
-      # Retrieve timezone and apply it because datetimes are stored as naive (no timezone information)
-      tz = airport_timezone_map[flight.legs[0].depart.airport]
-      flight.sched_time_local_formatted = DateTimeToString(flight.legs[0].depart.dt_utc.replace(tzinfo=utc).astimezone(tz) - timedelta(seconds=seconds_before))
-      db.Session.commit()
-      dlog("Flight time: %s" % flight.legs[0].depart.dt_formatted)
-      if config["CELERY"]:
-        check_in_flight.apply_async([res.id, flight.id], countdown=flight.seconds)
-      elif not blocking:
-        print "Scheduling check in for flight at", flight.legs[0].depart.dt_formatted, "(local), ", flight.legs[0].depart.dt_utc_formatted, "(UTC) in", int(flight.seconds/60/60), "hrs", int(flight.seconds/60%60),  "mins from now..."
-        t = Timer(flight.seconds, TryCheckinFlight, (res.id, flight.id, None, 1))
-        t.daemon = True
-        t.start()
-        # DEBUG
-        # if flight == res.flights[0]:
-        #   Timer(5, TryCheckinFlight, (res, flight, None, 1)).start()
-      else:
-        scheduler.enterabs(flight.sched_time, 1, TryCheckinFlight, (res.id, flight.id, scheduler, 1))
-        print "Scheduling check in for flight at", flight.legs[0].depart.dt_formatted, "(local), ", flight.legs[0].depart.dt_utc_formatted, "(UTC)"
-      dlog('Checkin scheduled at (UTC): %s' % flight.sched_time_formatted)
-      dlog('Checkin scheduled at (local): %s' % flight.sched_time_local_formatted)
-      dlog('Flights scheduled.  Waiting...')
+      scheduleFlight(res, flight, blocking, scheduler)
     else:
       print 'Flight %s was successfully checked in at %s\n' % ((i+1), flight.position)
   db.isReservationActive(res)

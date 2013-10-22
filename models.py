@@ -67,6 +67,7 @@ class Flight(Base):
   sched_time_formatted = Column(String())
   sched_time_local_formatted = Column(String())
   seconds = Column(Float())
+  task_uuid = Column(String())
 
 
 class Reservation(Base):

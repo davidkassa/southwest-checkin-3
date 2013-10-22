@@ -7,8 +7,12 @@
       <div class="text-centered">
         <h2>Reservations</h2>
         <table><tbody>
-          <th>Reservation</th><th>Name</th><th>Active</th><th>Scheduled Checkins</th><th>ID</th>
-          {% for res in reservations %}
+          <th>Reservation</th>
+          <th>Name</th>
+          <th>Active</th>
+          <th>Scheduled Checkins</th>
+          <th>Task ID</th>
+          {% for res in reservations|reverse %}
             <tr>
               <td><b><a href="/flights/{{res.code}}">{{res.code}}</a></b></td><td>{{res.first_name}} {{res.last_name}}</td>
               {% if res.active %}
@@ -16,18 +20,31 @@
                 <td><ul>
                   {% for flight in res.flights %}
                     {% if flight.sched_time_local_formatted %}
-                      <li>{{ flight.sched_time_local_formatted }} (ID: {{ flight.id }})</li>
+                      <li>{{ flight.sched_time_local_formatted }}</li>
                     {% endif %}
+                  {% endfor %}
+                </ul></td>
+                <td><ul>
+                  {% for flight in res.flights %}
+                    <li>
+                      {% if flight.task_uuid %}
+                        <a href="http://localhost:5555/task/{{flight.task_uuid}}">{{ flight.task_uuid }}</a>
+                      {% else %}
+                        <a href="/all/schedule/{{flight.id}}">Schedule it</a>
+                      {% endif %}
+                    </li>
                   {% endfor %}
                 </ul></td>
               {% else %}
                 <td>not active</td><td></td>
               {% endif %}
-              <td>{{ res.id }}</td>
             </tr>
           {% endfor %}
         </tbody></table>
-        Active threads: {{count}}
+        <form action="{{ url_for('schedule_all_reservations') }}" method=get class=add-entry>
+          <input class="btn btn-southwest" type=submit value="Schedule All Reservations">
+        </form>
+        Active threads: {{count}} | <a href="http://localhost:5555">Flower</a>
       </div>
     </div>
   </div>
