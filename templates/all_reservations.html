@@ -28,7 +28,7 @@
                   {% for flight in res.flights %}
                     <li>
                       {% if flight.task_uuid %}
-                        <a href="http://localhost:5555/task/{{flight.task_uuid}}">{{ flight.task_uuid }}</a>
+                        <a href="http://localhost:5555/task/{{flight.task_uuid}}">{{ flight.task_uuid }}</a><a href="/all/schedule/{{flight.id}}">Reschedule it</a>
                       {% else %}
                         <a href="/all/schedule/{{flight.id}}">Schedule it</a>
                       {% endif %}
