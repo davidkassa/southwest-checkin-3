@@ -1,3 +1,1 @@
-celery: celery -A tasks worker --loglevel=info
-web: newrelic-admin run-program gunicorn -b "0.0.0.0:$PORT" server:app
-# flower: celery flower --broker=$BROKER_URL
+web: env > .env; env GEM_HOME=$HOME/.ruby-gems env PATH=PATH:$HOME/.ruby-gems/bin foreman start -f ProcfileFree
