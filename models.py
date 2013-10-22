@@ -69,6 +69,11 @@ class Flight(Base):
   seconds = Column(Float())
   task_uuid = Column(String())
 
+  def task_status(self):
+    if self.task_uuid == None: return False
+    from celery.result import AsyncResult
+    return AsyncResult(self.task_uuid).state
+
 
 class Reservation(Base):
   __tablename__ = 'reservation'
