@@ -604,6 +604,7 @@ def success_message(reservation, flight):
   message = ''
   message += 'SUCCESS.  Checked in at position %s\r\n' % flight.position
   message += getFlightInfo(reservation, [flight])
+  return message
 
 def send_success_email(message, boarding_pass, reservation):
   if hasattr(reservation, 'email'):

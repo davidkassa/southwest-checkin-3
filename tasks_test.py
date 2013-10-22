@@ -20,6 +20,7 @@ class ReservationTestCase(DatabaseTestCase):
         self.setUpFlightLocation(self.reservation)
         self.db.Session.add(self.reservation)
         self.db.Session.commit()
+        self.setUpEmailMock()
 
     def setUpReservation(self):
         self.code = '999999'
@@ -40,6 +41,12 @@ class ReservationTestCase(DatabaseTestCase):
     def setUpFlightLocation(self, reservation):
         reservation.flights[0].legs[0].depart = FlightLegLocation()
         reservation.flights[0].legs[0].depart.airport = 'AUS'
+        reservation.flights[0].legs[0].arrive = FlightLegLocation()
+        reservation.flights[0].legs[0].arrive.airport = 'MCI'
+
+    def setUpEmailMock(self):
+        import sw_checkin_email
+        sw_checkin_email.send_email = MagicMock()
 
     def tearDown(self):
         self.db.deleteReservation(self.reservation)
@@ -70,6 +77,14 @@ class CheckInFlightTestCase(ReservationTestCase):
 
     def runTest(self):
         check_in_flight(self.reservation.id, self.reservation.flights[0].id)
+
+class CheckInSuccessTestCase(ReservationTestCase):
+    def runTest(self):
+        check_in_success(self.reservation, self.reservation.flights[0], "Boarding Pass", 1)
+
+class SuccessMessageTestCase(CheckInSuccessTestCase):
+    def runTest(self):
+        self.assertEqual(success_message(self.reservation, self.reservation.flights[0]), u'SUCCESS.  Checked in at position None\r\nConfirmation number: 999999\r\nPassenger name: Bob Smith\r\nFlight 1:\n  Flight Number: 1234\n    Departs: AUS None (None)\n    Arrives: MCI None (None)\n')
 
 if __name__ == '__main__':
     unittest.main()
