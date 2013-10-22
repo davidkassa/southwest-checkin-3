@@ -1,0 +1,4 @@
+# open /Applications/Postgres.app
+# redis-server
+celery: celery -A tasks worker --loglevel=info
+flower: celery flower --broker='redis://localhost:6379/0'
