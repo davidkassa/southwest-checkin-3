@@ -31,6 +31,7 @@ For example, in a bash shell I might configure email:
     export SMTP_USER=$EMAIL_FROM
     export SMTP_PASSWORD='mypassword'
 
+
 These settings will be used in the application. `default_settings.py` will be used for the rest of the configuration like the database, SMTP email port, and debug settings. Override these appropriately. This style of configuration makes it easy to keep sensitive configuration seperate from the public repository and also makes it easy to deploy these settings to Heroku.
 Note: If you use Gmail's two factor authentication, you will need a Application Specific password, not your normal password.
 
@@ -66,7 +67,7 @@ Storing the reservations in a database is optional (on by default). If an active
 
     $ python sw_checkin_email.py
 
-There are also several useful ways of running the script in the background.
+There are also several useful ways to run the script in the background.
 
 Run the script in the background:
 
@@ -80,8 +81,23 @@ Run the script in the background, log to file, and allow yourself to logout (you
 
     $ nohup python sw_checkin_email.py John Doe ABC123 &> sw_checkin_email.log
 
-For more expanation on these commands, you may want to read about [nohup and disown](http://www.basicallytech.com/blog/index.php?/archives/70-Shell-stuff-job-control-and-screen.html#bash_disown).
+For more explanation on these commands, you may want to read about [nohup and disown](http://www.basicallytech.com/blog/index.php?/archives/70-Shell-stuff-job-control-and-screen.html#bash_disown).
 
+## KNOWN ISSUES ##
+
+When using the database, the script produces unpredictable results when run
+with more than one name/confirmation number. CLI usage with
+the database disabled has been confirmed to work as of 10/5/2013.
+
+    # Add to your bash startup (e.g. .profile, .bashrc)
+    export STORE_DATABASE="False" # Use memory instead of database
+
+    # Check in two users
+    python sw_checkin_email.py John Doe ABC123 Jane Doe DEF456
+
+The various backgrounding/logging options above will still work with this
+configuration.  Running more than one instance of the script *should* work,
+but this has not been tested.
 
 ## Technical Details ##
 
