@@ -191,6 +191,19 @@ def all_reservations():
     return render_template('all_reservations.html', reservations=reservations, count=count)
   return abort(500)
 
+@app.route('/all/schedule_all', methods=['GET'])
+@requires_authentication
+def schedule_all_reservations():
+  scheduleAllExistingReservations()
+  return redirect(url_for("all_reservations"))
+
+@app.route('/all/schedule/<id>', methods=['GET'])
+def schedule_flight(id):
+  flight = db.Session.query(Flight).get(id)
+  result = scheduleFlight(flight.reservation, flight)
+  app.logger.debug('Result from scheduling: %s', result)
+  return redirect(url_for("all_reservations"))
+
 if __name__ == '__main__':
   # Bind to PORT if defined, otherwise default to 5000.
   port = int(os.environ.get('PORT', 5000))
