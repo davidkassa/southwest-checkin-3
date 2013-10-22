@@ -19,14 +19,14 @@ CELERY_RESULT_BACKEND = url
 
 ### Database ###
 
-# CELERY_RESULT_BACKEND = "database"
+CELERY_RESULT_BACKEND = "database"
 #
-# if config["HEROKU_DB"]:
-#   import os
-#   BROKER_URL          = 'sqla+postgresql://' + os.environ['DATABASE_URL']
-#   CELERY_RESULT_DBURI = 'postgresql://' + os.environ['DATABASE_URL']
+if config["HEROKU_DB"]:
+  import os
+  BROKER_URL          = 'sqla+postgresql://' + os.environ('DATABASE_URL')
+  CELERY_RESULT_DBURI = 'postgresql://' + os.environ.get('DATABASE_URL')
 # else:
-#   BROKER_URL          = 'sqla+sqlite:///' + config["SQLITE_DB"]
-#   CELERY_RESULT_DBURI = 'sqlite:///' + config["SQLITE_DB"]
+  # BROKER_URL          = 'sqla+sqlite:///' + config["SQLITE_DB"]
+  # CELERY_RESULT_DBURI = 'sqlite:///' + config["SQLITE_DB"]
 #
 # CELERY_RESULT_ENGINE_OPTIONS = {"echo": True}
