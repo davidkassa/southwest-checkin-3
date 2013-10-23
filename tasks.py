@@ -22,8 +22,12 @@ def test_celery(flight_id):
 @celery.task(default_retry_delay=config["RETRY_INTERVAL"], max_retries=config["MAX_RETRIES"])
 def check_in_flight(reservation_id, flight_id):
   db = Database(heroku=True)
+  flight = db.Session.query(Flight).get(flight_id)
+  if flight.success:
+    print "Skipping flight %d. Already checked in at %s" % (flight_id, flight.position)
+    return
+
   reservation = db.Session.query(Reservation).get(reservation_id)
-  flight      = db.Session.query(Flight).get(flight_id)
 
   (position, boarding_pass) = getBoardingPass(reservation)
 
