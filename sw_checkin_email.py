@@ -618,6 +618,7 @@ def check_in_success(reservation, flight, boarding_pass, position):
   flight.position = position
   db.Session.commit()
   send_success_email(success_message(reservation, flight), boarding_pass, reservation)
+  return
 
 def success_message(reservation, flight):
   message = ''
