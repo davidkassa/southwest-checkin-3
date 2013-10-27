@@ -48,4 +48,4 @@ def check_in_flight(reservation_id, flight_id):
   else:
     print 'FAILURE. Scheduling another try in %d seconds' % config["RETRY_INTERVAL"]
     session.remove()
-    raise check_in_flight.retry(reservation_id, flight_id)
+    raise check_in_flight.retry(args=(reservation_id, flight_id))
