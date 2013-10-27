@@ -613,10 +613,10 @@ def displayFlightInfo(res, flights, do_send_email=False):
   if do_send_email:
     send_email('Waiting for SW flight', message);
 
-def check_in_success(reservation, flight, boarding_pass, position):
+def check_in_success(reservation, flight, boarding_pass, position, session):
   flight.success = True
   flight.position = position
-  db.Session.commit()
+  session.commit()
   send_success_email(success_message(reservation, flight), boarding_pass, reservation)
   return
 

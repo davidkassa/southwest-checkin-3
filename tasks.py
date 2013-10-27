@@ -43,7 +43,7 @@ def check_in_flight(reservation_id, flight_id):
   (position, boarding_pass) = getBoardingPass(reservation)
 
   if position:
-    return check_in_success(reservation, flight, boarding_pass, position)
+    return check_in_success(reservation, flight, boarding_pass, position, session)
     session.remove()
   else:
     print 'FAILURE. Scheduling another try in %d seconds' % config["RETRY_INTERVAL"]
