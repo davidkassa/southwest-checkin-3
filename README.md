@@ -83,21 +83,6 @@ Run the script in the background, log to file, and allow yourself to logout (you
 
 For more explanation on these commands, you may want to read about [nohup and disown](http://www.basicallytech.com/blog/index.php?/archives/70-Shell-stuff-job-control-and-screen.html#bash_disown).
 
-## KNOWN ISSUES ##
-
-When using the database, the script produces unpredictable results when run
-with more than one name/confirmation number. CLI usage with
-the database disabled has been confirmed to work as of 10/5/2013.
-
-    # Add to your bash startup (e.g. .profile, .bashrc)
-    export STORE_DATABASE="False" # Use memory instead of database
-
-    # Check in two users
-    python sw_checkin_email.py John Doe ABC123 Jane Doe DEF456
-
-The various backgrounding/logging options above will still work with this
-configuration.  Running more than one instance of the script *should* work,
-but this has not been tested.
 
 ## Technical Details ##
 
