@@ -20,10 +20,13 @@ The easiest way to install the dependencies is with [pip](http://pypi.python.org
 
     $ pip install -r requirements.txt
 
+For the web interface, the [Celery](http://docs.celeryproject.org/en/latest/index.html) task queue is required. [Redis](http://redis.io/) is used as the broker for queuing tasks (although you can setup a different broker such as RabbitMQ). Make sure to set `CELERY=true` to run the web interface.
+
 You will also need to set the appropriate settings for the application. By default, the app will use any environment variables you have set, and fallback to `default_settings.py` for any environment variables that are not set.
 
 For example, in a bash shell I might configure email:
 
+    export CELERY="True"
     export SEND_EMAIL="True"
     export EMAIL_FROM="my@email.com"
     export SEND_ADMIN_EMAIL="True"
@@ -38,7 +41,7 @@ Note: If you use Gmail's two factor authentication, you will need a Application 
 
 ### Installation on Ubuntu 12.04 LTS ###
 
-Installation on Ubuntu 12.04 requires python-dev, libpq-dev, libxml2-dev, libxslt-dev.
+Installation on Ubuntu requires the appropriate system packages.
 
     $ sudo apt-get install python-dev build-essential python-pip
     $ sudo apt-get install libxml2-dev libxslt-dev libpq-dev
@@ -50,11 +53,10 @@ Enter a first and last name, confirmation number, and email. The system will att
 
 To cancel the automatic checkin, simply [search](http://southwest-checkin.herokuapp.com/search) for the reservation and cancel it.
 
-To run the development server on `localhost:5000`:
+To run the development server on `localhost:5000`, start Postgres if you are using it. Then:
 
-    $ python server.py
-
-Configuring the from email address and password in `sw_checkin_email.py` is required for the web interface.
+    $ redis-server # start redis
+    $ foreman start -f Procfile.dev
 
 
 ## CLI Usage ##
@@ -90,4 +92,5 @@ For more explanation on these commands, you may want to read about [nohup and di
 - [Beautiful Soup 4](http://www.crummy.com/software/BeautifulSoup/) scrapes southwest.com
 - The web interface was written using [Flask](http://flask.pocoo.org/)
 - The database layer was written using [SQLAlchemy](http://www.sqlalchemy.org/)
+- [Celery](http://docs.celeryproject.org/en/latest/index.html) and [Redis](http://redis.io/) are used to queue delayed check in tasks for the web interface
 - The [live app](http://southwest-checkin.herokuapp.com/) is hosted on a [Heroku](http://www.heroku.com/) free dyno and uses [Heroku Postgres Dev](https://addons.heroku.com/heroku-postgresql) to host the database and [New Relic](https://addons.heroku.com/newrelic) for app statistics
