@@ -11,6 +11,16 @@ from sw_checkin_email import *
 celery = Celery('tasks')
 celery.config_from_object('celery_config')
 
+if config["STORE_DATABASE"]:
+  if config["HEROKU_DB"]:
+    db = Database(heroku=True)
+  elif config["POSTGRES_DB"] != '':
+    db = Database(postgres=config["POSTGRES_DB"])
+  else:
+    db = Database(sqlite=config["SQLITE_DB"])
+else:
+  db = Database()
+
 @celery.task(default_retry_delay=config["RETRY_INTERVAL"], max_retries=config["MAX_RETRIES"])
 def test_celery(flight_id):
   try:
