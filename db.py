@@ -10,10 +10,10 @@ class Database:
     if heroku:
       import os
       self.url = os.environ['DATABASE_URL']
-      self.engine = create_engine(self.url, pool_recycle=3600, pool_size=10)
+      self.engine = create_engine(self.url)
     elif postgres:
       self.url = postgres
-      self.engine = create_engine(self.url, pool_recycle=3600, pool_size=10)
+      self.engine = create_engine(self.url)
     else:
       self.url = 'sqlite:///' + sqlite
       from sqlalchemy.pool import StaticPool
