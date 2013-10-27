@@ -1,197 +1,106 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Usage:
-#
-#   python test.py [--test <all(default)|database|email>] 
-#                  [--database <memory(default)|heroku|sqlite>] 
-#
-#   test items can be chained. I.E. `--test database email`
-
 from clint import args
 from clint.textui import puts, colored, indent
 
-errors = []
-def record_error(message, e):
-  errors.append([message, e])
+import unittest
+from mock import patch, MagicMock
+from datetime import datetime
 
-def remove_database():
-  if db_type == 'heroku':
-    try:
-      puts('Deleting test data from Heroku database...')
-      db.deleteReservation(res)
-    except Exception, e:
-      record_error('Failed on deletion', e)
+from models import Reservation, Flight, FlightLeg, FlightLegLocation
+from db import Database
 
-  if db_type == 'sqlite':
-    try:
-      puts('Deleting sqlite test database...')
-      from os import remove
-      remove('test.db')
-    except Exception, e:
-      record_error('Failed to delete test database', e)
+from sw_checkin_email import *
+from tasks import *
 
-# ========================================================================
-# Arguments
-# ========================================================================
+class EmailTestCase(unittest.TestCase):
+    def setUp(self):
+        self.email_to = 'sw.automatic.checkin@gmail.com'
 
-# Defaults
-db_type  = 'memory'
-test = {'database': True, 'email': True}
+    def runTest(self):
+        send_email('Southwest Checkin Test ' + str(datetime.now()), 'Test email body', boarding_pass=None, email=self.email_to)
 
-if args.contains('--database'):
-  arg = args.grouped['--database'][0]
-  if arg == 'heroku':
-    db_type = 'heroku'
-  if arg == 'sqlite':
-    db_type = 'sqlite'
-if args.contains('--test'):
-  test_args = args.grouped['--test']
-  if 'all' in test_args:
-    pass
-  elif 'database' not in test_args:
-    test['database'] = False
-  elif 'email' not in test_args:
-    test['email'] = False
+class DatabaseTestCase(unittest.TestCase):
+    def setUp(self):
+        self.db = Database()
+        self.db.create_all()
 
-puts('Testing:')
-with indent(4):
-  for key, value in test.items():
-    if value:
-      puts(colored.blue(key))
+class ReservationTestCase(DatabaseTestCase):
+    def setUp(self):
+        super(ReservationTestCase, self).setUp()
+        self.setUpReservation()
+        self.setUpFlight(self.reservation)
+        self.setUpFlightLeg(self.reservation)
+        self.setUpFlightLocation(self.reservation)
+        self.db.Session.add(self.reservation)
+        self.db.Session.commit()
+        self.setUpEmailMock()
 
-# ========================================================================
-# Database
-# ========================================================================
+    def setUpReservation(self):
+        self.code = '999999'
+        self.reservation = Reservation('Bob', 'Smith', self.code, 'email@email.com')
 
-if test['database']:
-  puts(colored.blue('\nTesting database...'))
+    def setUpFlight(self, reservation):
+        flights = []
+        flights.append(Flight())
+        flights[0].sched_time = 10.0
+        flights.append(Flight())
+        reservation.flights = flights
 
-  from models import Reservation, Flight, FlightLeg, FlightLegLocation
-  from db import Database
+    def setUpFlightLeg(self, reservation):
+        reservation.flights[0].legs.append(FlightLeg())
+        reservation.flights[1].legs.append(FlightLeg())
+        reservation.flights[0].legs[0].flight_number = "1234"
 
-  if db_type == 'memory':
-    print "Using a memory database..."
-    db = Database()
-  elif db_type == 'sqlite':
-    print "Using a sqlite database..."
-    db = Database('test.db')
-  elif db_type == 'heroku':
-    print "Using a heroku database..."
-    db = Database(heroku=True)
+    def setUpFlightLocation(self, reservation):
+        reservation.flights[0].legs[0].depart = FlightLegLocation()
+        reservation.flights[0].legs[0].depart.airport = 'AUS'
+        reservation.flights[0].legs[0].arrive = FlightLegLocation()
+        reservation.flights[0].legs[0].arrive.airport = 'MCI'
 
-  db.create_all()
+    def setUpEmailMock(self):
+        import sw_checkin_email
+        sw_checkin_email.send_email = MagicMock()
 
-  puts('Adding a reservation...')
-  try:
-    res = Reservation('Bob', 'Smith', '999999', 'email@email.com')
-    db.Session.add(res)
-    db.Session.commit()
-  except Exception, e:
-    record_error('Failed on adding the reservation', e)
-    remove_database()
-
-  puts('Adding a flight...')
-  try:
-    flights = []
-    flights.append(Flight())
-    flights[0].sched_time = 10.0
-    flights.append(Flight())
-    res.flights = flights
-    db.Session.commit()
-  except Exception, e:
-    record_error('Failed on adding the flight', e)
-    remove_database()
-
-  puts('Adding a flight leg...')
-  try:
-    res.flights[0].legs.append(FlightLeg())
-    res.flights[1].legs.append(FlightLeg())
-    res.flights[0].legs[0].flight_number = "1234"
-    db.Session.commit()
-  except Exception, e:
-    record_error('Failed on adding a flight leg', e)
-    remove_database()
-
-  puts('Adding a flight location...')
-  try:
-    res.flights[0].legs[0].depart = FlightLegLocation()
-    res.flights[0].legs[0].depart.airport = 'AUS'
-    db.Session.commit()
-  except Exception, e:
-    record_error('Failed on adding the reservation', e)
-    remove_database()
-
-  puts('Querying data...')
-  try:
-    for instance in db.Session.query(Reservation): 
-      with indent(4, quote='>'):
-        puts('Reservation: %s %s' % (instance.first_name, instance.code))
-        puts('First flight scheduled time: %s ' % str(instance.flights[0].sched_time))
-        puts('First flight, first leg, flight #: %s' % instance.flights[0].legs[0].flight_number)
-        puts("First flight, first leg location's airport: %s" % instance.flights[0].legs[0].depart.airport)
-  except Exception, e:
-    record_error('Failed on querying', e)
-    remove_database()
+    def tearDown(self):
+        self.db.deleteReservation(self.reservation)
 
 
-# ========================================================================
-# Celery
-# ========================================================================
+class CreateReservationTestCase(ReservationTestCase):
+    def runTest(self):
+        self.assertEqual(self.db.findReservation(self.code).first_name, 'Bob', 'Incorrect first name')
 
-if test['database']:
-  try:
-    from tasks import *
-    flight = db.Session.query(Flight).first()
-    puts("Creating a celery task for %s..." % flight.id)
-    result2 = test_celery.delay(flight.id)
-  except Exception, e:
-    record_error('Failed on creating celery task', e)
-    remove_database()
+class CreateFlightTestCase(ReservationTestCase):
+    def runTest(self):
+        self.assertEqual(self.db.findReservation(self.code).flights[0].sched_time, 10.0, 'Incorrect scheduled time.')
 
-# ========================================================================
-# Remove database
-# ========================================================================
+class CreateFlightLegTestCase(ReservationTestCase):
+    def runTest(self):
+        self.assertEqual(self.db.findReservation(self.code).flights[0].legs[0].flight_number, "1234", 'Incorrect flight number.')
 
-if test['database']:
-  remove_database()
+class CreateFlightLegLocationTestCase(ReservationTestCase):
+    def runTest(self):
+        self.assertEqual(self.db.findReservation(self.code).flights[0].legs[0].depart.airport, 'AUS', 'Incorrect flight location.')
 
-# ========================================================================
-# Email
-# ========================================================================
+class CheckInFlightTestCase(ReservationTestCase):
+    def setUp(self):
+        super(CheckInFlightTestCase, self).setUp()
+        import tasks
+        tasks.getBoardingPass = MagicMock(return_value=[1, 1])
+        tasks.check_in_success = MagicMock()
+        tasks.db = MagicMock(return_value=self.db)
 
-if test['email']:
-  puts(colored.blue('\nTesting email...'))
+    def runTest(self):
+        check_in_flight(self.reservation.id, self.reservation.flights[0].id)
 
-  import getpass
-  from datetime import datetime
-  from sw_checkin_email import *
+class CheckInSuccessTestCase(ReservationTestCase):
+    def runTest(self):
+        check_in_success(self.reservation, self.reservation.flights[0], "Boarding Pass", 1, self.db.Session)
 
-  email_to = 'sw.automatic.checkin@gmail.com'
+class SuccessMessageTestCase(CheckInSuccessTestCase):
+    def runTest(self):
+        self.assertEqual(success_message(self.reservation, self.reservation.flights[0]), u'SUCCESS.  Checked in at position None\r\nConfirmation number: 999999\r\nPassenger name: Bob Smith\r\nFlight 1:\n  Flight Number: 1234\n    Departs: AUS None (None)\n    Arrives: MCI None (None)\n')
 
-  if config["SEND_EMAIL"]:
-      if not config["EMAIL_FROM"]:
-        record_error('There is no from email configured', 'From email address missing')
-      if config["EMAIL_FROM"]:
-        if not config["SMTP_PASSWORD"]:
-          record_error('There is no smtp password configured', 'SMTP password missing')
-        try:
-          send_email('Southwest Checkin Test ' + str(datetime.now()), 'Test email body', boarding_pass=None, email=email_to)
-        except Exception, e:
-          record_error('Failed sending email', e)
-      else:
-        record_error('Did not get user input to send email', 'The user did not enter a from email address')
-
-# ========================================================================
-# Results
-# ========================================================================
-
-if len(errors) == 0:
-  puts(colored.green('Success!'))
-else:
-  puts(colored.red(':( There were some errors:'))
-  for i, e in enumerate(errors, 1):
-    puts(colored.red('ERROR %s:' % i))
-    with indent(4, quote=colored.red('>')):
-      puts('Message: %s' % e[0])
-      puts('Exception: %s' % e[1])
+if __name__ == '__main__':
+    unittest.main()

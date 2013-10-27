@@ -22,15 +22,6 @@ else:
   db = Database()
 
 @celery.task(default_retry_delay=config["RETRY_INTERVAL"], max_retries=config["MAX_RETRIES"])
-def test_celery(flight_id):
-  try:
-    db = Database('southwest-checkin.db')
-    flight = session.query(Flight).get(flight_id)
-    return "Found flight %s" % flight.id
-  except Exception, exc:
-    raise test_celery.retry(exc=exc)
-
-@celery.task(default_retry_delay=config["RETRY_INTERVAL"], max_retries=config["MAX_RETRIES"])
 def check_in_flight(reservation_id, flight_id):
   session = scoped_session(db.session_factory)
   flight = session.query(Flight).get(flight_id)
