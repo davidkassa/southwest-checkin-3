@@ -74,6 +74,7 @@ class CheckInFlightTestCase(ReservationTestCase):
         import tasks
         tasks.getBoardingPass = MagicMock(return_value=[1, 1])
         tasks.check_in_success = MagicMock()
+        tasks.db = MagicMock(return_value=self.db)
 
     def runTest(self):
         check_in_flight(self.reservation.id, self.reservation.flights[0].id)
