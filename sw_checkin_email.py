@@ -634,7 +634,7 @@ def send_success_email(message, boarding_pass, reservation):
   send_email('%s %s was checked in' % (reservation.first_name, reservation.last_name), message, boarding_pass, config["ADMIN_EMAIL"])
 
 def TryCheckinFlight(res_id, flight_id, sch, attempt):
-  session = scoped_session(self.session_factory)
+  session = scoped_session(db.session_factory)
   res = session.query(Reservation).filter_by(id=res_id).one()
   flight = session.query(Flight).filter_by(id=flight_id).one()
   print '-='*30
