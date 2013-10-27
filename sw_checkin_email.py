@@ -313,6 +313,7 @@ class HtmlFormParser(object):
     print
     if form == None:
       print("Couldn't find the HTML form to lookup the flight! Did the web page change? Or are we too early?")
+      return None
     else:
       self.formaction = form.get('action', None)
       self.submit_url = urlparse.urljoin(page_url, self.formaction)
@@ -547,7 +548,7 @@ def getBoardingPass(res):
   dlog("Parsing the checkin options page...\nURL: " + form_url)
   form = HtmlFormParser(reservations, form_url, 'checkinOptions')
   if not hasattr(form, 'submit_url'): # The form was not created correctly
-    return None
+    return (None, None)
 
   # Need to check all of the passengers
   for i in form.inputs:
