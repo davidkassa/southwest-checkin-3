@@ -4,6 +4,7 @@ config = Config()
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'US/Central'
+CELERY_REDIS_MAX_CONNECTIONS=2
 
 if config["HEROKU_DB"]:
   import os
