@@ -7,7 +7,7 @@ CELERY_TIMEZONE = 'US/Central'
 
 if config["HEROKU_DB"]:
   import os
-  url = os.environ.get('REDISCLOUD_URL')
+  url = os.environ.get('BROKER_URL')
 else:
   url = 'redis://localhost:6379/0'
 
