@@ -17,11 +17,12 @@ class Database:
     else:
       self.url = 'sqlite:///' + sqlite
       from sqlalchemy.pool import StaticPool
+      # special args for memory db -> http://docs.sqlalchemy.org/en/rel_0_7/dialects/sqlite.html#using-a-memory-database-in-multiple-threads
       self.engine = create_engine(self.url, connect_args={'check_same_thread':False},
-                    poolclass=StaticPool) # special args for memory db -> http://docs.sqlalchemy.org/en/rel_0_7/dialects/sqlite.html#using-a-memory-database-in-multiple-threads
-    session_factory = sessionmaker(bind=self.engine)
+                    poolclass=StaticPool)
+    self.session_factory = sessionmaker(bind=self.engine)
     # The scoped_session is thread safe
-    self.Session = scoped_session(session_factory)
+    self.Session = scoped_session(self.session_factory)
 
   def create_all(self):
     """ Create tables if they don't exist """

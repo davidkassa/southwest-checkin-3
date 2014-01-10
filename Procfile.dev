@@ -1,0 +1,8 @@
+# For development, using postgres and redis is required for the web interface
+#
+# open /Applications/Postgres.app
+# redis-server
+
+celery: celery -A tasks worker --loglevel=info
+flower: celery flower --broker='redis://localhost:6379/0'
+web: python server.py

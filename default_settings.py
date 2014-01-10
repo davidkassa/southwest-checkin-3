@@ -4,6 +4,7 @@ STORE_DATABASE = True # Store all data in a database? Otherwise, use memory
 HEROKU_DB = False # Use heroku postgres?
 POSTGRES_DB = '' # i.e. 'postgresql://postgres:password@localhost/southwest-checkin'
 SQLITE_DB = 'southwest-checkin.db' # i.e. 'southwest-checkin.db'
+CELERY = False
 RETRY_INTERVAL = 5 # If we are unable to check in, how soon should we retry? (seconds)
 MAX_RETRIES = 5 # How many times to retry before giving up?
 CHECKIN_WINDOW = 0 # How soon before the designated time should we try to check in? (seconds)

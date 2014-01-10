@@ -54,6 +54,9 @@ from models import Reservation, Flight, FlightLeg, FlightLegLocation
 from settings import Config
 config = Config()
 
+from db import Database
+from tasks import *
+
 # ========================================================================
 
 base_url = 'http://www.southwest.com'
@@ -186,7 +189,6 @@ def dlog(str):
   if config["VERBOSE"]:
     print 'DEBUG: %s' % str
 
-from db import Database
 if config["STORE_DATABASE"]:
   if config["HEROKU_DB"]:
     db = Database(heroku=True)
@@ -311,6 +313,7 @@ class HtmlFormParser(object):
     print
     if form == None:
       print("Couldn't find the HTML form to lookup the flight! Did the web page change? Or are we too early?")
+      return None
     else:
       self.formaction = form.get('action', None)
       self.submit_url = urlparse.urljoin(page_url, self.formaction)
@@ -384,6 +387,7 @@ class ReservationInfoParser(object):
 
     soup = BeautifulSoup(data, "lxml")
     self.flights = []
+    
     '''
     Since we only check in to flights with the given confirmation number, 
     we do not want to include any 'associated products' with other confirmation 
@@ -544,7 +548,7 @@ def getBoardingPass(res):
   dlog("Parsing the checkin options page...\nURL: " + form_url)
   form = HtmlFormParser(reservations, form_url, 'checkinOptions')
   if not hasattr(form, 'submit_url'): # The form was not created correctly
-    return None
+    return (None, None)
 
   # Need to check all of the passengers
   for i in form.inputs:
@@ -610,9 +614,30 @@ def displayFlightInfo(res, flights, do_send_email=False):
   if do_send_email:
     send_email('Waiting for SW flight', message);
 
+def check_in_success(reservation, flight, boarding_pass, position, session):
+  flight.success = True
+  flight.position = position
+  session.commit()
+  send_success_email(success_message(reservation, flight), boarding_pass, reservation)
+  return
+
+def success_message(reservation, flight):
+  message = ''
+  message += 'SUCCESS.  Checked in at position %s\r\n' % flight.position
+  message += getFlightInfo(reservation, [flight])
+  return message
+
+def send_success_email(message, boarding_pass, reservation):
+  if hasattr(reservation, 'email'):
+    send_email('Flight checked in!', message, boarding_pass, reservation.email)
+  else:
+    send_email('Flight checked in!', message, boarding_pass)
+  send_email('%s %s was checked in' % (reservation.first_name, reservation.last_name), message, boarding_pass, config["ADMIN_EMAIL"])
+
 def TryCheckinFlight(res_id, flight_id, sch, attempt):
-  res = db.Session.query(Reservation).filter_by(id=res_id).one()
-  flight = db.Session.query(Flight).filter_by(id=flight_id).one()
+  session = scoped_session(db.session_factory)
+  res = session.query(Reservation).filter_by(id=res_id).one()
+  flight = session.query(Flight).filter_by(id=flight_id).one()
   print '-='*30
   print 'Trying to checkin flight at %s' % DateTimeToString(datetime.now(utc))
   print 'Attempt #%s' % attempt
@@ -628,13 +653,15 @@ def TryCheckinFlight(res_id, flight_id, sch, attempt):
     message += 'SUCCESS.  Checked in at position %s\r\n' % position
     message += getFlightInfo(res, [flight])
     print message
-    db.Session.commit()
+    session.commit()
     if hasattr(res, 'email'):
       send_email('Flight checked in!', message, boarding_pass, res.email)
     else:
       send_email('Flight checked in!', message, boarding_pass)
     send_email('%s %s was checked in' % (res.first_name, res.last_name), message, boarding_pass, config["ADMIN_EMAIL"])
+    session.remove()
   else:
+    session.remove()
     if attempt > config["MAX_RETRIES"]:
       print 'FAILURE.  Too many failures, giving up.'
     else:
@@ -646,12 +673,6 @@ def TryCheckinFlight(res_id, flight_id, sch, attempt):
         t = Timer(config["RETRY_INTERVAL"], TryCheckinFlight, (res.id, flight.id, None, attempt + 1))
         t.daemon = True
         t.start()
-
-
-
-
-
-
 
 def send_email(subject, message, boarding_pass=None, email=None):
   if not config["SEND_EMAIL"] or not config["SEND_ADMIN_EMAIL"]: return
@@ -685,8 +706,39 @@ def send_email(subject, message, boarding_pass=None, email=None):
       smtp.close()
     except Exception, e:
       print 'Error sending email!'
-      print sys.exc_info()[1]
-      raise
+      raise e
+
+def scheduleFlight(res, flight, blocking=False, scheduler=None):
+  flight_time = time_module.mktime(flight.legs[0].depart.dt_utc.utctimetuple()) - time_module.timezone
+  seconds_before = config["CHECKIN_WINDOW"] + 24*60*60 # how many seconds before the flight time do we check in
+  flight.sched_time = flight_time - seconds_before
+  flight.sched_time_formatted = DateTimeToString(flight.legs[0].depart.dt_utc.replace(tzinfo=utc) - timedelta(seconds=seconds_before))
+  flight.seconds = flight.sched_time - time_module.time()
+  # Retrieve timezone and apply it because datetimes are stored as naive (no timezone information)
+  tz = airport_timezone_map[flight.legs[0].depart.airport]
+  flight.sched_time_local_formatted = DateTimeToString(flight.legs[0].depart.dt_utc.replace(tzinfo=utc).astimezone(tz) - timedelta(seconds=seconds_before))
+  db.Session.commit()
+  dlog("Flight time: %s" % flight.legs[0].depart.dt_formatted)
+  if config["CELERY"]:
+    result = check_in_flight.apply_async([res.id, flight.id], countdown=flight.seconds)
+    flight.task_uuid = result.id
+    db.Session.commit()
+  elif not blocking:
+    result = "Scheduling check in for flight at", flight.legs[0].depart.dt_formatted, "(local), ", flight.legs[0].depart.dt_utc_formatted, "(UTC) in", int(flight.seconds/60/60), "hrs", int(flight.seconds/60%60),  "mins from now..."
+    t = Timer(flight.seconds, TryCheckinFlight, (res.id, flight.id, None, 1))
+    t.daemon = True
+    t.start()
+    # DEBUG
+    # if flight == res.flights[0]:
+    #   Timer(5, TryCheckinFlight, (res, flight, None, 1)).start()
+  else:
+    scheduler.enterabs(flight.sched_time, 1, TryCheckinFlight, (res.id, flight.id, scheduler, 1))
+    result = "Scheduling check in for flight at", flight.legs[0].depart.dt_formatted, "(local), ", flight.legs[0].depart.dt_utc_formatted, "(UTC)"
+  print result
+  dlog('Checkin scheduled at (UTC): %s' % flight.sched_time_formatted)
+  dlog('Checkin scheduled at (local): %s' % flight.sched_time_local_formatted)
+  dlog('Flights scheduled.  Waiting...')
+  return result
 
 def scheduleAllFlights(res, blocking=False, scheduler=None):
   """ Schedule all of the flights for checkin.  Schedule 1 minute before our clock
@@ -699,30 +751,7 @@ def scheduleAllFlights(res, blocking=False, scheduler=None):
       print 'Flight %s already left...' % (i+1)
       flight.active = False
     elif not flight.success:
-      seconds_before = config["CHECKIN_WINDOW"] + 24*60*60 # how many seconds before the flight time do we check in
-      flight.sched_time = flight_time - seconds_before
-      flight.sched_time_formatted = DateTimeToString(flight.legs[0].depart.dt_utc.replace(tzinfo=utc) - timedelta(seconds=seconds_before))
-      flight.seconds = flight.sched_time - time_module.time()
-      # Retrieve timezone and apply it because datetimes are stored as
-      # native (no timezone information)
-      tz = airport_timezone_map[flight.legs[0].depart.airport]
-      flight.sched_time_local_formatted = DateTimeToString(flight.legs[0].depart.dt_utc.replace(tzinfo=utc).astimezone(tz) - timedelta(seconds=seconds_before))
-      db.Session.commit()
-      dlog("Flight time: %s" % flight.legs[0].depart.dt_formatted)
-      if not blocking:
-        print "Scheduling check in for flight at", flight.legs[0].depart.dt_formatted, "(local), ", flight.legs[0].depart.dt_utc_formatted, "(UTC) in", int(flight.seconds/60/60), "hrs", int(flight.seconds/60%60),  "mins from now..."
-        t = Timer(flight.seconds, TryCheckinFlight, (res.id, flight.id, None, 1))
-        t.daemon = True
-        t.start()
-        # DEBUG
-        # if flight == res.flights[0]:
-        #   Timer(5, TryCheckinFlight, (res, flight, None, 1)).start()
-      else:
-        scheduler.enterabs(flight.sched_time, 1, TryCheckinFlight, (res.id, flight.id, scheduler, 1))
-        print "Scheduling check in for flight at", flight.legs[0].depart.dt_formatted, "(local), ", flight.legs[0].depart.dt_utc_formatted, "(UTC)"
-      dlog('Checkin scheduled at (UTC): %s' % flight.sched_time_formatted)
-      dlog('Checkin scheduled at (local): %s' % flight.sched_time_local_formatted)
-      dlog('Flights scheduled.  Waiting...')
+      scheduleFlight(res, flight, blocking, scheduler)
     else:
       print 'Flight %s was successfully checked in at %s\n' % ((i+1), flight.position)
   db.isReservationActive(res)
