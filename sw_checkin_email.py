@@ -703,7 +703,8 @@ def scheduleAllFlights(res, blocking=False, scheduler=None):
       flight.sched_time = flight_time - seconds_before
       flight.sched_time_formatted = DateTimeToString(flight.legs[0].depart.dt_utc.replace(tzinfo=utc) - timedelta(seconds=seconds_before))
       flight.seconds = flight.sched_time - time_module.time()
-      # Retrieve timezone and apply it because datetimes are stored as naive (no timezone information)
+      # Retrieve timezone and apply it because datetimes are stored as
+      # native (no timezone information)
       tz = airport_timezone_map[flight.legs[0].depart.airport]
       flight.sched_time_local_formatted = DateTimeToString(flight.legs[0].depart.dt_utc.replace(tzinfo=utc).astimezone(tz) - timedelta(seconds=seconds_before))
       db.Session.commit()
