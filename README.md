@@ -10,6 +10,7 @@ Here are some of the features of the application:
 * Informs the user via email after successful check in and includes boarding position and boarding pass
 * Checks in all passengers for that reservation
 * Stores the information in a database in case the web interface or CLI is restarted
+* Note: Does *not* work for AirTrans flights
 
 If southwest changes the checkin process, the parser might need to be updated. If you see a bug, file an issue or fork and create a pull request with the fix.
 
@@ -94,3 +95,8 @@ For more explanation on these commands, you may want to read about [nohup and di
 - The database layer was written using [SQLAlchemy](http://www.sqlalchemy.org/)
 - [Celery](http://docs.celeryproject.org/en/latest/index.html) and [Redis](http://redis.io/) are used to queue delayed check in tasks for the web interface
 - The [live app](http://southwest-checkin.herokuapp.com/) is hosted on a [Heroku](http://www.heroku.com/) free dyno and uses [Heroku Postgres Dev](https://addons.heroku.com/heroku-postgresql) to host the database and [New Relic](https://addons.heroku.com/newrelic) for app statistics
+
+## Known Issues ##
+
+- For AirTrans flights, the application will read the reservation correctly, but checkin attempts will fail.  The application will retry based on the environment settings.
+

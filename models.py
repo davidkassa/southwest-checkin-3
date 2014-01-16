@@ -6,12 +6,19 @@ from sqlalchemy.orm import relationship, backref
 Base = declarative_base()
 
 class FlightLegLocation(Base):
-  """ Attributes:
+  """ Represents an airport at a specific point in time
+      corresponding to a scheduled departure or arrival of a flight.
+
+      Attributes:
         airport: airport 3-letter code
         tz: timezone
         dt: departure or arrival time
         dt_utc: departure or arrival time in UTC
         dt_formatted: departure or arrival time formatted to string
+      
+      Known Issues:
+        - This isn't a well-defined entity and is likely to cause
+          confusion, errors, or incorrect use in calling code.
   """
   __tablename__ = 'flight_leg_location'
   id = Column(Integer, primary_key=True)
@@ -25,7 +32,10 @@ class FlightLegLocation(Base):
   
 
 class FlightLeg(Base):
-  """ Attributes:
+  """ Represents a segment of a flight from an airport to the
+      next airport.
+
+      Attributes:
         flight_number: the flight number, format: '#123'
         depart: a FlightLegLocation for the departure city
         arrive: a FlightLegLocation for the arrival city
@@ -53,7 +63,10 @@ class FlightLeg(Base):
 
 
 class Flight(Base):
-  """ Attributes:
+  """ A flight goes from an origin airport to a destination airport.
+      It consists of one or more FlightLegs.
+
+      Attributes:
         legs: a list of FlightLegs
   """
   __tablename__ = 'flight'
@@ -76,6 +89,18 @@ class Flight(Base):
 
 
 class Reservation(Base):
+  """ Represents a reservation.
+      A reservation is identified by a 6-character confirmation code.
+      It can have one or more people on it and can have one or more
+      flights.
+      
+      KNOWN ISSUES:
+      - This table links a single code with a single person.
+        Adding more than one person with the same code will cause
+        an error or an overwrite of the reservation.
+        This shouldn't affect check-in as all people on the reservation
+        will be checked in.
+  """
   __tablename__ = 'reservation'
   id = Column(Integer, primary_key=True)
   first_name = Column(String())
