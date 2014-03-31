@@ -197,6 +197,12 @@ def schedule_all_reservations():
   scheduleAllExistingReservations()
   return redirect(url_for("all_reservations"))
 
+@app.route('/all/update_activity', methods=['GET'])
+@requires_authentication
+def update_activity():
+  updateAllReservationsActivity()
+  return redirect(url_for("all_reservations"))
+
 @app.route('/all/schedule/<id>', methods=['GET'])
 def schedule_flight(id):
   flight = db.Session.query(Flight).get(id)
