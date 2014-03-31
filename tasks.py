@@ -65,10 +65,6 @@ def delete_inactive_old_reservations():
   reservations = session.query(Reservation).filter_by(active = False).all()
   res_count = 0
   for res in reservations:
-    for flight in res.flights:
-      for leg in flight.legs:
-        session.delete(leg.depart)
-        session.delete(leg.arrive)
     session.delete(res)
     res_count += 1
 
