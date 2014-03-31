@@ -204,6 +204,12 @@ def update_activity():
   update_all_reservation_activity.apply_async()
   return redirect(url_for("all_reservations"))
 
+@app.route('/all/delete_old_reservations', methods=['GET'])
+@requires_authentication
+def delete_old_reservations():
+  delete_inactive_old_reservations.apply_async()
+  return redirect(url_for("all_reservations"))
+
 @app.route('/all/schedule/<id>', methods=['GET'])
 def schedule_flight(id):
   flight = db.Session.query(Flight).get(id)

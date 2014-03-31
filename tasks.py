@@ -58,3 +58,26 @@ def update_all_reservation_activity():
     session.commit()
   session.remove()
   print "[Task] Marked %d reservations as inactive..." % count
+
+@celery.task()
+def delete_inactive_old_reservations():
+  session = scoped_session(db.session_factory)
+  reservations = session.query(Reservation).filter_by(active = False).all()
+  # Delete reservations and associated relationships
+  res_count          = 0
+  flight_count       = 0
+  leg_count          = 0
+  for res in reservations:
+    for flight in res.flights:
+      for leg in flight.legs:
+        session.delete(leg.depart)
+        session.delete(leg.arrive)
+        session.delete(leg)
+        leg_count += 1
+      session.delete(flight)
+      flight_count += 1
+    session.delete(res)
+    res_count += 1
+
+  session.remove()
+  print "[Task] Deleted %d reservations, %d flights, %d flight legs, and %d leg locations" % (res_count, flight_count, leg_count, leg_count*2)

@@ -41,11 +41,14 @@
             </tr>
           {% endfor %}
         </tbody></table>
-        <form action="{{ url_for('schedule_all_reservations') }}" method=get class=add-entry>
+        <form action="{{ url_for('schedule_all_reservations') }}" method=get class=add-entry style="display:inline-block;">
           <input class="btn btn-southwest" type=submit value="Schedule All Reservations">
         </form>
-        <form action="{{ url_for('update_activity') }}" method=get class=add-entry>
+        <form action="{{ url_for('update_activity') }}" method=get class=add-entry style="display:inline-block;">
           <input class="btn btn-southwest" type=submit value="Update All Reservations Activity">
+        </form>
+        <form action="{{ url_for('delete_old_reservations') }}" method=get class=add-entry style="display:inline-block;">
+          <input class="btn btn-southwest" type=submit value="Delete old reservations">
         </form>
         <a href="http://southwest-checkin-flower.herokuapp.com/">Flower</a>
       </div>
