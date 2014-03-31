@@ -768,16 +768,6 @@ def scheduleAllExistingReservations(confirm=False, blocking=False, scheduler=Non
       print "Checking reservation %s for %s %s" % (res.code, res.first_name, res.last_name)
       scheduleAllFlights(res, blocking, scheduler)
 
-def updateAllReservationsActivity():
-  reservations = db.getAllReservations()
-  for res in reservations:
-    for (i, flight) in enumerate(res.flights):
-      flight_time = time_module.mktime(flight.legs[0].depart.dt_utc.utctimetuple()) - time_module.timezone
-      if flight_time < time_module.time():
-        print 'Flight %s already left...' % (i+1)
-        flight.active = False
-    db.isReservationActive(res)
-
 # ========================================================================
 
 def main():

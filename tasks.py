@@ -40,3 +40,21 @@ def check_in_flight(reservation_id, flight_id):
     print 'FAILURE. Scheduling another try in %d seconds' % config["RETRY_INTERVAL"]
     session.remove()
     raise check_in_flight.retry(args=(reservation_id, flight_id))
+
+@celery.task()
+def update_all_reservation_activity():
+  print "[Task] Updating all reservations..."
+  session = scoped_session(db.session_factory)
+  reservations = session.query(Reservation).filter_by(active = True).all()
+  count = 0
+  for res in reservations:
+    for (i, flight) in enumerate(res.flights):
+      flight_time = time_module.mktime(flight.legs[0].depart.dt_utc.utctimetuple()) - time_module.timezone
+      if flight_time < time_module.time():
+        flight.active = False
+    res.isReservationActive()
+    if not res.active:
+      count += 1
+    session.commit()
+  session.remove()
+  print "[Task] Marked %d reservations as inactive..." % count

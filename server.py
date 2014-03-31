@@ -57,6 +57,7 @@ from pytz import timezone,utc
 import codecs
 
 from sw_checkin_email import *
+from tasks import *
 
 app.create_jinja_environment()
 app.jinja_env.globals["GOOGLE_ANALYTICS"] = config["GOOGLE_ANALYTICS"]
@@ -200,7 +201,7 @@ def schedule_all_reservations():
 @app.route('/all/update_activity', methods=['GET'])
 @requires_authentication
 def update_activity():
-  updateAllReservationsActivity()
+  update_all_reservation_activity.apply_async()
   return redirect(url_for("all_reservations"))
 
 @app.route('/all/schedule/<id>', methods=['GET'])

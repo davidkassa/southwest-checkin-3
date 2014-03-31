@@ -129,3 +129,4 @@ class Reservation(Base):
       self.active = active
     else:
       self.active = False
+    return self.active
