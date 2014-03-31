@@ -1,3 +1,4 @@
+from sets import Set
 from celery import Celery
 from sqlalchemy.orm import scoped_session
 
@@ -69,5 +70,24 @@ def delete_inactive_old_reservations():
     res_count += 1
   session.commit()
 
+  active_flight_leg_location_ids = []
+  legs = session.query(FlightLeg).all()
+
+  for leg in legs:
+    active_flight_leg_location_ids.append(leg.depart_id)
+    active_flight_leg_location_ids.append(leg.arrive_id)
+
+  all_flight_leg_locations = session.query(FlightLegLocation).all()
+  all_flight_leg_location_ids = map((lambda x: x.id), all_flight_leg_locations)
+  inactive_flight_location_ids = Set(all_flight_leg_location_ids) - Set(active_flight_leg_location_ids)
+
+  location_count = 0
+  for location_id in inactive_flight_location_ids:
+    location = session.query(FlightLegLocation).get(location_id)
+    session.delete(location)
+    location_count += 1
+  session.commit()
+
   session.remove()
   print "[Task] Deleted %d reservations" % res_count
+  print "[Task] Deleted %d leg locations" % location_count
