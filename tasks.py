@@ -67,6 +67,7 @@ def delete_inactive_old_reservations():
   for res in reservations:
     session.delete(res)
     res_count += 1
+  session.commit()
 
   session.remove()
   print "[Task] Deleted %d reservations" % res_count
