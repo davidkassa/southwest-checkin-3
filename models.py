@@ -1,5 +1,5 @@
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import (Column, Integer, ForeignKey,
+from sqlalchemy import (Column, Integer, ForeignKey, 
   String, Float, DateTime, Boolean)
 from sqlalchemy.orm import relationship, backref
 
@@ -15,7 +15,7 @@ class FlightLegLocation(Base):
         dt: departure or arrival time
         dt_utc: departure or arrival time in UTC
         dt_formatted: departure or arrival time formatted to string
-
+      
       Known Issues:
         - This isn't a well-defined entity and is likely to cause
           confusion, errors, or incorrect use in calling code.
@@ -29,7 +29,7 @@ class FlightLegLocation(Base):
   dt_formatted = Column(String())
   dt_utc = Column(DateTime())
   dt_utc_formatted = Column(String())
-
+  
 
 class FlightLeg(Base):
   """ Represents a segment of a flight from an airport to the
@@ -47,15 +47,13 @@ class FlightLeg(Base):
   id = Column(Integer, primary_key=True)
   flight_id = Column(Integer, ForeignKey('flight.id'))
   flight_number = Column(String(6))
-
+  
   depart_id = Column(Integer, ForeignKey("flight_leg_location.id"))
   arrive_id = Column(Integer, ForeignKey("flight_leg_location.id"))
   depart = relationship("FlightLegLocation",
-                    primaryjoin="FlightLegLocation.id==FlightLeg.depart_id",
-                    cascade='all, delete-orphan')
+                    primaryjoin="FlightLegLocation.id==FlightLeg.depart_id")
   arrive = relationship("FlightLegLocation",
-                    primaryjoin="FlightLegLocation.id==FlightLeg.arrive_id",
-                    cascade='all, delete-orphan')
+                    primaryjoin="FlightLegLocation.id==FlightLeg.arrive_id")
 
   # depart = relationship("FlightLegLocation", uselist=False, backref='flight') #, foreign_keys=[depart_id])
   # arrive = relationship("FlightLegLocation", uselist=False) #, foreign_keys=[arrive_id])
@@ -74,7 +72,7 @@ class Flight(Base):
   __tablename__ = 'flight'
   id = Column(Integer, primary_key=True)
   reservation_id = Column(Integer, ForeignKey('reservation.id'))
-  legs = relationship("FlightLeg", backref='flight', cascade='all, delete-orphan')
+  legs = relationship("FlightLeg", backref='flight')
   active = Column(Boolean(), default=True)
   success = Column(Boolean(), default=False)
   position = Column(String())
@@ -95,7 +93,7 @@ class Reservation(Base):
       A reservation is identified by a 6-character confirmation code.
       It can have one or more people on it and can have one or more
       flights.
-
+      
       KNOWN ISSUES:
       - This table links a single code with a single person.
         Adding more than one person with the same code will cause
@@ -111,7 +109,7 @@ class Reservation(Base):
   active = Column(Boolean(), default=True)
   new = Column(Boolean(), default=True)
   email = Column(String())
-  flights = relationship("Flight", backref='reservation', cascade="all, delete-orphan")
+  flights = relationship("Flight", backref='reservation', cascade="all, delete, delete-orphan")
 
   def __init__(self, first_name, last_name, code, email=None):
     self.first_name = first_name
@@ -126,7 +124,7 @@ class Reservation(Base):
     if len(self.flights) > 0:
       active = False
       for flight in self.flights:
-        if flight.active:
+        if flight.active: 
           active = True
       self.active = active
     else:
