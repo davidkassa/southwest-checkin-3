@@ -74,7 +74,7 @@ class Flight(Base):
   __tablename__ = 'flight'
   id = Column(Integer, primary_key=True)
   reservation_id = Column(Integer, ForeignKey('reservation.id'))
-  legs = relationship("FlightLeg", backref='flight', cascade='all, delete-orphan')
+  legs = relationship("FlightLeg", backref=backref('flight', cascade='all, delete-orphan'))
   active = Column(Boolean(), default=True)
   success = Column(Boolean(), default=False)
   position = Column(String())
@@ -111,7 +111,7 @@ class Reservation(Base):
   active = Column(Boolean(), default=True)
   new = Column(Boolean(), default=True)
   email = Column(String())
-  flights = relationship("Flight", backref='reservation', cascade="all, delete-orphan")
+  flights = relationship("Flight", backref=backref('reservation', cascade="all, delete-orphan"))
 
   def __init__(self, first_name, last_name, code, email=None):
     self.first_name = first_name
