@@ -126,6 +126,7 @@ def checkin():
       return message(msg)
 
     success = getFlightTimes(res)
+    db.Session.commit()
     if success:
       message = getFlightInfo(res, res.flights)
       if config["SEND_EMAIL"]:

@@ -605,6 +605,8 @@ def getFlightInfo(res, flights):
              leg.depart.dt_utc_formatted,
              leg.arrive.airport, leg.arrive.dt_formatted,
              leg.arrive.dt_utc_formatted)
+
+  message += '\nYour automatic check in: http://southwest-checkin.herokuapp.com/flights/%s\n' % res.code
   return message
 
 def displayFlightInfo(res, flights, do_send_email=False):
@@ -754,7 +756,6 @@ def scheduleAllFlights(res, blocking=False, scheduler=None):
       scheduleFlight(res, flight, blocking, scheduler)
     else:
       print 'Flight %s was successfully checked in at %s\n' % ((i+1), flight.position)
-  # db.isReservationActive(res)
 
 def scheduleAllExistingReservations(confirm=False, blocking=False, scheduler=None):
   """ Load all existing reservations' flights for automatic checkin """
