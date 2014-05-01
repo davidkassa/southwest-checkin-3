@@ -14,17 +14,26 @@
           <th>Task ID</th>
           {% for res in reservations|reverse %}
             <tr>
-              <td><b><a href="/flights/{{res.code}}">{{res.code}}</a></b></td><td>{{res.first_name}} {{res.last_name}}</td>
-              {% if res.active %}
-                <td><span class="highlight">active</span></td>
-                <td><ul>
+              <td><b><a href="/flights/{{res.code}}">{{res.code}}</a></b></td>
+              <td>{{res.first_name}} {{res.last_name}}</td>
+              <td>
+                {% if res.active %}
+                  <span class="highlight">active</span>
+                {% else %}
+                  not active
+                {% endif %}
+              </td>
+              <td>
+                <ul>
                   {% for flight in res.flights %}
                     {% if flight.sched_time_local_formatted %}
                       <li>{{ flight.sched_time_local_formatted }}</li>
                     {% endif %}
                   {% endfor %}
-                </ul></td>
-                <td><ul>
+                </ul>
+              </td>
+              <td>
+                <ul>
                   {% for flight in res.flights %}
                     <li>
                       {% if flight.task_uuid %}
@@ -34,10 +43,8 @@
                       {% endif %}
                     </li>
                   {% endfor %}
-                </ul></td>
-              {% else %}
-                <td>not active</td><td></td>
-              {% endif %}
+                </ul>
+              </td>
             </tr>
           {% endfor %}
         </tbody></table>
