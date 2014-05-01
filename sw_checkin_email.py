@@ -746,14 +746,15 @@ def scheduleAllFlights(res, blocking=False, scheduler=None):
   """ Schedule all of the flights for checkin.  Schedule 1 minute before our clock
       says we are good to go
   """
-  for (i, flight) in enumerate(res.flights):
+  retrieved_res = db.findReservation(res.code)
+  for (i, flight) in enumerate(retrieved_res.flights):
     flight_time = time_module.mktime(flight.legs[0].depart.dt_utc.utctimetuple()) - time_module.timezone
     dlog("Flight time (s via mktime): %s" % flight_time)
     if flight_time < time_module.time():
       print 'Flight %s already left...' % (i+1)
       flight.active = False
     elif not flight.success:
-      scheduleFlight(res, flight, blocking, scheduler)
+      scheduleFlight(retrieved_res, flight, blocking, scheduler)
     else:
       print 'Flight %s was successfully checked in at %s\n' % ((i+1), flight.position)
 
