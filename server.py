@@ -133,6 +133,7 @@ def checkin():
         send_email('Waiting for SW flight', message, boarding_pass=None, email=res.email);
 
       scheduleAllFlights(res)
+      db.Session.commit()
       print 'Current time: %s' % DateTimeToString(datetime.now(utc))
 
       return redirect(url_for('flight_status', code=res.code))
