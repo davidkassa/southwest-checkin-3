@@ -754,7 +754,7 @@ def scheduleAllFlights(res, blocking=False, scheduler=None):
       scheduleFlight(res, flight, blocking, scheduler)
     else:
       print 'Flight %s was successfully checked in at %s\n' % ((i+1), flight.position)
-  db.isReservationActive(res)
+  # db.isReservationActive(res)
 
 def scheduleAllExistingReservations(confirm=False, blocking=False, scheduler=None):
   """ Load all existing reservations' flights for automatic checkin """

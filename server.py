@@ -121,7 +121,9 @@ def checkin():
       send_email('An automatic southwest check in has been initiated', admin_message, boarding_pass=None, email=config["ADMIN_EMAIL"])
     print 'Created', res
     if not res.active:
-      return message('It looks like all of your flights have already taken off :(')
+      msg = 'It looks like all of your flights have already taken off :('
+      print msg
+      return message(msg)
 
     success = getFlightTimes(res)
     if success:
