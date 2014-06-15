@@ -595,9 +595,9 @@ def getBoardingPass(res):
 
   # finally, lets check in the flight and make our success file
   (checkinresult, form_url) = form.submit()
-  parsed_info = parseCheckinSuccess(checkinresult, form_url)
-  print parsed_info
-  return parsed_info
+  (position, boarding_pass) = parseCheckinSuccess(checkinresult, form_url)
+  print "Get boarding passing: %s" % position
+  return (position, boarding_pass)
 
 
 def DateTimeToString(time):
