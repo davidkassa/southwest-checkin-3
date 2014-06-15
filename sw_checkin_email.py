@@ -557,6 +557,7 @@ def parseCheckinSuccess(checkinresult, form_url):
   tag = soup.new_tag('base', href=urlparse.urljoin(form_url, '.'))
   soup.head.insert(0, tag)
 
+  print "Parsed position %s" % ', '.join(pos)
   return (', '.join(pos), str(soup))
 
 def getBoardingPass(res):
