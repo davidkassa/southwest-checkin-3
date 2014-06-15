@@ -535,6 +535,7 @@ def parseCheckinSuccess(checkinresult, form_url):
   soup = BeautifulSoup(checkinresult, "lxml")
   pos = []
   checkin_tables = soup.find_all('div', 'itinerary_content')
+  print checkin_tables
   for table in checkin_tables:
     body = table.find('tbody')
     rows = body.find_all('tr')
