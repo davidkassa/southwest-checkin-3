@@ -656,10 +656,7 @@ def TryCheckinFlight(res_id, flight_id, sch, attempt):
   print 'Trying to checkin flight at %s' % DateTimeToString(datetime.now(utc))
   print 'Attempt #%s' % attempt
   displayFlightInfo(res, [flight])
-  try:
-    (position, boarding_pass) = getBoardingPass(res)
-  except:
-    position = None
+  (position, boarding_pass) = getBoardingPass(res)
   if position:
     flight.success = True
     flight.position = position
