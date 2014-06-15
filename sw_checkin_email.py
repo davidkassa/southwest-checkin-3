@@ -525,6 +525,30 @@ def getFlightTimes(res):
     else:
       return False
 
+
+def parseCheckinSuccess(checkinresult, form_url):
+  if config["DEBUG_HTML_FILES"]:
+    f = codecs.open('html_checkin_success_' + str(datetime.now()) + '.html', encoding='utf-8', mode='w+')
+    f.write(str(checkinresult))
+    f.close
+
+  soup = BeautifulSoup(checkinresult, "lxml")
+  pos = []
+  checkin_tables = soup.find_all('div', 'itinerary_content')
+  for table in checkin_tables:
+    body = table.find('tbody')
+    rows = body.find_all('tr')
+    for row in rows:
+      group = row.find('td', 'boarding_group').find('h2', 'boardingInfo')
+      num = row.find('td', 'boarding_position').find('h2', 'boardingInfo')
+      pos.append('%s%s' % (group.string, num.string))
+
+  # Add a base tag to the soup
+  tag = soup.new_tag('base', href=urlparse.urljoin(form_url, '.'))
+  soup.head.insert(0, tag)
+
+  return (', '.join(pos), str(soup))
+
 def getBoardingPass(res):
   # read the southwest checkin web site
   (swdata, form_url) = ReadUrl(checkin_url)
@@ -560,30 +584,8 @@ def getBoardingPass(res):
 
   # finally, lets check in the flight and make our success file
   (checkinresult, form_url) = form.submit()
-  if config["DEBUG_HTML_FILES"]:
-    f = codecs.open('html_checkin_success_' + str(datetime.now()) + '.html', encoding='utf-8', mode='w+')
-    f.write(str(checkinresult))
-    f.close
+  return parseCheckinSuccess(checkinresult, form_url)
 
-  soup = BeautifulSoup(checkinresult, "lxml")
-  pos_boxes = FindAllByTagClass(soup, 'div', 'boardingPosition')
-  pos = []
-  for box in pos_boxes:
-    group = None
-    group_img = FindByTagClass(box, 'img', 'group')
-    if group_img:
-      group = group_img['alt']
-    num = 0
-    for num_img in FindAllByTagClass(box, 'img', 'position'):
-      num *= 10
-      num += int(num_img['alt'])
-    pos.append('%s%d' % (group, num))
-
-  # Add a base tag to the soup
-  tag = soup.new_tag('base', href=urlparse.urljoin(form_url, '.'))
-  soup.head.insert(0, tag)
-
-  return (', '.join(pos), str(soup))
 
 def DateTimeToString(time):
   return time.strftime('%I:%M%p %b %d %y %Z');

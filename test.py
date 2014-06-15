@@ -102,5 +102,13 @@ class SuccessMessageTestCase(CheckInSuccessTestCase):
     def runTest(self):
         self.assertEqual(success_message(self.reservation, self.reservation.flights[0]), u'SUCCESS.  Checked in at position None\r\nConfirmation number: 999999\r\nPassenger name: Bob Smith\r\nFlight 1:\n  Flight Number: 1234\n    Departs: AUS None (None)\n    Arrives: MCI None (None)\n\nYour automatic check in: http://southwest-checkin.herokuapp.com/flights/999999\n')
 
+class ParseCheckinSuccessTestCase(unittest.TestCase):
+    def runTest(self):
+        f = codecs.open('fixtures/Southwest Airlines - Boarding Pass Options.html', encoding='utf-8', mode='r')
+        result = parseCheckinSuccess(f.read(), checkin_url)
+        pos = result[0]
+        f.close
+        self.assertEqual(pos, u'A52, B02')
+
 if __name__ == '__main__':
     unittest.main()
