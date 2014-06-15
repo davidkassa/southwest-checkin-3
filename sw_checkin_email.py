@@ -531,7 +531,7 @@ def parseCheckinSuccess(checkinresult, form_url):
     from datetime import datetime
     import codecs
     f = codecs.open('html_checkin_success_' + str(datetime.now()) + '.html', encoding='utf-8', mode='w+')
-    f.write(str(checkinresult))
+    f.write(checkinresult)
     f.close
 
   from bs4 import BeautifulSoup
@@ -595,7 +595,9 @@ def getBoardingPass(res):
 
   # finally, lets check in the flight and make our success file
   (checkinresult, form_url) = form.submit()
-  return parseCheckinSuccess(checkinresult, form_url)
+  parsed_info = parseCheckinSuccess(checkinresult, form_url)
+  print parsed_info
+  return parsed_info
 
 
 def DateTimeToString(time):
@@ -658,7 +660,7 @@ def TryCheckinFlight(res_id, flight_id, sch, attempt):
   print 'Attempt #%s' % attempt
   displayFlightInfo(res, [flight])
   (position, boarding_pass) = getBoardingPass(res)
-  dlog("Retrieved position: " + position)
+  print 'TryCheckinFlight position %s' % position
   if position:
     flight.success = True
     flight.position = position
