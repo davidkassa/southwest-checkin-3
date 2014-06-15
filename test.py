@@ -100,7 +100,7 @@ class CheckInSuccessTestCase(ReservationTestCase):
 
 class SuccessMessageTestCase(CheckInSuccessTestCase):
     def runTest(self):
-        self.assertEqual(success_message(self.reservation, self.reservation.flights[0]), u'SUCCESS.  Checked in at position None\r\nConfirmation number: 999999\r\nPassenger name: Bob Smith\r\nFlight 1:\n  Flight Number: 1234\n    Departs: AUS None (None)\n    Arrives: MCI None (None)\n')
+        self.assertEqual(success_message(self.reservation, self.reservation.flights[0]), u'SUCCESS.  Checked in at position None\r\nConfirmation number: 999999\r\nPassenger name: Bob Smith\r\nFlight 1:\n  Flight Number: 1234\n    Departs: AUS None (None)\n    Arrives: MCI None (None)\n\nYour automatic check in: http://southwest-checkin.herokuapp.com/flights/999999\n')
 
 if __name__ == '__main__':
     unittest.main()
