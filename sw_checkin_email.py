@@ -535,14 +535,20 @@ def parseCheckinSuccess(checkinresult, form_url):
   soup = BeautifulSoup(checkinresult, "lxml")
   pos = []
   checkin_tables = soup.find_all('div', 'itinerary_content')
-  print checkin_tables
   for table in checkin_tables:
-    body = table.find('tbody')
-    rows = body.find_all('tr')
+    rows = table.find_all('tr')
+
     for row in rows:
-      group = row.find('td', 'boarding_group').find('h2', 'boardingInfo')
-      num = row.find('td', 'boarding_position').find('h2', 'boardingInfo')
-      pos.append('%s%s' % (group.string, num.string))
+      boarding_group = row.find('td', 'boarding_group')
+      if boarding_group:
+        group = boarding_group.find('h2', 'boardingInfo')
+
+      boarding_position = row.find('td', 'boarding_position')
+      if boarding_position:
+        num = boarding_position.find('h2', 'boardingInfo')
+
+      if boarding_group and boarding_position:
+        pos.append('%s%s' % (group.string, num.string))
 
   # Add a base tag to the soup
   tag = soup.new_tag('base', href=urlparse.urljoin(form_url, '.'))
