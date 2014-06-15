@@ -657,6 +657,7 @@ def TryCheckinFlight(res_id, flight_id, sch, attempt):
   print 'Attempt #%s' % attempt
   displayFlightInfo(res, [flight])
   (position, boarding_pass) = getBoardingPass(res)
+  dlog("Retrieved position: " + position)
   if position:
     flight.success = True
     flight.position = position
