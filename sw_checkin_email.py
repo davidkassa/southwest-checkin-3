@@ -528,10 +528,13 @@ def getFlightTimes(res):
 
 def parseCheckinSuccess(checkinresult, form_url):
   if config["DEBUG_HTML_FILES"]:
+    from datetime import datetime
+    import codecs
     f = codecs.open('html_checkin_success_' + str(datetime.now()) + '.html', encoding='utf-8', mode='w+')
     f.write(str(checkinresult))
     f.close
 
+  from bs4 import BeautifulSoup
   soup = BeautifulSoup(checkinresult, "lxml")
   pos = []
   checkin_tables = soup.find_all('div', 'itinerary_content')
