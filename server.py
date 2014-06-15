@@ -199,7 +199,7 @@ def all_reservations():
 @app.route('/all/schedule_all', methods=['GET'])
 @requires_authentication
 def schedule_all_reservations():
-  scheduleAllExistingReservations()
+  schedule_all_existing_reservations.apply_async()
   return redirect(url_for("all_reservations"))
 
 @app.route('/all/update_activity', methods=['GET'])

@@ -12,6 +12,9 @@ from sw_checkin_email import *
 celery = Celery('tasks')
 celery.config_from_object('celery_config')
 
+from celery.utils.log import get_task_logger
+logger = get_task_logger(__name__)
+
 if config["STORE_DATABASE"]:
   if config["HEROKU_DB"]:
     db = Database(heroku=True)
@@ -91,3 +94,15 @@ def delete_inactive_old_reservations():
   session.remove()
   print "[Task] Deleted %d reservations" % res_count
   print "[Task] Deleted %d leg locations" % location_count
+
+@celery.task()
+def schedule_all_existing_reservations():
+  logger.info("Scheduling all existing reservations....")
+  session = scoped_session(db.session_factory)
+  reservations = session.query(Reservation).filter_by(active = True).all()
+  for res in reservations:
+    logger.info("Checking reservation %s for %s %s" % (res.code, res.first_name, res.last_name))
+    scheduleAllFlights(res)
+
+  session.commit()
+  session.remove()

@@ -722,6 +722,7 @@ def scheduleFlight(res, flight, blocking=False, scheduler=None):
   db.Session.commit()
   dlog("Flight time: %s" % flight.legs[0].depart.dt_formatted)
   if config["CELERY"]:
+    from tasks import check_in_flight
     result = check_in_flight.apply_async([res.id, flight.id], countdown=flight.seconds)
     flight.task_uuid = result.id
     db.Session.commit()
