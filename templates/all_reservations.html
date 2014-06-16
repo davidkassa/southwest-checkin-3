@@ -4,6 +4,16 @@
   <div class="text-centered">
     <div id="status">
       <h1 class="text-centered logo"><a href="/">Southwest Check In</a></h1>
+      <form action="{{ url_for('schedule_all_reservations') }}" method=get class=add-entry style="display:inline-block;">
+        <input class="btn btn-southwest" type=submit value="Schedule All Reservations">
+      </form>
+      <form action="{{ url_for('update_activity') }}" method=get class=add-entry style="display:inline-block;">
+        <input class="btn btn-southwest" type=submit value="Update All Reservations Activity">
+      </form>
+      <form action="{{ url_for('delete_old_reservations') }}" method=get class=add-entry style="display:inline-block;">
+        <input class="btn btn-southwest" type=submit value="Delete old reservations">
+      </form>
+      <a href="http://southwest-checkin-flower.herokuapp.com/">Flower</a>
       <div class="text-centered">
         <h2>Reservations</h2>
         <table><tbody>
@@ -12,7 +22,7 @@
           <th>Active</th>
           <th>Scheduled Checkins</th>
           <th>Task ID</th>
-          {% for res in reservations|reverse %}
+          {% for res in reservations %}
             <tr>
               <td><b><a href="/flights/{{res.code}}">{{res.code}}</a></b></td>
               <td>{{res.first_name}} {{res.last_name}}</td>
@@ -48,16 +58,6 @@
             </tr>
           {% endfor %}
         </tbody></table>
-        <form action="{{ url_for('schedule_all_reservations') }}" method=get class=add-entry style="display:inline-block;">
-          <input class="btn btn-southwest" type=submit value="Schedule All Reservations">
-        </form>
-        <form action="{{ url_for('update_activity') }}" method=get class=add-entry style="display:inline-block;">
-          <input class="btn btn-southwest" type=submit value="Update All Reservations Activity">
-        </form>
-        <form action="{{ url_for('delete_old_reservations') }}" method=get class=add-entry style="display:inline-block;">
-          <input class="btn btn-southwest" type=submit value="Delete old reservations">
-        </form>
-        <a href="http://southwest-checkin-flower.herokuapp.com/">Flower</a>
       </div>
     </div>
   </div>
