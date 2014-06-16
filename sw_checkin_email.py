@@ -557,7 +557,6 @@ def parseCheckinSuccess(checkinresult, form_url):
   tag = soup.new_tag('base', href=urlparse.urljoin(form_url, '.'))
   soup.head.insert(0, tag)
 
-  print "Parsed position %s" % ', '.join(pos)
   return (', '.join(pos), str(soup))
 
 def getBoardingPass(res):
@@ -595,9 +594,7 @@ def getBoardingPass(res):
 
   # finally, lets check in the flight and make our success file
   (checkinresult, form_url) = form.submit()
-  (position, boarding_pass) = parseCheckinSuccess(checkinresult, form_url)
-  print "Get boarding passing: %s" % position
-  return (position, boarding_pass)
+  return parseCheckinSuccess(checkinresult, form_url)
 
 
 def DateTimeToString(time):
@@ -635,6 +632,7 @@ def check_in_success(reservation, flight, boarding_pass, position, session):
   flight.success = True
   flight.position = position
   session.commit()
+  print "Position %s saved." % flight.position
   send_success_email(success_message(reservation, flight), boarding_pass, reservation)
   return
 
@@ -660,7 +658,6 @@ def TryCheckinFlight(res_id, flight_id, sch, attempt):
   print 'Attempt #%s' % attempt
   displayFlightInfo(res, [flight])
   (position, boarding_pass) = getBoardingPass(res)
-  print 'TryCheckinFlight position %s' % position
   if position:
     flight.success = True
     flight.position = position
