@@ -489,7 +489,7 @@ class ReservationInfoParser(object):
     # Get time
     segmentTime = FindByTagClass(legDetails, 'td', 'routingDetailsTimes', get_text=True)
     # Create time() object
-    flight_time = time(*time_module.strptime(segmentTime.strip(), '%I:%M %p')[3:5])
+    flight_time = time(*time_module.strptime(segmentTime.strip().rstrip("Next Day").strip(), '%I:%M %p')[3:5])
     dlog("Time: " + str(flight_time))
     f.dt = f.tz.localize(
       datetime.combine(day, flight_time), is_dst=None)
