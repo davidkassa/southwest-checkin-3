@@ -13,7 +13,6 @@
       <form action="{{ url_for('delete_old_reservations') }}" method=get class=add-entry style="display:inline-block;">
         <input class="btn btn-southwest" type=submit value="Delete old reservations">
       </form>
-      <a href="http://southwest-checkin-flower.herokuapp.com/">Flower</a>
       <div class="text-centered">
         <h2>Reservations</h2>
         <table><tbody>
@@ -47,7 +46,7 @@
                   {% for flight in res.flights %}
                     <li>
                       {% if flight.task_uuid %}
-                        <a href="http://southwest-checkin-flower.herokuapp.com/task/{{flight.task_uuid}}">{{ flight.task_uuid }}</a><a href="/all/schedule/{{flight.id}}">Reschedule it</a>
+                        <a href="/task/{{flight.task_uuid}}">{{ flight.task_uuid }}</a><a href="/all/schedule/{{flight.id}}">Reschedule it</a>
                       {% else %}
                         <a href="/all/schedule/{{flight.id}}">Schedule it</a>
                       {% endif %}
