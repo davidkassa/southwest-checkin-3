@@ -86,6 +86,7 @@ module Southwest
 
     def make_request(params)
       response = Typhoeus::Request.post(base_uri, body: params, headers: headers)
+      check_response!(response)
       store_cookies(response)
       response
     end
@@ -101,6 +102,22 @@ module Southwest
       cookies << "JSESSIONID=#{jsessionid}" if jsessionid
       cookies << "cacheid=#{cacheid}" if cacheid
       cookies.any? ? cookies.join('; ') : nil
+    end
+
+    def check_response!(response)
+      unless response_ok?(response)
+        raise Southwest::RequestError, "There was an error making the request. It returned a status of #{status(response)}. Response:\n#{response}"
+      end
+    end
+
+    def response_ok?(response)
+      return false if response.code >= 400
+      code = status(response)
+      code < 400
+    end
+
+    def status(response)
+      JSON.parse(response.body)['httpStatusCode']
     end
 
     def store_cookies(response)
