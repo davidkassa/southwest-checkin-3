@@ -4,11 +4,15 @@ require_relative '../../../lib/southwest/flight_checkin'
 require 'pry'
 
 describe Southwest::FlightCheckin do
+  let(:last_name) { 'Bar' }
+  let(:first_name) { 'Fuu' }
+  let(:record_locator) { 'ABC123' }
+
   subject(:checkin) {
     Southwest::FlightCheckin.new(
-      last_name: 'Foo',
-      first_name: 'Bar',
-      record_locator: 'ABC123')
+      last_name: last_name,
+      first_name: first_name,
+      record_locator: record_locator)
   }
 
   describe '#get_travel_info initializes the checkin' do
@@ -34,6 +38,17 @@ describe Southwest::FlightCheckin do
     it 'returns a response' do
       VCR.use_cassette 'checkIntravelAlerts' do
         expect(JSON.parse(subject.check_intravel_alerts.body)['appState']).to eql('green')
+      end
+    end
+  end
+
+  describe '#checkin' do
+    it 'returns 5 successful responses' do
+      VCR.use_cassette 'checkin' do
+        responses = subject.checkin
+        responses.each { |k,v|
+          expect(JSON.parse(v.body)['httpStatusCode']).to eql(200)
+        }
       end
     end
   end

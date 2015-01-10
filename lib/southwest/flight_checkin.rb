@@ -1,3 +1,5 @@
+require_relative './errors'
+
 module Southwest
   class FlightCheckin
     def self.checkin(last_name:, first_name:, record_locator:)
@@ -19,71 +21,58 @@ module Southwest
     end
 
     def checkin
-      get_travel_info
-      check_intravel_alerts
-      flight_checkin_new
-      get_all_boarding_passes
-      view_boarding_passes
+      responses = {}
+
+      responses[:get_travel_info] = get_travel_info
+      breathe
+      responses[:check_intravel_alerts] = check_intravel_alerts
+      breathe
+      responses[:flight_checkin_new] = flight_checkin_new
+      breathe
+      responses[:get_all_boarding_passes] = get_all_boarding_passes
+      breathe
+      responses[:view_boarding_passes] = view_boarding_passes
+
+      responses
     end
 
     def get_travel_info
-      response = make_request(get_travel_info_params)
-      cookies = parse_cookies(response)
-      @jsessionid = cookies['JSESSIONID'].first if cookies['JSESSIONID']
-      @cacheid = cookies['cacheid'].first if cookies['cacheid']
-      response
+      make_request(base_params.merge({
+        serviceID: 'getTravelInfo'
+      }))
     end
 
     def check_intravel_alerts
-      make_request(check_intravel_alerts_params)
+      make_request(base_params.merge({
+        serviceID: 'checkIntravelAlerts'
+      }))
     end
 
     def flight_checkin_new
-      make_request(flight_checkin_new_params)
-    end
-
-    def get_all_boarding_passes
-      make_request(get_all_boarding_passes_params)
-    end
-
-    def view_boarding_passes
-      make_request(get_all_boarding_passes_params)
-    end
-
-    private
-
-    def get_travel_info_params
-      base_params.merge({
-        serviceID: 'getTravelInfo'
-      })
-    end
-
-    def check_intravel_alerts_params
-      base_params.merge({
-        serviceID: 'checkIntravelAlerts'
-      })
-    end
-
-    def flight_checkin_new_params
-      base_params.merge({
+      make_request(base_params.merge({
         serviceID: 'flightcheckin_new',
         lastName: last_name,
         firstName: first_name,
         recordLocator: record_locator
-      })
+      }))
     end
 
-    def get_all_boarding_passes_params
-      base_params.merge({
+    def get_all_boarding_passes
+      validate_session!
+      make_request(base_params.merge({
         serviceID: 'getallboardingpass'
-      })
+      }))
     end
 
-    def view_boarding_passes_params
-      base_params.merge({
-        serviceID: 'viewboardingpass'
-      })
+    def view_boarding_passes
+      validate_session!
+      make_request(base_params.merge({
+        serviceID: 'viewboardingpass',
+        optionPrint: 'true'
+      }))
     end
+
+    private
 
     def base_params
       {
@@ -96,12 +85,14 @@ module Southwest
     end
 
     def make_request(params)
-      Typhoeus::Request.post(base_uri, body: params, headers: headers)
+      response = Typhoeus::Request.post(base_uri, body: params, headers: headers)
+      store_cookies(response)
+      response
     end
 
     def headers
       headers = { 'User-Agent' => user_agent }
-      headers.merge('Cookie' => cookie) if cookie
+      headers.merge!('Cookie' => cookie) if cookie
       headers
     end
 
@@ -112,8 +103,19 @@ module Southwest
       cookies.any? ? cookies.join('; ') : nil
     end
 
+    def store_cookies(response)
+      cookies = parse_cookies(response)
+      @jsessionid = cookies['JSESSIONID'].first if cookies['JSESSIONID'].any?
+      @cacheid = cookies['cacheid'].first if cookies['cacheid'].any?
+    end
+
     def parse_cookies(response)
-      CGI::Cookie::parse(response.headers['Set-Cookie'].join(';'))
+      if response.headers['Set-Cookie'].respond_to? :join
+        cookie_string = response.headers['Set-Cookie'].join(';')
+      else
+        cookie_string = response.headers['Set-Cookie']
+      end
+      CGI::Cookie::parse(cookie_string)
     end
 
     def base_uri
@@ -122,6 +124,20 @@ module Southwest
 
     def user_agent
       'Southwest/2.10.0 CFNetwork/711.1.16 Darwin/14.0.0'
+    end
+
+    def validate_session!
+      raise Southwest::InvalidCredentialsError, "A session must be created calling `flight_checkin_new` before a boarding passes can be retrieved." unless cacheid && jsessionid
+    end
+
+    def breathe
+      sleep 0.5 unless test_env?
+    end
+
+    # Rails isn't necessary loaded in test,
+    # so don't use `Rails.env.test?`
+    def test_env?
+      ENV['RAILS_ENV'] = 'test'
     end
   end
 end
