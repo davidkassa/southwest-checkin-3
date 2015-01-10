@@ -231,6 +231,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   pg
+  pry
   rails (= 4.2.0)
   rspec-rails (~> 3.0)
   sass-rails (~> 5.0)
