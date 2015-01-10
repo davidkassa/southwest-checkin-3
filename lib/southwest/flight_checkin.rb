@@ -147,7 +147,7 @@ module Southwest
     end
 
     def validate_session!
-      raise Southwest::InvalidCredentialsError, "A session must be created calling `flight_checkin_new` before a boarding passes can be retrieved." unless cacheid && jsessionid
+      raise Southwest::InvalidCredentialsError, "A session must be created by calling `flight_checkin_new` before a boarding passes can be retrieved." unless cacheid && jsessionid
     end
 
     def breathe
