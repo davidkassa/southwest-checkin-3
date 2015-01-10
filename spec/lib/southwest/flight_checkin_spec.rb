@@ -43,12 +43,46 @@ describe Southwest::FlightCheckin do
   end
 
   describe '#checkin' do
+    let(:expected_keys) {
+      [
+        "arrivalCityCode",
+        "stop1",
+        "changeplaneImage",
+        "departRouting",
+        "wifiInfo",
+        "departTime",
+        "flightOperator",
+        "departCityCode",
+        "seperatorflag",
+        "departCity",
+        "stopmsg",
+        "travelDate",
+        "flightNumber",
+        "date",
+        "arrivalCityName",
+        "arrivalTime",
+        "traveltime",
+        "scheduleDepart",
+        "stop3",
+        "stop2",
+        "arriveCity"
+      ]
+    }
+
     it 'returns 5 successful responses' do
       VCR.use_cassette 'checkin' do
         responses = subject.checkin
-        responses.each { |k,v|
+        responses[:raw].each { |k,v|
           expect(JSON.parse(v.body)['httpStatusCode']).to eql(200)
         }
+      end
+    end
+
+    it 'returns flight information' do
+      VCR.use_cassette 'checkin' do
+        subject.checkin[:flight_information].each do |flight|
+          expect(flight).to include(*expected_keys)
+        end
       end
     end
   end

@@ -21,17 +21,18 @@ module Southwest
     end
 
     def checkin
-      responses = {}
+      responses = { raw: {} }
 
-      responses[:get_travel_info] = get_travel_info
+      responses[:raw][:get_travel_info] = get_travel_info
       breathe
-      responses[:check_intravel_alerts] = check_intravel_alerts
+      responses[:raw][:check_intravel_alerts] = check_intravel_alerts
       breathe
-      responses[:flight_checkin_new] = flight_checkin_new
+      responses[:raw][:flight_checkin_new] = flight_checkin_new
+      responses[:flight_information] = JSON.parse(responses[:raw][:flight_checkin_new].body)['output']
       breathe
-      responses[:get_all_boarding_passes] = get_all_boarding_passes
+      responses[:raw][:get_all_boarding_passes] = get_all_boarding_passes
       breathe
-      responses[:view_boarding_passes] = view_boarding_passes
+      responses[:raw][:view_boarding_passes] = view_boarding_passes
 
       responses
     end
