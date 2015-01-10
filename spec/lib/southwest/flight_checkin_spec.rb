@@ -43,30 +43,16 @@ describe Southwest::FlightCheckin do
   end
 
   describe '#checkin' do
-    let(:expected_keys) {
-      [
-        "arrivalCityCode",
-        "stop1",
-        "changeplaneImage",
-        "departRouting",
-        "wifiInfo",
-        "departTime",
-        "flightOperator",
-        "departCityCode",
-        "seperatorflag",
-        "departCity",
-        "stopmsg",
-        "travelDate",
-        "flightNumber",
-        "date",
-        "arrivalCityName",
-        "arrivalTime",
-        "traveltime",
-        "scheduleDepart",
-        "stop3",
-        "stop2",
-        "arriveCity"
-      ]
+    let(:expected_flight_information_keys) {
+      ["arrivalCityCode", "stop1", "changeplaneImage", "departRouting", "wifiInfo", "departTime", "flightOperator", "departCityCode", "seperatorflag", "departCity", "stopmsg", "travelDate", "flightNumber", "date", "arrivalCityName", "arrivalTime", "traveltime", "scheduleDepart", "stop3", "stop2", "arriveCity"]
+    }
+
+    let(:expected_boarding_pass_details_keys) {
+      ['mbpDepartDate', 'departCode', 'pass_rr_number', 'itineraryHeader', 'mbp_confirmationNumber', 'mbp_tier_status', 'mbprouting', 'arriveCode', 'departCity', 'mbpDepartTime', 'mbp_gateValue', 'itineraryRouting', 'arriveCity']
+    }
+
+    let(:expected_check_in_details_keys) {
+      ["flight_num", "name", "pnr", "boardingroup_text", "position1_text"]
     }
 
     it 'returns 5 successful responses' do
@@ -81,7 +67,23 @@ describe Southwest::FlightCheckin do
     it 'returns flight information' do
       VCR.use_cassette 'checkin' do
         subject.checkin[:flight_information].each do |flight|
-          expect(flight).to include(*expected_keys)
+          expect(flight).to include(*expected_flight_information_keys)
+        end
+      end
+    end
+
+    it 'returns boarding pass details' do
+      VCR.use_cassette 'checkin' do
+        subject.checkin[:boarding_pass_details].each do |flight|
+          expect(flight).to include(*expected_boarding_pass_details_keys)
+        end
+      end
+    end
+
+    it 'returns checkin details' do
+      VCR.use_cassette 'checkin' do
+        subject.checkin[:checkin_details].each do |flight|
+          expect(flight).to include(*expected_check_in_details_keys)
         end
       end
     end

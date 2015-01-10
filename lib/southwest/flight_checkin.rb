@@ -31,6 +31,8 @@ module Southwest
       responses[:flight_information] = JSON.parse(responses[:raw][:flight_checkin_new].body)['output']
       breathe
       responses[:raw][:get_all_boarding_passes] = get_all_boarding_passes
+      responses[:boarding_pass_details] = JSON.parse(responses[:raw][:get_all_boarding_passes].body)['mbpDetails']
+      responses[:checkin_details] = JSON.parse(responses[:raw][:get_all_boarding_passes].body)['mbpPassenger']
       breathe
       responses[:raw][:view_boarding_passes] = view_boarding_passes
 
