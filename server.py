@@ -189,7 +189,7 @@ def display_message(message):
 @app.route('/all')
 @requires_authentication
 def all_reservations():
-  reservations = db.getAllReservations(active=true)
+  reservations = db.getAllReservations(active=True)
   if reservations != None:
     import threading
     count = threading.activeCount()
