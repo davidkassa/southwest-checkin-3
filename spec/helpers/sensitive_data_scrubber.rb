@@ -1,9 +1,10 @@
-def sensitive_data_scrubber(text, number: nil, first: nil, last: nil, flight_numbers: [])
-  text.sub!(/#{number}/i, 'ABC123') if number
-  text.sub!(/#{first.upcase}/, 'FUU') if first
-  text.sub!(/#{last.upcase}/, 'BAR') if last
-  text.sub!(/#{first}/, 'Fuu') if first
-  text.sub!(/#{last}/, 'Bar') if last
+def sensitive_data_scrubber(text, confirmation_number: nil, first_name: nil,
+                            last_name: nil, flight_numbers: [])
+  text.sub!(/#{confirmation_number}/i, 'ABC123') if confirmation_number
+  text.sub!(/#{first_name.upcase}/, 'FUU') if first_name
+  text.sub!(/#{last_name.upcase}/, 'BAR') if last_name
+  text.sub!(/#{first_name}/, 'Fuu') if first_name
+  text.sub!(/#{last_name}/, 'Bar') if last_name
   text.sub!(/RR#.[0-9]*/, 'RR#12345678')
   text.sub!(/"rrNumber":".[^,]*/, '"rrNumber":"12345678"')
   text.sub!(/"middleName":"MN:.[^,]*/, '"middleName":"MN: B"')
