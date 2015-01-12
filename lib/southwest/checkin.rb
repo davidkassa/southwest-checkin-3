@@ -1,7 +1,7 @@
 require_relative './errors'
 
 module Southwest
-  class FlightCheckin
+  class Checkin
     def self.checkin(last_name:, first_name:, record_locator:)
       new(last_name: last_name,
           first_name: first_name,

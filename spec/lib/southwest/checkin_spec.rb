@@ -1,15 +1,15 @@
 require 'spec_helper'
 require 'helpers/vcr_helper'
-require_relative '../../../lib/southwest/flight_checkin'
+require_relative '../../../lib/southwest/checkin'
 require 'pry'
 
-describe Southwest::FlightCheckin do
+describe Southwest::Checkin do
   let(:last_name) { 'Bar' }
   let(:first_name) { 'Fuu' }
   let(:record_locator) { 'ABC123' }
 
   subject(:checkin) {
-    Southwest::FlightCheckin.new(
+    Southwest::Checkin.new(
       last_name: last_name,
       first_name: first_name,
       record_locator: record_locator)
