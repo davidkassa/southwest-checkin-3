@@ -1,7 +1,6 @@
 require 'spec_helper'
 require 'helpers/vcr_helper'
 require_relative '../../../lib/southwest/checkin'
-require 'pry'
 
 describe Southwest::Checkin do
   let(:last_name) { 'Bar' }
@@ -58,8 +57,8 @@ describe Southwest::Checkin do
     it 'returns 5 successful responses' do
       VCR.use_cassette 'checkin' do
         responses = subject.checkin
-        responses[:raw].each { |k,v|
-          expect(JSON.parse(v.body)['httpStatusCode']).to eql(200)
+        responses[:raw].each { |key, response|
+          expect(subject.response_ok? response).to be true
         }
       end
     end
