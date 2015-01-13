@@ -14,12 +14,6 @@ module Southwest
       @record_locator = record_locator
     end
 
-    def get_travel_info
-      make_request(base_params.merge({
-        serviceID: 'getTravelInfo'
-      }))
-    end
-
     protected
 
     def base_params

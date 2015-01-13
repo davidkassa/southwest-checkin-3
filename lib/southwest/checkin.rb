@@ -27,6 +27,12 @@ module Southwest
       responses
     end
 
+    def get_travel_info
+      make_request(base_params.merge({
+        serviceID: 'getTravelInfo'
+      }))
+    end
+
     def check_intravel_alerts
       make_request(base_params.merge({
         serviceID: 'checkIntravelAlerts'
