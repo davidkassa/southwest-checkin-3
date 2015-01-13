@@ -56,5 +56,37 @@ module Southwest
         optionPrint: 'true'
       }))
     end
+
+    private
+
+    # These endpoints return JSON with a custom response
+    # code attribute called `httpStatusCode`. This method
+    # validates that the HTTP response code and the
+    # `httpStatusCode` attribute are valid.
+    def check_response!(response)
+      unless response_ok?(response)
+        raise Southwest::RequestError, "There was an error making the request. It returned a status of #{status(response)}. Response:\n#{response}"
+      end
+    end
+
+    def response_ok?(response)
+      return false if response.code >= 400
+      code = status(response)
+      code < 400
+    end
+
+    def status(response)
+      JSON.parse(response.body)['httpStatusCode']
+    end
+
+    def breathe
+      sleep 0.5 unless test_env?
+    end
+
+    # Rails isn't necessary loaded in test,
+    # so don't use `Rails.env.test?`
+    def test_env?
+      ENV['RAILS_ENV'] = 'test'
+    end
   end
 end

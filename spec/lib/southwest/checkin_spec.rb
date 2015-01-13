@@ -58,7 +58,7 @@ describe Southwest::Checkin do
       VCR.use_cassette 'checkin' do
         responses = subject.checkin
         responses[:raw].each { |key, response|
-          expect(subject.response_ok? response).to be true
+          expect(JSON.parse(response.body)['httpStatusCode']).to eql(200)
         }
       end
     end
