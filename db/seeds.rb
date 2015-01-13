@@ -14,5 +14,9 @@ CSV.parse(airports_file).each do |row|
     icao: row[5],
     latitude: row[6].to_f,
     longitude: row[7].to_f,
+    altitude: row[8],
+    timezone_offset: row[9],
+    dst: row[10],
+    timezone: row[11]
   )
 end
