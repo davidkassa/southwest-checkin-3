@@ -7,6 +7,7 @@ VCR.configure do |c|
 
   # https://www.relishapp.com/vcr/vcr/v/1-6-0/docs/configuration/hooks#replace-sensitive-data-with-before-record-hook
   c.before_record do |i|
+    sensitive_data_scrubber(i.request.body)
     sensitive_data_scrubber(i.response.body)
   end
 end
