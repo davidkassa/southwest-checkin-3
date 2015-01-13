@@ -3,7 +3,8 @@ require_relative './request'
 module Southwest
   class Reservation < Request
     def retrieve_reservation
-      make_request(base_params.merge({
+      response = {}
+      response[:raw] = make_request(base_params.merge({
         serviceID: 'viewAirReservation',
         searchType:  'ConfirmationNumber',
         submitButton: 'Continue',
@@ -14,6 +15,8 @@ module Southwest
         confirmationNumberLastName:  last_name,
         creditCardDepartureDate: todays_date_formatted
       }))
+      response[:reservation] = JSON.parse(response[:raw].body)
+      response
     end
 
     private

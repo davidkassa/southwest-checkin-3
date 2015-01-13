@@ -15,7 +15,7 @@ describe Southwest::Reservation do
   }
 
   describe '#retrieve_reservation' do
-    let(:response_json) { JSON.parse(subject.retrieve_reservation.body) }
+    let(:response_json) { subject.retrieve_reservation[:reservation] }
     let(:expected_person_keys) {
       ["isCompanion", "cnclFirstName", "confirmationNumber", "Depart2", "Depart1", "cnclLastName", "passengerName0", "TripName", "isFlNotifAvailable", "cnclConfirmNo", "arrivalCityName"]
     }
