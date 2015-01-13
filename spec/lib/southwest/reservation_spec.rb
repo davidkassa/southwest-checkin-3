@@ -15,9 +15,36 @@ describe Southwest::Reservation do
   }
 
   describe '#retrieve_reservation' do
+    let(:response_json) { JSON.parse(subject.retrieve_reservation.body) }
+    let(:expected_person_keys) {
+      ["isCompanion", "cnclFirstName", "confirmationNumber", "Depart2", "Depart1", "cnclLastName", "passengerName0", "TripName", "isFlNotifAvailable", "cnclConfirmNo", "arrivalCityName"]
+    }
+
+    let(:expected_flight_keys) {
+      ["departCity", "arrivalCity", "departFlightNo"]
+    }
+
     it 'returns upComingInfo' do
       VCR.use_cassette 'viewAirReservation' do
-        expect(JSON.parse(subject.retrieve_reservation.body)['upComingInfo']).to_not eql(nil)
+        expect(response_json['upComingInfo']).to_not eql(nil)
+      end
+    end
+
+    it 'contains the correct keys for each person on the reservation' do
+      VCR.use_cassette 'viewAirReservation' do
+        response_json['upComingInfo'].each do |person|
+          expect(person).to include(*expected_person_keys)
+        end
+      end
+    end
+
+    it 'contains the correct information for each flight' do
+      VCR.use_cassette 'viewAirReservation' do
+        response_json['upComingInfo'].each do |person|
+          person.select { |k,v| k =~ /Depart/ }.each do |key, flight|
+            expect(flight).to include(*expected_flight_keys)
+          end
+        end
       end
     end
   end
