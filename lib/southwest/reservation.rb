@@ -2,6 +2,12 @@ require_relative './request'
 
 module Southwest
   class Reservation < Request
+    def self.retrieve_reservation(last_name:, first_name:, record_locator:)
+      new(last_name: last_name,
+          first_name: first_name,
+          record_locator: record_locator).retrieve_reservation
+    end
+
     def retrieve_reservation
       response = {}
       response[:raw] = make_request(base_params.merge({

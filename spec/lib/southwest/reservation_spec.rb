@@ -15,7 +15,6 @@ describe Southwest::Reservation do
   }
 
   describe '#retrieve_reservation' do
-    let(:response_json) { subject.retrieve_reservation[:reservation] }
     let(:expected_person_keys) {
       ["isCompanion", "cnclFirstName", "confirmationNumber", "Depart2", "Depart1", "cnclLastName", "passengerName0", "TripName", "isFlNotifAvailable", "cnclConfirmNo", "arrivalCityName"]
     }
@@ -26,23 +25,52 @@ describe Southwest::Reservation do
 
     it 'returns upComingInfo' do
       VCR.use_cassette 'viewAirReservation' do
-        expect(response_json['upComingInfo']).to_not eql(nil)
+        expect(subject.retrieve_reservation[:reservation]['upComingInfo']).to_not eql(nil)
       end
     end
 
     it 'contains the correct keys for each person on the reservation' do
       VCR.use_cassette 'viewAirReservation' do
-        response_json['upComingInfo'].each do |person|
+        subject.retrieve_reservation[:reservation]['upComingInfo'].each do |person|
           expect(person).to include(*expected_person_keys)
         end
       end
     end
 
-    it 'contains the correct information for each flight' do
+    it 'contains the correct information for each departure flight' do
       VCR.use_cassette 'viewAirReservation' do
-        response_json['upComingInfo'].each do |person|
+        subject.retrieve_reservation[:reservation]['upComingInfo'].each do |person|
           person.select { |k,v| k =~ /Depart/ }.each do |key, flight|
             expect(flight).to include(*expected_flight_keys)
+          end
+        end
+      end
+    end
+
+    context '1 stop return flight' do
+      let(:expected_flight_keys) {
+        ["departCity", "arrivalCity", "returnFlightNo"]
+      }
+
+      subject {
+        Southwest::Reservation.retrieve_reservation(
+          last_name: 'Bar',
+          first_name: 'Fuu',
+          record_locator: 'ABC123')
+      }
+
+      it 'returns upComingInfo' do
+        VCR.use_cassette 'viewAirReservation multi' do
+          expect(subject[:reservation]['upComingInfo']).to_not eql(nil)
+        end
+      end
+
+      it 'contains the correct information for each return flight' do
+        VCR.use_cassette 'viewAirReservation multi' do
+          subject[:reservation]['upComingInfo'].each do |person|
+            person.select { |k,v| k =~ /Return/ }.each do |key, flight|
+              expect(flight).to include(*expected_flight_keys)
+            end
           end
         end
       end
