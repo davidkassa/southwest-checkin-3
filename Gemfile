@@ -23,6 +23,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'typhoeus', '~> 0.7' # HTTP request client
 
+gem 'devise', '~> 3.4' # Authentication
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
