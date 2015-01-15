@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150113170009) do
+ActiveRecord::Schema.define(version: 20150115025621) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,4 +37,45 @@ ActiveRecord::Schema.define(version: 20150113170009) do
   add_index "airports", ["iata"], name: "index_airports_on_iata", using: :btree
   add_index "airports", ["icao"], name: "index_airports_on_icao", using: :btree
 
+  create_table "flights", force: :cascade do |t|
+    t.datetime "departure_time",       null: false
+    t.datetime "arrival_time",         null: false
+    t.string   "departure_city",       null: false
+    t.string   "arrival_city",         null: false
+    t.json     "payload",              null: false
+    t.integer  "departure_airport_id", null: false
+    t.integer  "arrival_airport_id",   null: false
+    t.integer  "reservation_id",       null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "flights", ["arrival_airport_id"], name: "index_flights_on_arrival_airport_id", using: :btree
+  add_index "flights", ["departure_airport_id"], name: "index_flights_on_departure_airport_id", using: :btree
+  add_index "flights", ["reservation_id"], name: "index_flights_on_reservation_id", using: :btree
+
+  create_table "passengers", force: :cascade do |t|
+    t.boolean  "is_companion",   default: false, null: false
+    t.string   "first_name",                     null: false
+    t.string   "last_name",                      null: false
+    t.integer  "reservation_id",                 null: false
+    t.string   "full_name",                      null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+  end
+
+  add_index "passengers", ["reservation_id"], name: "index_passengers_on_reservation_id", using: :btree
+
+  create_table "reservations", force: :cascade do |t|
+    t.string   "confirmation_number", null: false
+    t.string   "trip_name"
+    t.string   "arrival_city_name",   null: false
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+  end
+
+  add_foreign_key "flights", "airports", column: "arrival_airport_id"
+  add_foreign_key "flights", "airports", column: "departure_airport_id"
+  add_foreign_key "flights", "reservations"
+  add_foreign_key "passengers", "reservations"
 end
