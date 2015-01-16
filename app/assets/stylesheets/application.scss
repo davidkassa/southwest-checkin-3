@@ -13,12 +13,15 @@
  *= require_self
  */
 
+@import 'variables';
+@import 'media-queries';
+@import 'typography';
+@import 'buttons';
+@import 'header';
+@import 'home';
+
 body {
   margin: 0;
   padding: 0;
+  background-color: $madison;
 }
-
-@import 'variables';
-@import 'typography';
-@import 'header';
-@import 'home';

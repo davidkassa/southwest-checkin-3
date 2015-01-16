@@ -1,15 +1,40 @@
 .Hero {
   text-align: center;
-  background-color: #EEF1F2;
-  padding: (100px + $Header-height) 20px 100px;
+  color: $Hero-color;
+  background-color: $Hero-bg;
+  padding: ($Hero-top-padding-mobile + $Header-height-mobile) 20px $Hero-top-padding-mobile;
+
+  @include tablet-landscape-and-up {
+    padding: ($Hero-top-padding-desktop + $Header-height-desktop) 20px $Hero-top-padding-desktop;
+  }
 }
 
 .Hero-header {
-  margin-bottom: 50px;
-  font-size: 46px;
+  font-family: 'Cooper Hewitt Thin';
+  font-size: $Hero-heading-font-size-mobile;
+  margin-bottom: $Hero-padding-mobile;
+
+  @include tablet-landscape-and-up {
+    font-size: $Hero-heading-font-size-desktop;
+    margin-bottom: $Hero-padding-desktop;
+  }
 }
 
 .Hero-sub {
-  display: inline-block;
-  text-align: left;
+  font-family: 'Cooper Hewitt Light';
+  color: darken($Hero-color, 15%);
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+.Hero-add-reservation {
+  margin-top: $Hero-padding-mobile;
+
+  @include tablet-landscape-and-up {
+    margin-top: $Hero-padding-desktop;
+  }
+}
+
+.Hero-login {
+  margin-left: 10px;
 }

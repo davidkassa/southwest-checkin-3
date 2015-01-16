@@ -1,19 +1,48 @@
 .Header {
+  // background: darken($madison, 5%);
   position: fixed;
   width: 100%;
-  border-bottom: 1px solid red;
-  height: $Header-height;
-  line-height: $Header-height;
-  text-align: center;
-  padding-left: 30px;
-  font-size: 36px;
-}
+  height: $Header-height-mobile;
+  line-height: $Header-height-mobile;
+  padding-left: $Header-padding-mobile;
 
-.Header-logo {
-  color: #1E7FF7;
+  @include tablet-landscape-and-up {
+    height: $Header-height-desktop;
+    line-height: $Header-height-desktop;
+    padding-left: $Header-padding-desktop;
+    text-align: center;
+    padding-left: 0;
+  }
 }
 
 .Header-logo-img {
-  margin-top: ($Header-height - $Header-logo-height) / 2;
-  height: $Header-logo-height;
+  margin-top: ($Header-height-mobile - $Header-logo-height-mobile) / 2;
+  height: $Header-logo-height-phone;
+
+  @include tablet-portrait-and-up {
+    height: $Header-logo-height-mobile;
+  }
+
+  @include tablet-landscape-and-up {
+    margin-top: ($Header-height-desktop - $Header-logo-height-desktop) / 2;
+    height: $Header-logo-height-desktop;
+  }
+}
+
+.Header-actions {
+  position: absolute;
+  right: $Header-padding-mobile * 2;
+
+  @include tablet-landscape-and-up {
+    right: $Header-padding-desktop;
+  }
+}
+
+.Header-login {
+  color: $athens-gray;
+  margin-left: 10px;
+
+  @include tablet-landscape-and-up {
+    margin-left: 20px;
+  }
 }

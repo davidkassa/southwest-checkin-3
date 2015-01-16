@@ -1,2 +1,43 @@
-$Header-height: 80px;
-$Header-logo-height: 50px;
+/* Colors
+---------------*/
+
+$logo-blue: #1E7FF7;
+$madison: #2C3E50;
+$athens-gray: #ECF0F1;
+$carmine-pink: #E74C3C;
+$curious-blue: #2980B9;
+$curious-blue-light: #3498DB;
+
+
+/* Header
+---------------*/
+
+$Header-height-mobile: 60px;
+$Header-logo-height-mobile: 32px;
+$Header-logo-height-phone: 24px;
+$Header-padding-mobile: 15px;
+
+$Header-height-desktop: 80px;
+$Header-logo-height-desktop: 50px;
+$Header-padding-desktop: 30px;
+
+$Hero-bg: $madison;
+$Hero-color: $athens-gray;
+
+$Hero-heading-font-size-mobile: 36px;
+$Hero-padding-mobile: 20px;
+$Hero-top-padding-mobile: 30px;
+
+$Hero-heading-font-size-desktop: 46px;
+$Hero-padding-desktop: 50px;
+$Hero-top-padding-desktop: 100px;
+
+
+/* Breakpoints
+---------------*/
+
+$mq-mobile-portrait   : 320px !default;
+$mq-mobile-landscape  : 568px !default;
+$mq-tablet-portrait   : 768px !default;
+$mq-tablet-landscape  : 1024px !default;
+$mq-desktop           : 1382px !default;
