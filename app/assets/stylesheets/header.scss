@@ -1,0 +1,19 @@
+.Header {
+  position: fixed;
+  width: 100%;
+  border-bottom: 1px solid red;
+  height: $Header-height;
+  line-height: $Header-height;
+  text-align: center;
+  padding-left: 30px;
+  font-size: 36px;
+}
+
+.Header-logo {
+  color: #1E7FF7;
+}
+
+.Header-logo-img {
+  margin-top: ($Header-height - $Header-logo-height) / 2;
+  height: $Header-logo-height;
+}

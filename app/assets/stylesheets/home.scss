@@ -1,0 +1,15 @@
+.Hero {
+  text-align: center;
+  background-color: #EEF1F2;
+  padding: (100px + $Header-height) 20px 100px;
+}
+
+.Hero-header {
+  margin-bottom: 50px;
+  font-size: 46px;
+}
+
+.Hero-sub {
+  display: inline-block;
+  text-align: left;
+}

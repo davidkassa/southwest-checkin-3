@@ -7,11 +7,16 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+  <header class="Header">
+    <div class="Header-logo">
+      <%= image_tag 'logo.svg', class: 'Header-logo-img' %>
+    </div>
+  </header>
 
-<p class="notice"><%= notice %></p>
-<p class="alert"><%= alert %></p>
+  <div class="notice"><%= notice %></div>
+  <div class="alert"><%= alert %></div>
 
-<%= yield %>
+  <%= yield %>
 
 </body>
 </html>
