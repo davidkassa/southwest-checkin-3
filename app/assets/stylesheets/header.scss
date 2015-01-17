@@ -1,6 +1,7 @@
 .Header {
-  background: $madison;
   position: fixed;
+  top: 0;
+  background: $madison;
   width: 100%;
   height: $Header-height-mobile;
   line-height: $Header-height-mobile;
@@ -12,6 +13,14 @@
     padding-left: $Header-padding-desktop;
     text-align: center;
     padding-left: 0;
+  }
+}
+
+.Body {
+  margin-top: $Header-height-mobile;
+
+  @include tablet-landscape-and-up {
+    margin-top: $Header-height-desktop;
   }
 }
 

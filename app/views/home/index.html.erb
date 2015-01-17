@@ -5,16 +5,13 @@
 
   <div class="Hero-sub">
     <p>
-      Don't get stuck in Group C ever again. <a class="bold" href='/'>chkmein</a> will check you in exactly 24 hours before your flight.
-    </p>
-    <p>
-      It's that simple.
+      Don't get stuck in Group C ever again. <a class="bold" href='/'>chkmein</a> will check you in exactly 24 hours before your Southwest flight.
     </p>
   </div>
 
   <div class="Hero-add-reservation">
-    <a class='HeroButtonLink' href="#">Add a Reservation</a>
-    <a class="HeroLink Hero-login" href='#'>Login</a>
+    <%= link_to 'Add a Reservation', new_reservation_path, class: 'HeroButtonLink' %>
+    <%= link_to 'Login', new_user_session_path, class: 'HeroLink Hero-Login' %>
   </div>
 </div>
 

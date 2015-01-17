@@ -2,10 +2,10 @@
   text-align: center;
   color: $Hero-color;
   background-color: $Hero-bg;
-  padding: ($Hero-top-padding-mobile + $Header-height-mobile) 20px $Hero-top-padding-mobile;
+  padding: $Hero-top-padding-mobile 20px $Hero-top-padding-mobile;
 
   @include tablet-landscape-and-up {
-    padding: ($Hero-top-padding-desktop + $Header-height-desktop) 20px $Hero-top-padding-desktop;
+    padding: $Hero-top-padding-desktop 20px $Hero-top-padding-desktop;
   }
 }
 

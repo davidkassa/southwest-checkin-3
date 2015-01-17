@@ -10,18 +10,21 @@
 <body>
   <header class="Header">
     <div class="Header-actions">
-      <a class="GhostButtonLink" href='/'>Add a Reservation</a>
-      <a class="Header-login" href='/'>Login</a>
+      <%= link_to 'Add a Reservation', new_reservation_path, class: 'GhostButtonLink' %>
+      <%= link_to 'Login', new_user_session_path, class: 'Header-login' %>
     </div>
     <div class="Header-logo">
-      <%= image_tag 'logo.svg', class: 'Header-logo-img' %>
+      <a href="/">
+        <%= image_tag 'logo.svg', class: 'Header-logo-img' %>
+      </a>
     </div>
   </header>
 
-  <div class="notice"><%= notice %></div>
-  <div class="alert"><%= alert %></div>
+  <section class="Body">
+    <div class="notice"><%= notice %></div>
+    <div class="alert"><%= alert %></div>
 
-  <%= yield %>
-
+    <%= yield %>
+  </section>
 </body>
 </html>
