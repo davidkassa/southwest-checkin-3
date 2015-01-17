@@ -38,15 +38,19 @@
        font-url('cooper_hewitt/CooperHewitt-Semibold.svg#svgFontName') format('svg'); /* Legacy iOS */
 }
 
-
-body {
+%default-font-size {
   font-family: 'Cooper Hewitt Light';
   font-weight: 400;
-  font-size: 16px;
+  font-size: $font-size-mobile;
 
   @include tablet-landscape-and-up {
     font-family: 'Cooper Hewitt Book';
+    font-size: $font-size-desktop;
   }
+}
+
+body {
+  @extend %default-font-size;
 }
 
 a {
