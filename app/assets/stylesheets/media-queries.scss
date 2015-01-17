@@ -4,6 +4,13 @@
 //      https://gist.github.com/2028061
 //
 
+// Screens with iPhone 4(S) vertical height and below
+@mixin iphone4s-and-below {
+    @media (max-height : 480px) {
+        @content;
+    }
+}
+
 // Both portrait and landscape
 @mixin mobile-only {
     @media (max-width : $mq-mobile-landscape) {

@@ -28,16 +28,23 @@ $Header-height-desktop: 80px;
 $Header-logo-height-desktop: 50px;
 $Header-padding-desktop: 30px;
 
+
+/* Hero
+---------------*/
+
 $Hero-bg: $madison;
 $Hero-color: $athens-gray;
 
-$Hero-heading-font-size-mobile: 36px;
-$Hero-padding-mobile: 20px;
-$Hero-top-padding-mobile: 30px;
+$Hero-heading-font-size-mobile: 46px;
+$Hero-element-margin-mobile: 40px;
+$Hero-padding-mobile: 40px;
 
 $Hero-heading-font-size-desktop: 54px;
-$Hero-padding-desktop: 50px;
-$Hero-top-padding-desktop: 100px;
+$Hero-element-margin-desktop: 50px;
+$Hero-padding-desktop: 100px;
+
+$Hero-element-margin-iphone4s: 20px;
+$Hero-padding-iphone4s: 20px;
 
 
 /* Breakpoints
