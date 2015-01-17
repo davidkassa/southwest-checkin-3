@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Confirmation number:</strong>
+  <%= @reservation.confirmation_number %>
+</p>
+
+<p>
+  <strong>Trip name:</strong>
+  <%= @reservation.trip_name %>
+</p>
+
+<p>
+  <strong>Arrival city name:</strong>
+  <%= @reservation.arrival_city_name %>
+</p>
+
+<%= link_to 'Edit', edit_reservation_path(@reservation) %> |
+<%= link_to 'Back', reservations_path %>
