@@ -16,7 +16,7 @@
     <div class="FormGroup">
       <div class="field">
         <%= f.label 'Confirmation #' %>
-        <%= f.text_field :confirmation_number %>
+        <%= f.text_field :confirmation_number, autofocus: true %>
       </div>
       <%= f.fields_for :passenger do |ff| %>
         <div class="field">
@@ -26,6 +26,29 @@
         <div class="field">
           <%= ff.label 'Last Name' %>
           <%= ff.text_field :last_name %>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="FormGroupTitle">Account</div>
+    <div class="FormGroup">
+      <%= f.fields_for :user do |ff| %>
+        <div class="field">
+          <%= ff.label :email %>
+          <%= ff.email_field :email %>
+        </div>
+
+        <div class="field">
+          <%= ff.label :password %>
+          <% if @minimum_password_length %>
+          <em>(<%= @minimum_password_length %> characters minimum)</em>
+          <% end %><br />
+          <%= ff.password_field :password, autocomplete: "off" %>
+        </div>
+
+        <div class="field">
+          <%= ff.label :password_confirmation %>
+          <%= ff.password_field :password_confirmation, autocomplete: "off" %>
         </div>
       <% end %>
     </div>
