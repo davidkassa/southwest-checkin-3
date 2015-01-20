@@ -58,6 +58,7 @@
 
 body {
   @extend %default-font;
+  color: $text-color;
 }
 
 a {
@@ -78,6 +79,11 @@ a {
   }
 }
 
+%bold,
 .bold {
   font-family: 'Cooper Hewitt Semibold';
+}
+
+%light {
+  font-family: 'Cooper Hewitt Light';
 }

@@ -48,6 +48,8 @@ $Hero-padding-iphone4s: 20px;
 /* Typography
 ---------------*/
 
+$text-color: lighten(black, 5%);
+$muted-text-color: lighten($text-color, 50%);
 $light-text-color: $athens-gray;
 
 

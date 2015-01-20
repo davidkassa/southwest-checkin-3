@@ -4,6 +4,7 @@
 
 .Form {
   margin: 0 auto;
+  padding-top: 30px;
 
   .field,
   input {
@@ -58,4 +59,13 @@
       border-bottom: 0;
     }
   }
+}
+
+.FormGroupTitle {
+  @extend %medium;
+  margin-left: 15px;
+  margin-bottom: 5px;
+  color: $muted-text-color;
+  text-transform: uppercase;
+  font-size: 13px;
 }
