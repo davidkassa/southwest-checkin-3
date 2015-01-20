@@ -33,7 +33,6 @@ $Header-padding-desktop: 30px;
 ---------------*/
 
 $Hero-bg: $madison;
-$Hero-color: $athens-gray;
 
 $Hero-heading-font-size-mobile: 46px;
 $Hero-element-margin-mobile: 40px;
@@ -45,6 +44,18 @@ $Hero-padding-desktop: 100px;
 
 $Hero-element-margin-iphone4s: 20px;
 $Hero-padding-iphone4s: 20px;
+
+/* Typography
+---------------*/
+
+$light-text-color: $athens-gray;
+
+
+/* Forms
+---------------*/
+
+$Form-height-mobile: 40px;
+$Form-border-color: darken($athens-gray, 10%);
 
 
 /* Breakpoints

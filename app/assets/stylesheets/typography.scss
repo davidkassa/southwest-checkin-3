@@ -39,18 +39,25 @@
 }
 
 %default-font-size {
-  font-family: 'Cooper Hewitt Light';
-  font-weight: 400;
   font-size: $font-size-mobile;
 
   @include tablet-landscape-and-up {
-    font-family: 'Cooper Hewitt Book';
     font-size: $font-size-desktop;
   }
 }
 
-body {
+%default-font {
   @extend %default-font-size;
+  font-family: 'Cooper Hewitt Light';
+  font-weight: 400;
+
+  @include tablet-landscape-and-up {
+    font-family: 'Cooper Hewitt Book';
+  }
+}
+
+body {
+  @extend %default-font;
 }
 
 a {
@@ -60,6 +67,14 @@ a {
 
   &:hover {
     text-decoration: underline;
+  }
+}
+
+%medium {
+  font-family: 'Cooper Hewitt Book';
+
+  @include tablet-landscape-and-up {
+    font-family: 'Cooper Hewitt Medium';
   }
 }
 

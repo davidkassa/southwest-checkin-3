@@ -1,6 +1,6 @@
 .Hero {
   text-align: center;
-  color: $Hero-color;
+  color: $light-text-color;
   background-color: $Hero-bg;
   padding: $Hero-padding-mobile 20px $Hero-padding-mobile;
 
@@ -31,7 +31,7 @@
 
 .Hero-sub {
   font-family: 'Cooper Hewitt Light';
-  color: darken($Hero-color, 15%);
+  color: darken($light-text-color, 15%);
   max-width: 380px;
   margin: 0 auto;
 }

@@ -1,3 +1,61 @@
 // Place all the styles related to the Reservations controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.Form {
+  margin: 0 auto;
+
+  .field,
+  input {
+    @extend %default-font-size;
+  }
+
+  .field {
+    width: 100%;
+    height: $Form-height-mobile;
+    line-height: $Form-height-mobile;
+    font-size: 16px;
+
+    label, input {
+      float: left;
+    }
+
+    label {
+      @extend %medium;
+      text-align: left;
+      padding-right: 10px;
+      width: 35%;
+    }
+
+    input {
+      font-size: 16px;
+      border: 0;
+      padding: 0;
+      height: 100%;
+      width: 65%;
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
+  .actions {
+    margin-top: 20px;
+    text-align: center;
+  }
+}
+
+.FormGroup {
+  border-top: 1px solid $Form-border-color;
+  border-bottom: 1px solid $Form-border-color;
+
+  .field {
+    margin-left: 15px;
+    border-bottom: 1px solid $Form-border-color;
+
+    &:last-child {
+      border-bottom: 0;
+    }
+  }
+}

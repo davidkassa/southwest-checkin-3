@@ -40,7 +40,7 @@
 
 .Header-actions {
   position: absolute;
-  right: $Header-padding-mobile * 2;
+  right: $Header-padding-mobile;
 
   @include tablet-landscape-and-up {
     right: $Header-padding-desktop;

@@ -1,29 +1,36 @@
-<%= form_for(@reservation) do |f| %>
-  <% if @reservation.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@reservation.errors.count, "error") %> prohibited this reservation from being saved:</h2>
+<div class="Form">
+  <%= form_for(@reservation) do |f| %>
+    <% if @reservation.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@reservation.errors.count, "error") %> prohibited this reservation from being saved:</h2>
 
-      <ul>
-      <% @reservation.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
+        <ul>
+        <% @reservation.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="FormGroup">
+      <div class="field">
+        <%= f.label 'Confirmation #' %>
+        <%= f.text_field :confirmation_number %>
+      </div>
+      <%= f.fields_for :passenger do |ff| %>
+        <div class="field">
+          <%= ff.label 'First Name' %>
+          <%= ff.text_field :first_name %>
+        </div>
+        <div class="field">
+          <%= ff.label 'Last Name' %>
+          <%= ff.text_field :last_name %>
+        </div>
       <% end %>
-      </ul>
+    </div>
+
+    <div class="actions">
+      <%= f.submit 'Add Reservation', class: 'AddReservationButton' %>
     </div>
   <% end %>
-
-  <div class="field">
-    <%= f.label :confirmation_number %><br>
-    <%= f.text_field :confirmation_number %>
-  </div>
-  <div class="field">
-    <%= f.label :trip_name %><br>
-    <%= f.text_field :trip_name %>
-  </div>
-  <div class="field">
-    <%= f.label :arrival_city_name %><br>
-    <%= f.text_field :arrival_city_name %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>
+</div>

@@ -14,14 +14,18 @@
  */
 
 @import 'variables';
+@import 'scaffolding';
 @import 'media-queries';
 @import 'typography';
 @import 'grid';
 @import 'buttons';
 @import 'header';
 @import 'hero';
+@import 'reservations';
 
 body {
   margin: 0;
   padding: 0;
 }
+
+
