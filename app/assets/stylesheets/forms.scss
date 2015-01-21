@@ -93,7 +93,7 @@ form {
 
 .FieldGroupNote {
   @extend %smallest-font-size;
-  margin: $Form-margin/2 0 0 $Form-margin;
+  margin: $Form-margin/2 0 $Form-margin $Form-margin;
 }
 
 .FormLink {

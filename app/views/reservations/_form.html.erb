@@ -1,60 +1,58 @@
-<div class="Form">
-  <%= form_for(@reservation) do |f| %>
-    <% if @reservation.errors.any? %>
-      <div id="error_explanation">
-        <h2><%= pluralize(@reservation.errors.count, "error") %> prohibited this reservation from being saved:</h2>
+<%= form_for(@reservation) do |f| %>
+  <% if @reservation.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@reservation.errors.count, "error") %> prohibited this reservation from being saved:</h2>
 
-        <ul>
-        <% @reservation.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-        </ul>
-      </div>
-    <% end %>
-
-    <div class="FieldGroupTitle">Reservation</div>
-    <div class="FieldGroup">
-      <div class="field">
-        <%= f.label 'Confirmation #' %>
-        <%= f.text_field :confirmation_number, autofocus: true %>
-      </div>
-      <%= f.fields_for :passenger do |ff| %>
-        <div class="field">
-          <%= ff.label 'First Name' %>
-          <%= ff.text_field :first_name %>
-        </div>
-        <div class="field">
-          <%= ff.label 'Last Name' %>
-          <%= ff.text_field :last_name %>
-        </div>
+      <ul>
+      <% @reservation.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
       <% end %>
-    </div>
-
-    <!-- div class="FieldGroupTitle">Account</div>
-    <div class="FieldGroup">
-      <%= f.fields_for :user do |ff| %>
-        <div class="field">
-          <%= ff.label :email %>
-          <%= ff.email_field :email %>
-        </div>
-
-        <div class="field">
-          <%= ff.label :password %>
-          <% if @minimum_password_length %>
-          <em>(<%= @minimum_password_length %> characters minimum)</em>
-          <% end %><br />
-          <%= ff.password_field :password, autocomplete: "off" %>
-        </div>
-
-        <div class="field">
-          <%= ff.label :password_confirmation %>
-          <%= ff.password_field :password_confirmation, autocomplete: "off" %>
-        </div>
-      <% end %>
-    </div -->
-
-    <div class="actions">
-      <%= f.submit 'Add Reservation', class: 'BlueSubmitButton' %>
+      </ul>
     </div>
   <% end %>
-</div>
+
+  <div class="FieldGroupTitle">Reservation</div>
+  <div class="FieldGroup">
+    <div class="field">
+      <%= f.label 'Confirmation #' %>
+      <%= f.text_field :confirmation_number, autofocus: true %>
+    </div>
+    <%= f.fields_for :passenger do |ff| %>
+      <div class="field">
+        <%= ff.label 'First Name' %>
+        <%= ff.text_field :first_name %>
+      </div>
+      <div class="field">
+        <%= ff.label 'Last Name' %>
+        <%= ff.text_field :last_name %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- div class="FieldGroupTitle">Account</div>
+  <div class="FieldGroup">
+    <%= f.fields_for :user do |ff| %>
+      <div class="field">
+        <%= ff.label :email %>
+        <%= ff.email_field :email %>
+      </div>
+
+      <div class="field">
+        <%= ff.label :password %>
+        <% if @minimum_password_length %>
+        <em>(<%= @minimum_password_length %> characters minimum)</em>
+        <% end %><br />
+        <%= ff.password_field :password, autocomplete: "off" %>
+      </div>
+
+      <div class="field">
+        <%= ff.label :password_confirmation %>
+        <%= ff.password_field :password_confirmation, autocomplete: "off" %>
+      </div>
+    <% end %>
+  </div -->
+
+  <div class="actions">
+    <%= f.submit 'Add Reservation', class: 'BlueSubmitButton' %>
+  </div>
+<% end %>
