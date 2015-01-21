@@ -4,17 +4,12 @@
 
 .Form,
 form {
+  @extend %smaller-font-size;
   margin: 0 auto;
   padding-top: 30px;
 
-  .field,
-  input {
-    @extend %default-font-size;
-  }
-
   .field {
     height: $Form-height-mobile;
-    font-size: 16px;
     line-height: $Form-height-mobile;
 
     label, input {
@@ -25,7 +20,7 @@ form {
       @extend %medium;
       text-align: left;
       padding-right: 10px;
-      width: 35%;
+      width: 38%;
       white-space: nowrap;
       overflow: hidden;
     }
@@ -35,7 +30,7 @@ form {
       border: 0;
       padding: 0;
       height: 100%;
-      width: 65%;
+      width: 62%;
       -webkit-tap-highlight-color: rgba(0,0,0,0);
 
       &:focus {
@@ -50,12 +45,9 @@ form {
     }
 
     &.long-label {
+      input,
       label {
-        width: 45%;
-      }
-
-      input {
-        width: 55%;
+        width: 50%;
       }
     }
 
@@ -90,6 +82,7 @@ form {
 }
 
 .FieldGroupTitle {
+  @extend %smallest-font-size;
   @extend %medium;
   margin-left: $Form-margin;
   margin-bottom: 5px;
@@ -104,7 +97,7 @@ form {
 }
 
 .FormLink {
-  @extend %smaller-font-size;
+  @extend %smallest-font-size;
   margin-left: $Form-margin;
 }
 

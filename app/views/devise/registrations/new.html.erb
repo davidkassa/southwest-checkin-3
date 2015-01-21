@@ -8,13 +8,13 @@
       <%= f.email_field :email, autofocus: true %>
     </div>
 
-    <div class="field long-label">
+    <div class="field">
       <%= f.label :password %>
       <%= f.password_field :password, autocomplete: "off" %>
     </div>
 
-    <div class="field long-label">
-      <%= f.label 'Confirm Password' %>
+    <div class="field">
+      <%= f.label :password_confirmation, 'Confirm password' %>
       <%= f.password_field :password_confirmation, autocomplete: "off" %>
     </div>
   </div>
