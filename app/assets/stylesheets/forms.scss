@@ -2,7 +2,8 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.Form {
+.Form,
+form {
   margin: 0 auto;
   padding-top: 30px;
 
@@ -13,8 +14,8 @@
 
   .field {
     height: $Form-height-mobile;
-    line-height: $Form-height-mobile;
     font-size: 16px;
+    line-height: $Form-height-mobile;
 
     label, input {
       float: left;
@@ -40,20 +41,35 @@
         outline: none;
       }
     }
+
+    input[type="checkbox"] {
+      margin: 10px $Form-margin;
+      width: auto;
+      height: auto;
+    }
+
+    // Make sure Rails-generated linebreaks are disabled
+    br {
+      display: none;
+    }
   }
 
   .actions {
     margin-top: 20px;
     text-align: center;
+
+    input[type="submit"] {
+      @extend %BlueSubmitButton;
+    }
   }
 }
 
-.FormGroup {
+.FieldGroup {
   border-top: 1px solid $Form-border-color;
   border-bottom: 1px solid $Form-border-color;
 
   .field {
-    margin-left: 15px;
+    margin-left: $Form-margin;
     border-bottom: 1px solid $Form-border-color;
 
     &:last-child {
@@ -62,11 +78,20 @@
   }
 }
 
-.FormGroupTitle {
+.FieldGroupTitle {
   @extend %medium;
-  margin-left: 15px;
+  margin-left: $Form-margin;
   margin-bottom: 5px;
   color: $muted-text-color;
   text-transform: uppercase;
   font-size: 13px;
+}
+
+.FormLink {
+  @extend %smaller-font-size;
+  margin-left: $Form-margin;
+}
+
+.FormLinks {
+  margin-top: $Form-margin;
 }

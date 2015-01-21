@@ -12,8 +12,8 @@
       </div>
     <% end %>
 
-    <div class="FormGroupTitle">Reservation</div>
-    <div class="FormGroup">
+    <div class="FieldGroupTitle">Reservation</div>
+    <div class="FieldGroup">
       <div class="field">
         <%= f.label 'Confirmation #' %>
         <%= f.text_field :confirmation_number, autofocus: true %>
@@ -30,8 +30,8 @@
       <% end %>
     </div>
 
-    <!-- div class="FormGroupTitle">Account</div>
-    <div class="FormGroup">
+    <!-- div class="FieldGroupTitle">Account</div>
+    <div class="FieldGroup">
       <%= f.fields_for :user do |ff| %>
         <div class="field">
           <%= ff.label :email %>
@@ -54,7 +54,7 @@
     </div -->
 
     <div class="actions">
-      <%= f.submit 'Add Reservation', class: 'AddReservationButton' %>
+      <%= f.submit 'Add Reservation', class: 'BlueSubmitButton' %>
     </div>
   <% end %>
 </div>

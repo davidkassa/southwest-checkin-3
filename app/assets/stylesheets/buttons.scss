@@ -82,7 +82,8 @@
   }
 }
 
-.AddReservationButton {
+%BlueSubmitButton,
+.BlueSubmitButton {
   @extend %BaseButton;
   @extend %default-font;
   @include filledButton($logo-blue);

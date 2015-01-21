@@ -15,6 +15,8 @@ $alert-red: #D40D12;
 
 $font-size-desktop: 16px;
 $font-size-mobile: 16px;
+$font-size-desktop-smaller: 14px;
+$font-size-mobile-smaller: 14px;
 
 
 /* Header
@@ -59,6 +61,7 @@ $light-text-color: $athens-gray;
 
 $Form-height-mobile: 40px;
 $Form-border-color: darken($athens-gray, 10%);
+$Form-margin: 15px;
 
 
 /* Forms
