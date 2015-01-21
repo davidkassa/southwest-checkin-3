@@ -8,9 +8,18 @@ form {
   margin: 0 auto;
   padding-top: 45px;
 
+  @include tablet-portrait-and-up {
+    padding-top: 60px;
+  }
+
   .field {
     height: $Form-height-mobile;
     line-height: $Form-height-mobile;
+
+    @include tablet-portrait-and-up {
+      height: $Form-height-desktop;
+      line-height: $Form-height-desktop;
+    }
 
     label, input {
       float: left;
@@ -23,6 +32,10 @@ form {
       width: 38%;
       white-space: nowrap;
       overflow: hidden;
+
+      @include tablet-portrait-and-up {
+        width: 35%;
+      }
     }
 
     .field_with_errors input {
@@ -40,12 +53,20 @@ form {
       &:focus {
         outline: none;
       }
+
+      @include tablet-portrait-and-up {
+        width: 65%;
+      }
     }
 
     input[type="checkbox"] {
       margin: 10px $Form-margin;
       width: auto;
       height: auto;
+
+      @include tablet-landscape-and-up {
+        margin: 23px $Form-margin;
+      }
     }
 
     &.long-label {
@@ -71,13 +92,32 @@ form {
   }
 }
 
+form,
+.Form,
+.FormLinks {
+  @include tablet-portrait-and-up {
+    width: 60%;
+    max-width: 600px;
+  }
+}
+
 .FieldGroup {
   border-top: 1px solid $Form-border-color;
   border-bottom: 1px solid $Form-border-color;
 
+  @include tablet-portrait-and-up {
+    border: 1px solid $Form-border-color;
+    border-radius: 6px;
+  }
+
   .field {
     margin-left: $Form-margin;
     border-bottom: 1px solid $Form-border-color;
+
+    @include tablet-portrait-and-up {
+      margin-left: 0;
+      padding: 0 $Form-margin;
+    }
 
     &:last-child {
       border-bottom: 0;
@@ -90,9 +130,15 @@ form {
   @extend %medium;
   margin-left: $Form-margin;
   margin-bottom: 5px;
-  color: $muted-text-color;
+  color: $muted-text-color-mobile;
   text-transform: uppercase;
   font-size: 13px;
+
+  @include tablet-portrait-and-up {
+    font-family: 'Cooper Hewitt Book';
+    margin: $Form-margin*2 0 $Form-margin $Form-margin;
+    color: $text-color;
+  }
 }
 
 .FieldGroupNote {
@@ -106,7 +152,7 @@ form {
 }
 
 .FormLinks {
-  margin-top: $Form-margin;
+  margin: $Form-margin auto 0;
 }
 
 #error_explanation {

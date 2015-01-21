@@ -53,8 +53,9 @@ $Hero-padding-iphone4s: 20px;
 /* Typography
 ---------------*/
 
-$text-color: lighten(black, 5%);
-$muted-text-color: lighten($text-color, 50%);
+$text-color: #555;
+$muted-text-color-mobile: lighten($text-color, 50%);
+$muted-text-color-desktop: lighten($text-color, 20%);
 $light-text-color: $athens-gray;
 
 
@@ -62,6 +63,7 @@ $light-text-color: $athens-gray;
 ---------------*/
 
 $Form-height-mobile: 40px;
+$Form-height-desktop: 64px;
 $Form-border-color: darken($athens-gray, 10%);
 $Form-margin: 15px;
 

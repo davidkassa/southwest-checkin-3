@@ -16,6 +16,10 @@
 
 .notice-inner {
   padding: 10px 10px 10px;
+
+  @include tablet-portrait-and-up {
+    padding: 15px 15px 10px;
+  }
 }
 
 .notice {
