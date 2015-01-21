@@ -1,6 +1,6 @@
 <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
   <div class="FieldGroupTitle">Log in</div>
-  <div class="FieldGroup">
+  <div class="FieldGroup js-FieldGroup">
     <div class="field">
       <%= f.label :email %><br />
       <%= f.email_field :email, autofocus: true, placeholder: 'Email' %>

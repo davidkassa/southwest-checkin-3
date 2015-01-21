@@ -2,7 +2,7 @@
   <%= devise_error_messages! %>
 
   <div class="FieldGroupTitle"><%= resource_name.to_s.humanize %></div>
-  <div class="FieldGroup">
+  <div class="FieldGroup js-FieldGroup">
     <div class="field long-label">
       <%= f.label :email, placeholder: 'Email' %><br />
       <%= f.email_field :email, autofocus: true, placeholder: 'Email' %>
@@ -23,7 +23,7 @@
   </div>
 
   <div class="FieldGroupTitle">Security</div>
-  <div class="FieldGroup">
+  <div class="FieldGroup js-FieldGroup">
 
     <div class="field long-label">
       <%= f.label :current_password %>

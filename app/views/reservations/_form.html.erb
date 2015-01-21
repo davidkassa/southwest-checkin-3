@@ -12,7 +12,7 @@
   <% end %>
 
   <div class="FieldGroupTitle">Reservation</div>
-  <div class="FieldGroup">
+  <div class="FieldGroup js-FieldGroup">
     <div class="field">
       <%= f.label 'Confirmation #' %>
       <%= f.text_field :confirmation_number, autofocus: true, placeholder: 'Confirmation #' %>
@@ -30,7 +30,7 @@
   </div>
 
   <!-- div class="FieldGroupTitle">Account</div>
-  <div class="FieldGroup">
+  <div class="FieldGroup js-FieldGroup">
     <%= f.fields_for :user do |ff| %>
       <div class="field">
         <%= ff.label :email %>
