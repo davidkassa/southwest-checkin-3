@@ -3,6 +3,7 @@
   border: 0;
   cursor: pointer;
   transition: all .2s ease;
+  white-space: nowrap;
 }
 
 @mixin filledButton($background-color) {

@@ -12,7 +12,6 @@
   }
 
   .field {
-    width: 100%;
     height: $Form-height-mobile;
     line-height: $Form-height-mobile;
     font-size: 16px;
@@ -26,6 +25,7 @@
       text-align: left;
       padding-right: 10px;
       width: 35%;
+      white-space: nowrap;
     }
 
     input {
