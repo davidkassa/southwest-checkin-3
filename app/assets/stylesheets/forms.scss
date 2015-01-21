@@ -25,6 +25,10 @@ form {
       overflow: hidden;
     }
 
+    .field_with_errors input {
+      line-height: $Form-height-mobile - 1px;
+    }
+
     input {
       font-size: 16px;
       border: 0;
@@ -103,4 +107,16 @@ form {
 
 .FormLinks {
   margin-top: $Form-margin;
+}
+
+#error_explanation {
+  margin: 0 $Form-margin;
+
+  h2 {
+    @extend %smaller-font-size;
+  }
+
+  ul {
+    @extend %smallest-font-size;
+  }
 }
