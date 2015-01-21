@@ -15,16 +15,16 @@
   <div class="FieldGroup">
     <div class="field">
       <%= f.label 'Confirmation #' %>
-      <%= f.text_field :confirmation_number, autofocus: true %>
+      <%= f.text_field :confirmation_number, autofocus: true, placeholder: 'Confirmation #' %>
     </div>
     <%= f.fields_for :passenger do |ff| %>
       <div class="field">
         <%= ff.label 'First Name' %>
-        <%= ff.text_field :first_name %>
+        <%= ff.text_field :first_name, placeholder: 'First Name' %>
       </div>
       <div class="field">
         <%= ff.label 'Last Name' %>
-        <%= ff.text_field :last_name %>
+        <%= ff.text_field :last_name, placeholder: 'Last Name' %>
       </div>
     <% end %>
   </div>

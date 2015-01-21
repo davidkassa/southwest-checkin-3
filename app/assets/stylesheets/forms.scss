@@ -69,9 +69,12 @@ form {
     }
 
     &.long-label {
-      input,
+      input {
+        width: 55%;
+      }
+
       label {
-        width: 50%;
+        width: 45%;
       }
     }
 
