@@ -1,0 +1,13 @@
+.notice,
+.alert {
+  padding: 15px 15px 10px;
+}
+
+.notice {
+  background-color: $curious-blue-light;
+  color: white;
+}
+
+.alert {
+  background-color: $alert-red;
+}
