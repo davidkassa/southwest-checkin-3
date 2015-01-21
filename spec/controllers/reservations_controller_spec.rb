@@ -19,6 +19,7 @@ require 'rails_helper'
 # that an instance is receiving a specific message.
 
 RSpec.describe ReservationsController, :type => :controller do
+  let(:user) { User.create(email: 'foo@bar.com', password: 'password') }
 
   # This should return the minimal set of attributes required to create a valid
   # Reservation. As you add validations to Reservation, be sure to
@@ -35,6 +36,10 @@ RSpec.describe ReservationsController, :type => :controller do
   # in order to pass any filters (e.g. authentication) defined in
   # ReservationsController. Be sure to keep this updated too.
   let(:valid_session) { {} }
+
+  before do
+    sign_in :user, user
+  end
 
   describe "GET index" do
     it "assigns all reservations as @reservations" do
