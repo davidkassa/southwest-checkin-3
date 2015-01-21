@@ -17,6 +17,7 @@
 }
 
 .Body {
+  position: relative;
   margin-top: $Header-height-mobile;
 
   @include tablet-landscape-and-up {

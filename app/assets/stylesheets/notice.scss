@@ -1,15 +1,21 @@
 .notice,
 .alert {
+  @extend %smallest-font-size;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
   color: white;
   max-height: 400px;
   overflow: hidden;
   transition: all 0.5s ease;
   box-shadow: inset 0 $notice-shadow-top $notice-shadow-top (-$notice-shadow-top) rgba(0,0,0,0.8),
-              inset 0 (-$notice-shadow-bottom) $notice-shadow-bottom (-$notice-shadow-bottom) rgba(0,0,0,0.8)
+              inset 0 (-$notice-shadow-bottom) $notice-shadow-bottom (-$notice-shadow-bottom) rgba(0,0,0,0.2)
 }
 
 .notice-inner {
-  padding: 15px 15px 10px;
+  padding: 10px 10px 10px;
 }
 
 .notice {
