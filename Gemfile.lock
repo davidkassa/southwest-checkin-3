@@ -38,6 +38,8 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.3.6)
     arel (6.0.0)
+    autoprefixer-rails (5.0.0.1)
+      execjs
     awesome_print (1.6.1)
     bcrypt (3.1.9)
     binding_of_caller (0.7.2)
@@ -239,6 +241,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  autoprefixer-rails
   awesome_print
   byebug
   devise (~> 3.4)
