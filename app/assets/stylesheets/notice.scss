@@ -1,13 +1,21 @@
 .notice,
 .alert {
+  color: white;
+  max-height: 400px;
+  overflow: hidden;
+  transition: all 0.5s ease;
+  box-shadow: inset 0 $notice-shadow-top $notice-shadow-top (-$notice-shadow-top) rgba(0,0,0,0.8),
+              inset 0 (-$notice-shadow-bottom) $notice-shadow-bottom (-$notice-shadow-bottom) rgba(0,0,0,0.8)
+}
+
+.notice-inner {
   padding: 15px 15px 10px;
 }
 
 .notice {
   background-color: $curious-blue-light;
-  color: white;
 }
 
 .alert {
-  background-color: $alert-red;
+  background-color: $carmine-pink;
 }
