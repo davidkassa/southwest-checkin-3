@@ -1,13 +1,21 @@
-var noticeModule = (function() {
-  return {
-    delay: 4000,
+var notice = (function() {
+  var timeoutID = null;
 
+  var delay = 4000;
+
+  return {
     removeNoticesAfterDelay: function() {
-      window.setTimeout(function() {
+      if (timeoutID) {
+        window.clearTimeout(timeoutID);
+      }
+
+      timeoutID = window.setTimeout(function() {
         $('.js-notice').css('max-height', '0');
-      }, this.delay)
+      }, delay)
     }
   }
 })();
 
-noticeModule.removeNoticesAfterDelay();
+$(document).on("ready page:load", function() {
+  notice.removeNoticesAfterDelay();
+});
