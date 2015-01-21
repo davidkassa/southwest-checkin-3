@@ -27,6 +27,7 @@ form {
       padding-right: 10px;
       width: 35%;
       white-space: nowrap;
+      overflow: hidden;
     }
 
     input {
@@ -46,6 +47,16 @@ form {
       margin: 10px $Form-margin;
       width: auto;
       height: auto;
+    }
+
+    &.long-label {
+      label {
+        width: 45%;
+      }
+
+      input {
+        width: 55%;
+      }
     }
 
     // Make sure Rails-generated linebreaks are disabled
@@ -85,6 +96,11 @@ form {
   color: $muted-text-color;
   text-transform: uppercase;
   font-size: 13px;
+}
+
+.FieldGroupNote {
+  @extend %smallest-font-size;
+  margin: $Form-margin/2 0 0 $Form-margin;
 }
 
 .FormLink {
