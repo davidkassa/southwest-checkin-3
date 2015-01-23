@@ -54,6 +54,7 @@ end
 
 group :test do
   gem 'webmock'
+  gem 'shoulda-matchers', require: false
 end
 
 group :developement do
