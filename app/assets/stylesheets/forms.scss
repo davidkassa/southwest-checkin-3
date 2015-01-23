@@ -187,3 +187,26 @@ form,
     @extend %smallest-font-size;
   }
 }
+
+.ConfirmationNumberField {
+  text-transform: uppercase;
+
+  &:placeholder {
+    text-transform: none;
+  }
+  &::placeholder {
+    text-transform: none;
+  }
+  &:-moz-placeholder {
+    text-transform: none;
+  }
+  &::-moz-placeholder {
+    text-transform: none;
+  }
+  &:-ms-input-placeholder {
+    text-transform: none;
+  }
+  &::-webkit-input-placeholder {
+    text-transform: none;
+  }
+}

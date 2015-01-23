@@ -15,7 +15,7 @@
   <div class="FieldGroup js-FieldGroup">
     <div class="field">
       <%= f.label 'Confirmation #' %>
-      <%= f.text_field :confirmation_number, autofocus: true, placeholder: 'Confirmation #' %>
+      <%= f.text_field :confirmation_number, maxlength: 6, autofocus: true, placeholder: 'Confirmation #', class: 'ConfirmationNumberField' %>
     </div>
     <%= f.fields_for :passenger do |ff| %>
       <div class="field">
