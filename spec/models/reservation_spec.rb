@@ -3,20 +3,14 @@ require 'rails_helper'
 describe Reservation, :type => :model do
   describe 'creating a reservation' do
     describe 'with invalid attributes' do
-      it 'must have a valid confirmation_number' do
-        expect(Reservation.create({
-          arrival_city_name: "10:05 PM Denver, CO (DEN)",
-        }).errors[:confirmation_number]).to include(
-          "can't be blank",
-          "is the wrong length (should be 6 characters)")
-      end
+      subject { Reservation.create }
 
-      it 'must include an arrival_city_name' do
-        expect(Reservation.create({
-          confirmation_number: "ABC123",
-        }).errors[:arrival_city_name]).to include(
-          "can't be blank")
-      end
+      it { should accept_nested_attributes_for :passengers }
+      it { should accept_nested_attributes_for :user }
+
+      it { should validate_presence_of :confirmation_number }
+      it { should ensure_length_of(:confirmation_number).is_equal_to(6) }
+      it { should validate_presence_of :arrival_city_name }
 
       it 'must include at least one passenger' do
         expect(Reservation.create({
