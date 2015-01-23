@@ -1,6 +1,6 @@
 class Reservation < ActiveRecord::Base
-  has_many :passengers
   belongs_to :user
+  has_many :passengers, inverse_of: :reservation
   accepts_nested_attributes_for :passengers, :user
 
   before_save :upcase_confirmation_number
