@@ -9,8 +9,7 @@ module Southwest
     end
 
     def retrieve_reservation
-      response = {}
-      response[:raw] = make_request(base_params.merge({
+      typhoeus_response = make_request(base_params.merge({
         serviceID: 'viewAirReservation',
         searchType:  'ConfirmationNumber',
         submitButton: 'Continue',
@@ -21,8 +20,8 @@ module Southwest
         confirmationNumberLastName:  last_name,
         creditCardDepartureDate: todays_date_formatted
       }))
-      response[:reservation] = JSON.parse(response[:raw].body)
-      response
+
+      Response.new(typhoeus_response)
     end
 
     private

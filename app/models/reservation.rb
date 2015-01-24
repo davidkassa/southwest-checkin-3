@@ -8,7 +8,7 @@ class Reservation < ActiveRecord::Base
 
   validates_associated :passengers
   # validates :passengers, length: { minimum: 1 }
-  validates :confirmation_number, :first_name, :last_name, :arrival_city_name, presence: true
+  validates :confirmation_number, :first_name, :last_name, :arrival_city_name, :payload, presence: true
   validates :confirmation_number, length: { is: 6 }
 
   private
@@ -18,8 +18,8 @@ class Reservation < ActiveRecord::Base
   end
 
   def retrieve_reservation
-    self.arrival_city_name = southwest_reservation[:reservation]["upComingInfo"][0]["arrivalCityName"]
-    # passengers.first.full_name = southwest_reservation[:reservation]["upComingInfo"][0]["passengerName0"]
+    self.payload = southwest_reservation.to_hash
+    self.arrival_city_name = southwest_reservation.body["upComingInfo"][0]["arrivalCityName"]
   end
 
   def southwest_reservation

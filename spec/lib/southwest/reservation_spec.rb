@@ -25,13 +25,13 @@ describe Southwest::Reservation do
 
     it 'returns upComingInfo' do
       VCR.use_cassette 'viewAirReservation' do
-        expect(subject.retrieve_reservation[:reservation]['upComingInfo']).to_not eql(nil)
+        expect(subject.retrieve_reservation.body['upComingInfo']).to_not eql(nil)
       end
     end
 
     it 'contains the correct keys for each person on the reservation' do
       VCR.use_cassette 'viewAirReservation' do
-        subject.retrieve_reservation[:reservation]['upComingInfo'].each do |person|
+        subject.retrieve_reservation.body['upComingInfo'].each do |person|
           expect(person).to include(*expected_person_keys)
         end
       end
@@ -39,7 +39,7 @@ describe Southwest::Reservation do
 
     it 'contains the correct information for each departure flight' do
       VCR.use_cassette 'viewAirReservation' do
-        subject.retrieve_reservation[:reservation]['upComingInfo'].each do |person|
+        subject.retrieve_reservation.body['upComingInfo'].each do |person|
           person.select { |k,v| k =~ /Depart/ }.each do |key, flight|
             expect(flight).to include(*expected_flight_keys)
           end
@@ -61,13 +61,13 @@ describe Southwest::Reservation do
 
       it 'returns upComingInfo' do
         VCR.use_cassette 'viewAirReservation multi' do
-          expect(subject[:reservation]['upComingInfo']).to_not eql(nil)
+          expect(subject.body['upComingInfo']).to_not eql(nil)
         end
       end
 
       it 'contains the correct information for each return flight' do
         VCR.use_cassette 'viewAirReservation multi' do
-          subject[:reservation]['upComingInfo'].each do |person|
+          subject.body['upComingInfo'].each do |person|
             person.select { |k,v| k =~ /Return/ }.each do |key, flight|
               expect(flight).to include(*expected_flight_keys)
             end
