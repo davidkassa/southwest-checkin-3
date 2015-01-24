@@ -34,7 +34,9 @@ describe Reservation, :type => :model do
       }
 
       it 'upcases the confirmation number' do
-        expect(Reservation.create(valid_attributes).confirmation_number).to eql('ABC123')
+        VCR.use_cassette 'viewAirReservation' do
+          expect(Reservation.create(valid_attributes).confirmation_number).to eql('ABC123')
+        end
       end
     end
   end

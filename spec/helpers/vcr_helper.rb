@@ -10,4 +10,11 @@ VCR.configure do |c|
     sensitive_data_scrubber(i.request.body)
     sensitive_data_scrubber(i.response.body)
   end
+
+  c.before_playback(:jan_12_2015) {
+    allow_any_instance_of(Southwest::Reservation).to receive(:todays_date_formatted).and_return('01/12/2015')
+  }
 end
+
+VCR.use_cassette("viewAirReservation", tag: :jan_12_2015) {}
+VCR.use_cassette("viewAirReservation_multi", tag: :jan_12_2015) {}
