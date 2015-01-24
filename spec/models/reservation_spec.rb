@@ -28,15 +28,6 @@ describe Reservation, :type => :model do
           expect(Reservation.create(valid_attributes).arrival_city_name).to eql('Denver, CO')
         end
       end
-
-      pending 'must include at least one passenger' do
-        recorded do
-          expect(Reservation.create({
-            confirmation_number: "ABC123",
-          }).errors[:passengers]).to include(
-            "is too short (minimum is 1 character)")
-        end
-      end
     end
 
     describe 'with valid attributes' do
@@ -47,6 +38,12 @@ describe Reservation, :type => :model do
       it 'upcases the confirmation number' do
         recorded do
           expect(Reservation.create(valid_attributes).confirmation_number).to eql('ABC123')
+        end
+      end
+
+      it 'creates at least one passenger' do
+        recorded do
+          expect(subject.passengers.first).to be_persisted
         end
       end
     end
