@@ -17,16 +17,14 @@
       <%= f.label 'Confirmation #' %>
       <%= f.text_field :confirmation_number, maxlength: 6, autofocus: true, placeholder: 'Confirmation #', class: 'ConfirmationNumberField' %>
     </div>
-    <%= f.fields_for :passenger do |ff| %>
-      <div class="field">
-        <%= ff.label 'First Name' %>
-        <%= ff.text_field :first_name, placeholder: 'First Name' %>
-      </div>
-      <div class="field">
-        <%= ff.label 'Last Name' %>
-        <%= ff.text_field :last_name, placeholder: 'Last Name' %>
-      </div>
-    <% end %>
+    <div class="field">
+      <%= f.label 'First Name' %>
+      <%= f.text_field :first_name, placeholder: 'First Name' %>
+    </div>
+    <div class="field">
+      <%= f.label 'Last Name' %>
+      <%= f.text_field :last_name, placeholder: 'Last Name' %>
+    </div>
   </div>
 
   <!-- div class="FieldGroupTitle">Account</div>

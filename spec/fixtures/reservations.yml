@@ -1,3 +1,5 @@
 denver:
   confirmation_number: "ABC123"
-  arrival_city_name: "10:05 PM Denver, CO (DEN)"
+  first_name: "Fuu"
+  last_name: "Bar"
+  arrival_city_name: "Denver, CO"
