@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 describe Reservation, :type => :model do
-  def recorded
-    VCR.use_cassette('viewAirReservation') { yield }
+  def recorded(cassette='viewAirReservation')
+    VCR.use_cassette(cassette) { yield }
   end
 
   let(:valid_attributes) {
@@ -30,22 +30,36 @@ describe Reservation, :type => :model do
       end
     end
 
-    describe 'with valid attributes' do
+    shared_examples 'with valid attributes' do
       subject { Reservation.create(valid_attributes) }
+      let(:passenger) { subject.passengers.first }
 
-      it { recorded { should be_valid } }
+      it { VCR.use_cassette(cassette) { should be_valid } }
 
       it 'upcases the confirmation number' do
-        recorded do
+        VCR.use_cassette(cassette) do
           expect(Reservation.create(valid_attributes).confirmation_number).to eql('ABC123')
         end
       end
 
       it 'creates at least one passenger' do
-        recorded do
-          expect(subject.passengers.first).to be_persisted
+        VCR.use_cassette(cassette) do
+          expect(passenger).to be_persisted
+          expect(passenger.first_name).to_not be_nil
+          expect(passenger.last_name).to_not be_nil
+          expect(passenger.full_name).to_not be_nil
         end
       end
+    end
+
+    context 'viewAirReservation' do
+      let(:cassette) { 'viewAirReservation' }
+      it_behaves_like 'with valid attributes'
+    end
+
+    context 'viewAirReservation multi' do
+      let(:cassette) { 'viewAirReservation multi' }
+      it_behaves_like 'with valid attributes'
     end
   end
 end
