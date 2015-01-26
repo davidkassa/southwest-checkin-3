@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe Reservation, :type => :model do
+  fixtures :airports
+
   def recorded(cassette='viewAirReservation')
     VCR.use_cassette(cassette) { yield }
   end
@@ -38,7 +40,16 @@ describe Reservation, :type => :model do
 
       it 'upcases the confirmation number' do
         VCR.use_cassette(cassette) do
-          expect(Reservation.create(valid_attributes).confirmation_number).to eql('ABC123')
+          expect(subject.confirmation_number).to eql('ABC123')
+        end
+      end
+
+      it 'creates at least one passenger' do
+        VCR.use_cassette(cassette) do
+          expect(passenger).to be_persisted
+          expect(passenger.first_name).to_not be_nil
+          expect(passenger.last_name).to_not be_nil
+          expect(passenger.full_name).to_not be_nil
         end
       end
 
@@ -54,7 +65,16 @@ describe Reservation, :type => :model do
 
     context 'viewAirReservation' do
       let(:cassette) { 'viewAirReservation' }
+
       it_behaves_like 'with valid attributes'
+
+      subject { Reservation.create(valid_attributes) }
+
+      it 'creates two flights' do
+        VCR.use_cassette(cassette) do
+          expect(subject.flights.count).to eql(2)
+        end
+      end
     end
 
     context 'viewAirReservation multi' do

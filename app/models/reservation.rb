@@ -1,10 +1,12 @@
 class Reservation < ActiveRecord::Base
   belongs_to :user
   has_many :passengers, inverse_of: :reservation, autosave: true
+  has_many :flights, inverse_of: :reservation, autosave: true
   accepts_nested_attributes_for :user
 
   before_validation :retrieve_reservation, on: :create
   before_create :create_passengers
+  before_create :create_flights
   before_save :upcase_confirmation_number
 
   validates_associated :passengers
@@ -27,6 +29,14 @@ class Reservation < ActiveRecord::Base
 
     passengers_attributes.each do |passenger_attributes|
       passengers.new(passenger_attributes)
+    end
+  end
+
+  def create_flights
+    flights_attributes = FlightsParser.new(southwest_reservation.body).flights
+
+    flights_attributes.each do |flight_attributes|
+      flights.new(flight_attributes)
     end
   end
 
