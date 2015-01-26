@@ -73,6 +73,21 @@ describe ReservationsController, :type => :controller do
         end
       end
     end
+
+    describe 'Southwest::RequestError' do
+      before do
+        allow_any_instance_of(Southwest::Reservation).to receive(:check_response!) {
+          raise Southwest::RequestError
+        }
+      end
+
+      it 'notifies the user that there was an error communicating with Southwest' do
+        VCR.use_cassette 'viewAirReservation' do
+          post :create, {:reservation => valid_attributes}, valid_session
+          expect(flash[:notice]).to match(/There was an error communicating with Southwest/)
+        end
+      end
+    end
   end
 
   # describe "GET index" do

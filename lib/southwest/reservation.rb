@@ -26,12 +26,6 @@ module Southwest
 
     private
 
-    def make_request(params)
-      response = Typhoeus::Request.post(base_uri, body: params, headers: headers)
-      store_cookies(response)
-      response
-    end
-
     # Example: '01/10/2015'
     def todays_date_formatted
       Time.now.strftime('%m/%d/%Y')
