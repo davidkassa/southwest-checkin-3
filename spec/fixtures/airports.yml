@@ -1,0 +1,97 @@
+BWI:
+  name: Baltimore Washington Intl
+  city: Baltimore
+  country: United States
+  iata: BWI
+  icao: KBWI
+  latitude: '39.175361'
+  longitude: "-76.668333"
+  airport_id: '3849'
+  altitude: '146'
+  timezone_offset: "-5.0"
+  dst: A
+  timezone: America/New_York
+
+MDW:
+  name: Chicago Midway Intl
+  city: Chicago
+  country: United States
+  iata: MDW
+  icao: KMDW
+  latitude: '41.785972'
+  longitude: "-87.752417"
+  airport_id: '3747'
+  altitude: '620'
+  timezone_offset: "-6.0"
+  dst: A
+  timezone: America/Chicago
+
+BNA:
+  name: Nashville Intl
+  city: Nashville
+  country: United States
+  iata: BNA
+  icao: KBNA
+  latitude: '36.124472'
+  longitude: "-86.678194"
+  airport_id: '3690'
+  altitude: '599'
+  timezone_offset: "-6.0"
+  dst: A
+  timezone: America/Chicago
+
+MSY:
+  name: Louis Armstrong New Orleans Intl
+  city: New Orleans
+  country: United States
+  iata: MSY
+  icao: KMSY
+  latitude: '29.993389'
+  longitude: "-90.258028"
+  airport_id: '3861'
+  altitude: '4'
+  timezone_offset: "-6.0"
+  dst: A
+  timezone: America/Chicago
+
+AUS:
+  name: Austin Bergstrom Intl
+  city: Austin
+  country: United States
+  iata: AUS
+  icao: KAUS
+  latitude: '30.194528'
+  longitude: "-97.669889"
+  airport_id: '3673'
+  altitude: '542'
+  timezone_offset: "-6.0"
+  dst: A
+  timezone: America/Chicago
+
+ABQ:
+  name: Albuquerque International Sunport
+  city: Albuquerque
+  country: United States
+  iata: ABQ
+  icao: KABQ
+  latitude: '35.040222'
+  longitude: "-106.609194"
+  airport_id: '4019'
+  altitude: '5355'
+  timezone_offset: "-7.0"
+  dst: A
+  timezone: America/Denver
+
+DEN:
+  name: Denver Intl
+  city: Denver
+  country: United States
+  iata: DEN
+  icao: KDEN
+  latitude: '39.861656'
+  longitude: "-104.673178"
+  airport_id: '3751'
+  altitude: '5431'
+  timezone_offset: "-7.0"
+  dst: A
+  timezone: America/Denver

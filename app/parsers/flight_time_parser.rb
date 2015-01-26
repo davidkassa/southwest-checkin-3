@@ -18,25 +18,25 @@ class FlightTimeParser
     time_in_zone.utc.to_datetime
   end
 
-  def city
-    /^\d{1,2}:\d{2}\ [APap][Mm]\ (?<city>.*)\ \([[:alpha:]]*\)/.match(city_string)[:city]
-  end
-
-  def airport
-    Airport.find_by_iata(iata)
-  end
-
-  def iata
-    /\(([[:alpha:]]*)\)/.match(city_string)[1]
-  end
-
-  private
-
   def time_in_zone
     Time.use_zone(airport.timezone) do
       Time.zone.parse("#{time_string}, #{date_string}")
     end
   end
+
+  def city
+    /^\d{1,2}:\d{2}\ [APap][Mm]\ (?<city>.*)\ \([[:alpha:]]*\)/.match(city_string)[:city]
+  end
+
+  def airport
+    Airport.find_by_iata!(iata)
+  end
+
+  def iata
+    city_string.scan(/\(([[:alpha:]]*)\)/).last.first
+  end
+
+  private
 
   def time_string
     /^\d{1,2}:\d{2}\ [APap][Mm]/.match(city_string)
