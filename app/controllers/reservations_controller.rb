@@ -22,7 +22,7 @@ class ReservationsController < ApplicationController
   end
 
   def create
-    @reservation = Reservation.new(reservation_params)
+    @reservation = current_user.reservations.new(reservation_params)
     @reservation.save
     respond_with(@reservation)
   end
@@ -43,6 +43,6 @@ class ReservationsController < ApplicationController
     end
 
     def reservation_params
-      params.require(:reservation).permit(:confirmation_number, :trip_name, :arrival_city_name)
+      params.require(:reservation).permit(:confirmation_number, :first_name, :last_name)
     end
 end
