@@ -10,5 +10,9 @@ class Flight < ActiveRecord::Base
             :departure_airport,
             :arrival_airport,
             :reservation,
+            :position,
+            :flight_type,
             presence: true
+
+  enum flight_type: { departure: 0, 'return': 1 }
 end

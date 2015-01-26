@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150124175953) do
+ActiveRecord::Schema.define(version: 20150126185629) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,16 +38,18 @@ ActiveRecord::Schema.define(version: 20150124175953) do
   add_index "airports", ["icao"], name: "index_airports_on_icao", using: :btree
 
   create_table "flights", force: :cascade do |t|
-    t.datetime "departure_time",       null: false
-    t.datetime "arrival_time",         null: false
-    t.string   "departure_city",       null: false
-    t.string   "arrival_city",         null: false
-    t.json     "payload",              null: false
-    t.integer  "departure_airport_id", null: false
-    t.integer  "arrival_airport_id",   null: false
-    t.integer  "reservation_id",       null: false
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.datetime "departure_time",                   null: false
+    t.datetime "arrival_time",                     null: false
+    t.string   "departure_city",                   null: false
+    t.string   "arrival_city",                     null: false
+    t.json     "payload",                          null: false
+    t.integer  "departure_airport_id",             null: false
+    t.integer  "arrival_airport_id",               null: false
+    t.integer  "reservation_id",                   null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.integer  "flight_type",          default: 0, null: false
+    t.integer  "position",                         null: false
   end
 
   add_index "flights", ["arrival_airport_id"], name: "index_flights_on_arrival_airport_id", using: :btree
