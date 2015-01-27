@@ -26,6 +26,8 @@ gem 'typhoeus', '~> 0.7' # HTTP request client
 
 gem 'devise', '~> 3.4' # Authentication
 
+gem 'sidekiq' # Background job processing queue
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
