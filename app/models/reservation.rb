@@ -8,6 +8,7 @@ class Reservation < ActiveRecord::Base
   before_create :create_passengers
   before_create :create_flights
   before_save :upcase_confirmation_number
+  after_save :schedule_checkins
 
   validates_associated :passengers
   validates :confirmation_number, :first_name, :last_name, :arrival_city_name, :payload, presence: true
@@ -46,5 +47,11 @@ class Reservation < ActiveRecord::Base
       first_name: first_name,
       record_locator: confirmation_number
     )
+  end
+
+  def schedule_checkins
+    flights.where(position: 1).each do |flight|
+      CheckinJob.set(wait_until: flight.departure_time - 1.day + 1.second).perform_later(flight)
+    end
   end
 end
