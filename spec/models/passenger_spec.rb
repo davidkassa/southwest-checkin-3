@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Passenger, :type => :model do
+RSpec.describe Passenger, :type => :model do
   describe 'creating a passenger' do
     subject { Passenger.create }
 

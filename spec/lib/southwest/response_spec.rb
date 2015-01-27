@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'helpers/vcr_helper'
 require_relative '../../../lib/southwest/response'
 
-describe Southwest::Response do
+RSpec.describe Southwest::Response do
   let(:last_name) { 'Bar' }
   let(:first_name) { 'Fuu' }
   let(:record_locator) { 'ABC123' }

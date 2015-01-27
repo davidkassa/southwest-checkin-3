@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Reservation, :type => :model do
+RSpec.describe Reservation, :type => :model do
   fixtures :airports
 
   def recorded(cassette='viewAirReservation')

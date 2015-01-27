@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe FlightsParser do
+RSpec.describe FlightsParser do
   fixtures :reservations, :airports
 
   shared_examples_for 'FlightParser' do

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe ReservationsController, :type => :controller do
+RSpec.describe ReservationsController, :type => :controller do
   fixtures :airports
 
   let(:user) { User.create(email: 'foo@bar.com', password: 'password') }

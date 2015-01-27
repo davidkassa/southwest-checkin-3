@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe FlightTimeParser do
+RSpec.describe FlightTimeParser do
   fixtures :airports
 
   subject { FlightTimeParser.new(city_string: city_string, date_string: date_string) }
