@@ -1,5 +1,5 @@
 class CheckinJob < ActiveJob::Base
-  queue_as :default
+  queue_as :checkin
 
   def perform(*args)
     puts "Fuu bar!"

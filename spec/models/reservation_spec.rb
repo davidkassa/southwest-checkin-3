@@ -78,16 +78,27 @@ RSpec.describe Reservation, type: :model do
 
       it 'schedules 1 checkin for the first departure flight' do
         VCR.use_cassette(cassette) do
-          subject
-          expect(ActiveJob::Base.queue_adapter.enqueued_jobs.count).to eq(1)
+          Timecop.freeze(Time.zone.parse('1 Jan 2015')) do
+            subject
+            expect(ActiveJob::Base.queue_adapter.enqueued_jobs.count).to eq(1)
+          end
         end
       end
 
       it 'enqueues the checkin 23hr59m59seconds before departure' do
         VCR.use_cassette(cassette) do
+          Timecop.freeze(Time.zone.parse('1 Jan 2015')) do
+            subject
+            enqueued_at = Time.zone.at(ActiveJob::Base.queue_adapter.enqueued_jobs.first[:at])
+            expect(enqueued_at).to eq(Time.zone.parse("Fri, 16 Jan 2015 02:10:01 UTC +00:00"))
+          end
+        end
+      end
+
+      it 'does not enqueue flights in the past' do
+        VCR.use_cassette(cassette) do
           subject
-          enqueued_at = Time.zone.at(ActiveJob::Base.queue_adapter.enqueued_jobs.first[:at])
-          expect(enqueued_at).to eq(Time.zone.parse("Fri, 16 Jan 2015 02:10:01 UTC +00:00"))
+          expect(ActiveJob::Base.queue_adapter.enqueued_jobs.count).to eq(0)
         end
       end
     end
