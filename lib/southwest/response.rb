@@ -8,10 +8,10 @@ module Southwest
 
     def initialize(response)
       @typhoeus_response = response
-      @response_body = try_to_parse(response.body)
-      @headers = response.headers
-      @code = response.code
-      @status_message = response.status_message
+      @response_body     = try_to_parse(response.body)
+      @headers           = response.headers
+      @code              = response.code
+      @status_message    = response.status_message
     end
 
     def to_hash

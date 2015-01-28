@@ -1,4 +1,5 @@
 require_relative './request'
+require_relative './checkin_response'
 
 module Southwest
   class Checkin < Request
@@ -9,22 +10,19 @@ module Southwest
     end
 
     def checkin
-      responses = { raw: {} }
+      get_travel_info_response = Response.new(get_travel_info)
+      breathe
+      check_intravel_alerts_response = Response.new(check_intravel_alerts)
+      breathe
+      flight_checkin_new_response = Response.new(flight_checkin_new)
+      breathe
+      get_all_boarding_passes_response = Response.new(get_all_boarding_passes)
+      breathe
+      view_boarding_passes_response = Response.new(view_boarding_passes)
 
-      responses[:raw][:get_travel_info] = get_travel_info
-      breathe
-      responses[:raw][:check_intravel_alerts] = check_intravel_alerts
-      breathe
-      responses[:raw][:flight_checkin_new] = flight_checkin_new
-      responses[:flight_information] = JSON.parse(responses[:raw][:flight_checkin_new].body)['output']
-      breathe
-      responses[:raw][:get_all_boarding_passes] = get_all_boarding_passes
-      responses[:boarding_pass_details] = JSON.parse(responses[:raw][:get_all_boarding_passes].body)['mbpDetails']
-      responses[:checkin_details] = JSON.parse(responses[:raw][:get_all_boarding_passes].body)['mbpPassenger']
-      breathe
-      responses[:raw][:view_boarding_passes] = view_boarding_passes
-
-      responses
+      CheckinResponse.new(flight_checkin_new: flight_checkin_new_response,
+                          get_all_boarding_passes: get_all_boarding_passes_response,
+                          view_boarding_passes: view_boarding_passes_response)
     end
 
     def get_travel_info
@@ -92,7 +90,7 @@ module Southwest
     # Rails isn't necessary loaded in test,
     # so don't use `Rails.env.test?`
     def test_env?
-      ENV['RAILS_ENV'] = 'test'
+      @test_env ||= ENV['RAILS_ENV'] == 'test'
     end
   end
 end

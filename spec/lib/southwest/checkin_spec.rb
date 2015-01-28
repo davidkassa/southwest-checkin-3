@@ -54,18 +54,27 @@ RSpec.describe Southwest::Checkin do
       ["flight_num", "name", "pnr", "boardingroup_text", "position1_text"]
     }
 
-    it 'returns 5 successful responses' do
+    it '#flight_checkin_new returns a valid Southwest::Response' do
       VCR.use_cassette 'checkin' do
-        responses = subject.checkin
-        responses[:raw].each { |key, response|
-          expect(JSON.parse(response.body)['httpStatusCode']).to eql(200)
-        }
+        expect(subject.checkin.flight_checkin_new.code).to eql(200)
+      end
+    end
+
+    it '#get_all_boarding_passes returns a valid Southwest::Response' do
+      VCR.use_cassette 'checkin' do
+        expect(subject.checkin.get_all_boarding_passes.code).to eql(200)
+      end
+    end
+
+    it '#view_boarding_passes returns a valid Southwest::Response' do
+      VCR.use_cassette 'checkin' do
+        expect(subject.checkin.view_boarding_passes.code).to eql(200)
       end
     end
 
     it 'returns flight information' do
       VCR.use_cassette 'checkin' do
-        subject.checkin[:flight_information].each do |flight|
+        subject.checkin.flight_information.each do |flight|
           expect(flight).to include(*expected_flight_information_keys)
         end
       end
@@ -73,7 +82,7 @@ RSpec.describe Southwest::Checkin do
 
     it 'returns boarding pass details' do
       VCR.use_cassette 'checkin' do
-        subject.checkin[:boarding_pass_details].each do |flight|
+        subject.checkin.boarding_pass_details.each do |flight|
           expect(flight).to include(*expected_boarding_pass_details_keys)
         end
       end
@@ -81,7 +90,7 @@ RSpec.describe Southwest::Checkin do
 
     it 'returns checkin details' do
       VCR.use_cassette 'checkin' do
-        subject.checkin[:checkin_details].each do |flight|
+        subject.checkin.checkin_details.each do |flight|
           expect(flight).to include(*expected_check_in_details_keys)
         end
       end
