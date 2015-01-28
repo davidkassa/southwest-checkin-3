@@ -74,6 +74,26 @@ RSpec.describe FlightsParser do
       it 'has the correct `:flight_type` enum' do
         expect(first[:flight_type]).to eql(0)
       end
+
+      it 'has the correct UTC departure time' do
+        expect(first[:departure_time]).to eql(Time.zone.parse('2015-01-17 02:10:00').to_datetime)
+      end
+
+      it 'has the correct UTC arrival time' do
+        expect(first[:arrival_time]).to eql(Time.zone.parse('2015-01-17 04:25:00').to_datetime)
+      end
+    end
+
+    describe 'second flight' do
+      let(:second) { subject.flights.second }
+
+      it 'has the correct UTC departure time' do
+        expect(second[:departure_time]).to eql(Time.zone.parse('2015-01-17 05:05:00').to_datetime)
+      end
+
+      it 'has the correct UTC arrival time' do
+        expect(second[:arrival_time]).to eql(Time.zone.parse('2015-01-17 06:25:00').to_datetime)
+      end
     end
   end
 

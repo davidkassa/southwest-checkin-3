@@ -36,7 +36,7 @@ class FlightsParser
     # TODO: this determines if the flight spans multiple days (and
     # is less than 24 hours) and sets the correct day. Ideally, a response
     # would return 'returnArrivalDate' or 'departArrivalDate' if this is
-    # the case, however, this has not yet ben determined.
+    # the case, however, this has not yet been determined.
     if (flight_time_arrival.utc_datetime < flight_time_departure.utc_datetime)
       arrival_time = flight_time_arrival.utc_datetime + 1.day
     else
@@ -65,11 +65,11 @@ class FlightsParser
   end
 
   def return_date_string(flight_hash)
-    flight_hash["returnDate"] || select_return_flights.first {|f| f["returnDate"] }
+    flight_hash["returnDate"] || select_return_flights.select {|k,v| v["returnDate"] }.first[1]["returnDate"]
   end
 
   def depart_date_string(flight_hash)
-    flight_hash["departDate"] || select_departure_flights.first {|f| f["departDate"] }
+    flight_hash["departDate"] || select_departure_flights.select {|k,v| v["departDate"] }.first[1]["departDate"]
   end
 
   def select_departure_flights
