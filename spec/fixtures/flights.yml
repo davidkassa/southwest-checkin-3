@@ -1,0 +1,23 @@
+denver_1:
+  departure_time: '2015-01-17 02:10:00'
+  arrival_time: '2015-01-17 04:25:00'
+  departure_city: Austin, TX
+  arrival_city: Denver, CO
+  payload: '{"travelTime":"Travel Time 4:15","departDate":"Friday, Jan 16, 2015","depfaretype":"Wanna Get Away","departstop2":"","departstop3":"","departCity":"08:10 PM Austin, TX (AUS)","departFlightNo":"406","departoperator":"","arrivalCity":"09:25 PM Denver, CO (DEN)","departstop1":""}'
+  departure_airport: AUS
+  arrival_airport: DEN
+  reservation: denver
+  flight_type: '0'
+  position: '1'
+
+denver_2:
+  departure_time: '2015-01-17 05:05:00'
+  arrival_time: '2015-01-17 06:25:00'
+  departure_city: Denver, CO
+  arrival_city: Albuquerque, NM
+  payload: '{"departstop2":"","departstop3":"","changePlane":"Denver, CO (DEN)","departCity":"10:05 PM Denver, CO (DEN)","departFlightNo":"213","departoperator":"","arrivalCity":"11:25 PM Albuquerque, NM (ABQ)","departstop1":""}'
+  departure_airport: DEN
+  arrival_airport: ABQ
+  reservation: denver
+  flight_type: '0'
+  position: '2'
