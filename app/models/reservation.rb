@@ -11,8 +11,13 @@ class Reservation < ActiveRecord::Base
   after_save :schedule_checkins
 
   validates_associated :passengers
-  validates :confirmation_number, :first_name, :last_name, :arrival_city_name, :payload, presence: true
   validates :confirmation_number, length: { is: 6 }
+  validates :confirmation_number,
+            :first_name,
+            :last_name,
+            :arrival_city_name,
+            :payload,
+            presence: true
 
   private
 

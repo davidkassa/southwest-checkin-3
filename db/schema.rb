@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150126185629) do
+ActiveRecord::Schema.define(version: 20150130185508) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,6 +36,28 @@ ActiveRecord::Schema.define(version: 20150126185629) do
   add_index "airports", ["airport_id"], name: "index_airports_on_airport_id", unique: true, using: :btree
   add_index "airports", ["iata"], name: "index_airports_on_iata", using: :btree
   add_index "airports", ["icao"], name: "index_airports_on_icao", using: :btree
+
+  create_table "checkins", force: :cascade do |t|
+    t.integer  "reservation_id", null: false
+    t.json     "payload",        null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "checkins", ["reservation_id"], name: "index_checkins_on_reservation_id", using: :btree
+
+  create_table "flight_checkins", force: :cascade do |t|
+    t.string   "flight_number",     null: false
+    t.string   "boarding_group",    null: false
+    t.integer  "boarding_position", null: false
+    t.integer  "flight_id",         null: false
+    t.integer  "checkin_id",        null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "flight_checkins", ["checkin_id"], name: "index_flight_checkins_on_checkin_id", using: :btree
+  add_index "flight_checkins", ["flight_id"], name: "index_flight_checkins_on_flight_id", using: :btree
 
   create_table "flights", force: :cascade do |t|
     t.datetime "departure_time",                   null: false
@@ -104,6 +126,9 @@ ActiveRecord::Schema.define(version: 20150126185629) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
 
+  add_foreign_key "checkins", "reservations"
+  add_foreign_key "flight_checkins", "checkins"
+  add_foreign_key "flight_checkins", "flights"
   add_foreign_key "flights", "airports", column: "arrival_airport_id"
   add_foreign_key "flights", "airports", column: "departure_airport_id"
   add_foreign_key "flights", "reservations"
