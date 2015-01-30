@@ -14,6 +14,7 @@ require "sprockets/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+
 module SouthwestCheckin
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
@@ -33,6 +34,7 @@ module SouthwestCheckin
 
     config.autoload_paths << Rails.root.join('lib')
     config.autoload_paths << Rails.root.join('app', 'parsers')
+    require Rails.root.join('lib', 'errors.rb')
 
     config.active_job.queue_adapter = :sidekiq
   end
