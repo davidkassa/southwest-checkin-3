@@ -1,0 +1,44 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://mobile.southwest.com/middleware/MWServlet
+    body:
+      encoding: UTF-8
+      string: appID=swa&appver=2.10.0&cacheid=&channel=rc&firstName=Fuu&lastName=Bar&platform=iPhone&recordLocator=ABC123&serviceID=flightcheckin_new
+    headers:
+      User-Agent:
+      - Southwest/2.10.0 CFNetwork/711.1.16 Darwin/14.0.0
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Set-Cookie:
+      - JSESSIONID=5C4149E7D54147799CCE898368B00696; Path=/middleware/; Secure; HttpOnly
+      - cacheid=49c3d5f049-4e30-41e0-a860-e33f872b238d; Path=/middleware; Secure;
+        HttpOnly
+      Cache-Control:
+      - no-store, no-cache, must-revalidate
+      Pragma:
+      - no-cache
+      Content-Type:
+      - text/plain;charset=UTF-8
+      Content-Length:
+      - '1145'
+      Date:
+      - Sat, 31 Jan 2015 18:38:49 GMT
+      Server:
+      - Kony
+    body:
+      encoding: UTF-8
+      string: '{"interMsg":"","form_input":[],"hazmatnoteContent":"","departItinerary":[],"title":"Southwest
+        Airlines - Checkin Online and Print Boarding Passes","hazViewMoreLinkContent3b":"","hazViewMoreLinkContent3a":"","CODA_PNR":"false","errmsg":"The
+        passenger name entered does not match one of the passenger names listed under
+        the confirmation number. Check the confirmation number and passenger''s name
+        to make sure they are correct. If you have questions or require further assistance,
+        please contact a Southwest Airlines Customer Representative for assistance
+        at 1-800-I-FLY-SWA (1-800-435-9792).  (SW301007-W_zbKj-yTJ22x_esYxQniQ)","hazViewMoreLinkContent4LinkText":"","httpStatusCode":200,"hazViewMoreLinkContent4":"","hazmatnoteContentBold":"","hazmatnoteLinkText":"","returnOperator":[],"departOperator":[],"opstatus":"-123","hazmatnoteTitle":"","flightcheckin_url":"https://www.southwest.com/flight/retrieveCheckinDoc.html","hazViewMoreLinkContent4LinkValue":"","hazViewMoreLinkContentBold":"","hazViewMoreLinkContent1":"","hazmatnoteLinkValue":"","hazViewMoreLinkContent2":"","passenger_names":[],"hazViewMoreLinkHeading":"","returnItinerary":[]}'
+    http_version: 
+  recorded_at: Sat, 31 Jan 2015 18:38:55 GMT
+recorded_with: VCR 2.9.3

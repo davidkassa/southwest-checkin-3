@@ -25,6 +25,14 @@ module Southwest
       response_body
     end
 
+    def error?
+      !error.nil? && !error.empty?
+    end
+
+    def error
+      body["errmsg"]
+    end
+
     private
 
     def try_to_parse(string)

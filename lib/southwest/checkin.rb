@@ -10,11 +10,13 @@ module Southwest
     end
 
     def checkin
-      get_travel_info_response = Response.new(get_travel_info)
-      breathe
-      check_intravel_alerts_response = Response.new(check_intravel_alerts)
-      breathe
       flight_checkin_new_response = Response.new(flight_checkin_new)
+
+      if flight_checkin_new_response.error?
+        return CheckinErrorResponse.new(flight_checkin_new: flight_checkin_new_response,
+                                        error: flight_checkin_new_response.error)
+      end
+
       breathe
       get_all_boarding_passes_response = Response.new(get_all_boarding_passes)
       breathe
@@ -62,6 +64,10 @@ module Southwest
     end
 
     private
+
+    def is_cancelled_reservation?(response)
+      response.body["errmsg"] =~ /cancelled/i
+    end
 
     # These endpoints return JSON with a custom response
     # code attribute called `httpStatusCode`. This method

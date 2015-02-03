@@ -1,0 +1,40 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://mobile.southwest.com/middleware/MWServlet
+    body:
+      encoding: UTF-8
+      string: appID=swa&appver=2.10.0&cacheid=&channel=rc&firstName=Fuu&lastName=Bar&platform=iPhone&recordLocator=ABC123&serviceID=flightcheckin_new
+    headers:
+      User-Agent:
+      - Southwest/2.10.0 CFNetwork/711.1.16 Darwin/14.0.0
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Set-Cookie:
+      - JSESSIONID=7006EF40F5C3444ADAB318D4CD00C2ED; Path=/middleware/; Secure; HttpOnly
+      - cacheid=33aa69e62f-a8ee-4479-989c-253388bf985a; Path=/middleware; Secure;
+        HttpOnly
+      Cache-Control:
+      - no-store, no-cache, must-revalidate
+      Pragma:
+      - no-cache
+      Content-Type:
+      - text/plain;charset=UTF-8
+      Content-Length:
+      - '828'
+      Date:
+      - Sat, 31 Jan 2015 17:50:28 GMT
+      Server:
+      - Kony
+    body:
+      encoding: UTF-8
+      string: '{"interMsg":"","form_input":[],"hazmatnoteContent":"","departItinerary":[],"title":"Southwest
+        Airlines - Checkin Online and Print Boarding Passes","hazViewMoreLinkContent3b":"","hazViewMoreLinkContent3a":"","CODA_PNR":"false","errmsg":"Your
+        reservation has been cancelled.  (SW301001-ck2_DHdfQ9apJcwbaofboQ)","hazViewMoreLinkContent4LinkText":"","httpStatusCode":200,"hazViewMoreLinkContent4":"","hazmatnoteContentBold":"","hazmatnoteLinkText":"","returnOperator":[],"departOperator":[],"opstatus":"-123","hazmatnoteTitle":"","flightcheckin_url":"https://www.southwest.com/flight/retrieveCheckinDoc.html","hazViewMoreLinkContent4LinkValue":"","hazViewMoreLinkContentBold":"","hazViewMoreLinkContent1":"","hazmatnoteLinkValue":"","hazViewMoreLinkContent2":"","passenger_names":[],"hazViewMoreLinkHeading":"","returnItinerary":[]}'
+    http_version: 
+  recorded_at: Sat, 31 Jan 2015 17:50:32 GMT
+recorded_with: VCR 2.9.3

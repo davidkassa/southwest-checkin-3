@@ -1,0 +1,45 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://mobile.southwest.com/middleware/MWServlet
+    body:
+      encoding: UTF-8
+      string: appID=swa&appver=2.10.0&cacheid=&channel=rc&firstName=Fuu&lastName=Bar&platform=iPhone&recordLocator=ABC123&serviceID=flightcheckin_new
+    headers:
+      User-Agent:
+      - Southwest/2.10.0 CFNetwork/711.1.16 Darwin/14.0.0
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Set-Cookie:
+      - JSESSIONID=0A436515169B7721E60D30885A43977D; Path=/middleware/; Secure; HttpOnly
+      - cacheid=27384c3176-9049-42c7-9a68-f9f4735df8ab; Path=/middleware; Secure;
+        HttpOnly
+      Cache-Control:
+      - no-store, no-cache, must-revalidate
+      Pragma:
+      - no-cache
+      Content-Type:
+      - text/plain;charset=UTF-8
+      Content-Length:
+      - '1241'
+      Date:
+      - Sat, 31 Jan 2015 18:19:24 GMT
+      Server:
+      - Kony
+    body:
+      encoding: UTF-8
+      string: '{"interMsg":"","form_input":[],"hazmatnoteContent":"","departItinerary":[],"title":"Southwest
+        Airlines - Checkin Online and Print Boarding Passes","hazViewMoreLinkContent3b":"","hazViewMoreLinkContent3a":"","CODA_PNR":"false","errmsg":"The
+        request to check in and print your Boarding Pass is more than 24 hours prior
+        to your scheduled departure or less than 1 hour prior to departure flight
+        time. Please try again during the allotted time frame or proceed to the airport
+        to check in for your flight.  (SW302105-L6kZilF1TDyCevL6BJtADw)  If you have
+        questions or require further assistance, please contact a Southwest Airlines
+        Customer Representative at 1-800-I-FLY-SWA (1-800-435-9792).  (SW101081-L6kZilF1TDyCevL6BJtADw)","hazViewMoreLinkContent4LinkText":"","httpStatusCode":200,"hazViewMoreLinkContent4":"","hazmatnoteContentBold":"","hazmatnoteLinkText":"","returnOperator":[],"departOperator":[],"opstatus":"-123","hazmatnoteTitle":"","flightcheckin_url":"https://www.southwest.com/flight/retrieveCheckinDoc.html","hazViewMoreLinkContent4LinkValue":"","hazViewMoreLinkContentBold":"","hazViewMoreLinkContent1":"","hazmatnoteLinkValue":"","hazViewMoreLinkContent2":"","passenger_names":[],"hazViewMoreLinkHeading":"","returnItinerary":[]}'
+    http_version: 
+  recorded_at: Sat, 31 Jan 2015 18:19:28 GMT
+recorded_with: VCR 2.9.3
