@@ -53,12 +53,11 @@ RSpec.describe Reservation, type: :model do
         end
       end
 
-      it 'creates at least one passenger' do
+      it 'each passenger has a full name' do
         VCR.use_cassette(cassette) do
-          expect(passenger).to be_persisted
-          expect(passenger.first_name).to_not be_nil
-          expect(passenger.last_name).to_not be_nil
-          expect(passenger.full_name).to_not be_nil
+          subject.passengers.each do |passenger|
+            expect(passenger.full_name).to_not be_nil
+          end
         end
       end
     end
@@ -118,6 +117,20 @@ RSpec.describe Reservation, type: :model do
       it 'creates three passengers' do
         VCR.use_cassette(cassette) do
           expect(subject.passengers.count).to eql(3)
+        end
+      end
+    end
+
+    context 'viewAirReservation multiple passengers sfo bwi 1 stop' do
+      let(:cassette) { "viewAirReservation multiple passengers sfo bwi 1 stop" }
+
+      subject { Reservation.create(valid_attributes) }
+
+      it_behaves_like 'with valid attributes'
+
+      it 'creates two passengers' do
+        VCR.use_cassette(cassette) do
+          expect(subject.passengers.count).to eql(2)
         end
       end
     end
