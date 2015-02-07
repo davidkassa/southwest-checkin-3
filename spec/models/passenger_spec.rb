@@ -5,8 +5,6 @@ RSpec.describe Passenger, :type => :model do
     subject { Passenger.create }
 
     it { should validate_presence_of :reservation }
-    it { should validate_presence_of :first_name }
-    it { should validate_presence_of :last_name }
     it { should validate_presence_of :full_name }
 
     describe 'with valid attributes' do
