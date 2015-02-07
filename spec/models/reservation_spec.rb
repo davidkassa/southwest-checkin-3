@@ -85,7 +85,7 @@ RSpec.describe Reservation, type: :model do
         end
       end
 
-      it 'enqueues the checkin 23hr59m59seconds before departure' do
+      it 'enqueues the checkin 23hr59m59s before departure' do
         VCR.use_cassette(cassette) do
           Timecop.freeze(Time.zone.parse('1 Jan 2015')) do
             subject
@@ -106,6 +106,20 @@ RSpec.describe Reservation, type: :model do
     context 'viewAirReservation multi' do
       let(:cassette) { 'viewAirReservation multi' }
       it_behaves_like 'with valid attributes'
+    end
+
+    context 'multiple passengers MCO PIT nonstop' do
+      let(:cassette) { "viewAirReservation_multiple_passengers_mco_pit_nonstop" }
+
+      subject { Reservation.create(valid_attributes) }
+
+      it_behaves_like 'with valid attributes'
+
+      it 'creates three passengers' do
+        VCR.use_cassette(cassette) do
+          expect(subject.passengers.count).to eql(3)
+        end
+      end
     end
   end
 end
