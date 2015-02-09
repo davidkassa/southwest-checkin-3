@@ -9,7 +9,7 @@ class FlightTimeParser
   attr_reader :city_string
   attr_reader :date_string
 
-  def initialize(city_string: city_string, date_string: date_string)
+  def initialize(city_string:, date_string:)
     @city_string = city_string
     @date_string = date_string
   end
