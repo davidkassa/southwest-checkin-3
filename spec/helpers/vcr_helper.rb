@@ -15,7 +15,7 @@ VCR.configure do |c|
     vcr_confirmation_number ||= get_query_param_value(i.request.body, 'confirmationNumber') || get_query_param_value(i.request.body, 'recordLocator')
     vcr_first_name ||= get_query_param_value(i.request.body, 'confirmationNumberFirstName') || get_query_param_value(i.request.body, 'firstName')
     vcr_last_name ||= get_query_param_value(i.request.body, 'confirmationNumberLastName') || get_query_param_value(i.request.body, 'lastName')
-    vcr_flight_numbers += flight_numbers(text)
+    vcr_flight_numbers += flight_numbers(i.request.body)
     vcr_flight_numbers.uniq
     sensitive_data_scrubber(i.request.body, confirmation_number: vcr_confirmation_number, first_name: vcr_first_name, last_name: vcr_last_name)
     sensitive_data_scrubber(i.response.body, confirmation_number: vcr_confirmation_number, first_name: vcr_first_name, last_name: vcr_last_name)
