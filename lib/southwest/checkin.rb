@@ -10,8 +10,9 @@ module Southwest
     end
 
     def checkin
-      flight_checkin_new_response = Response.new(flight_checkin_new)
+      create_session
 
+      flight_checkin_new_response = Response.new(flight_checkin_new)
       if flight_checkin_new_response.error?
         return CheckinErrorResponse.new(flight_checkin_new: flight_checkin_new_response,
                                         error: flight_checkin_new_response.error)
@@ -25,6 +26,14 @@ module Southwest
       CheckinResponse.new(flight_checkin_new: flight_checkin_new_response,
                           get_all_boarding_passes: get_all_boarding_passes_response,
                           view_boarding_passes: view_boarding_passes_response)
+    end
+
+    def create_session
+      get_travel_info_response = Response.new(get_travel_info)
+      breathe
+      check_intravel_alerts_response = Response.new(check_intravel_alerts)
+      breathe
+      return get_travel_info_response, check_intravel_alerts_response
     end
 
     def get_travel_info
@@ -90,7 +99,7 @@ module Southwest
     end
 
     def breathe
-      sleep 0.5 unless test_env?
+      sleep 3 unless test_env?
     end
 
     # Rails isn't necessary loaded in test,

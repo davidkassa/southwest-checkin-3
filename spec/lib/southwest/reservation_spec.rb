@@ -93,4 +93,10 @@ RSpec.describe Southwest::Reservation do
 
     it_behaves_like 'successful reservation retrieval'
   end
+
+  describe 'single passenger reservation' do
+    let(:cassette) { 'viewAirReservation single MDW MCI' }
+
+    it_behaves_like 'successful reservation retrieval'
+  end
 end

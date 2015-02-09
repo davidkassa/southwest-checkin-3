@@ -160,6 +160,12 @@ RSpec.describe Southwest::Checkin do
       it_behaves_like 'successful checkin'
     end
 
+    context 'single MDW MCI' do
+      let(:cassette) { 'checkin single MDW MCI' }
+
+      it_behaves_like 'successful checkin'
+    end
+
     context 'checkin non matching confirmation' do
       it 'returns a CheckinErrorResponse' do
         VCR.use_cassette 'checkin non matching confirmation' do
