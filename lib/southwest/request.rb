@@ -20,7 +20,7 @@ module Southwest
       {
         appID: 'swa',
         channel: 'rc',
-        appver: '2.10.0',
+        appver: app_version,
         platform: 'iPhone',
         cacheid: ''
       }
@@ -72,7 +72,11 @@ module Southwest
     end
 
     def user_agent
-      'Southwest/2.10.0 CFNetwork/711.1.16 Darwin/14.0.0'
+      "Southwest/#{app_version} CFNetwork/711.1.16 Darwin/14.0.0"
+    end
+
+    def app_version
+      "2.10.1"
     end
 
     def validate_session!
