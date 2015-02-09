@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150130185508) do
+ActiveRecord::Schema.define(version: 20150204153721) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,10 +54,12 @@ ActiveRecord::Schema.define(version: 20150130185508) do
     t.integer  "checkin_id",        null: false
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
+    t.integer  "passenger_id",      null: false
   end
 
   add_index "flight_checkins", ["checkin_id"], name: "index_flight_checkins_on_checkin_id", using: :btree
   add_index "flight_checkins", ["flight_id"], name: "index_flight_checkins_on_flight_id", using: :btree
+  add_index "flight_checkins", ["passenger_id"], name: "index_flight_checkins_on_passenger_id", using: :btree
 
   create_table "flights", force: :cascade do |t|
     t.datetime "departure_time",                   null: false
@@ -80,8 +82,8 @@ ActiveRecord::Schema.define(version: 20150130185508) do
 
   create_table "passengers", force: :cascade do |t|
     t.boolean  "is_companion",   default: false, null: false
-    t.string   "first_name",                     null: false
-    t.string   "last_name",                      null: false
+    t.string   "first_name"
+    t.string   "last_name"
     t.integer  "reservation_id",                 null: false
     t.string   "full_name",                      null: false
     t.datetime "created_at",                     null: false
@@ -129,6 +131,7 @@ ActiveRecord::Schema.define(version: 20150130185508) do
   add_foreign_key "checkins", "reservations"
   add_foreign_key "flight_checkins", "checkins"
   add_foreign_key "flight_checkins", "flights"
+  add_foreign_key "flight_checkins", "passengers"
   add_foreign_key "flights", "airports", column: "arrival_airport_id"
   add_foreign_key "flights", "airports", column: "departure_airport_id"
   add_foreign_key "flights", "reservations"
