@@ -2,6 +2,7 @@ class Reservation < ActiveRecord::Base
   belongs_to :user
   has_many :passengers, inverse_of: :reservation, autosave: true
   has_many :flights, inverse_of: :reservation, autosave: true
+  has_one :checkin
   accepts_nested_attributes_for :user
 
   before_validation :retrieve_reservation, on: :create

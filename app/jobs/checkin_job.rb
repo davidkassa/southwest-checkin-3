@@ -16,14 +16,14 @@ class CheckinJob < ActiveJob::Base
       }
     })
 
-    flights(checkin_response, checkin_record).each do |flight_attributes|
+    flight_checkins(checkin_response, checkin_record).each do |flight_attributes|
       FlightCheckin.create(flight_attributes)
     end
   end
 
   private
 
-  def flights(checkin_response, checkin_record)
-    CheckinParser.new(checkin_response, checkin_record).flights
+  def flight_checkins(checkin_response, checkin_record)
+    CheckinParser.new(checkin_response, checkin_record).flight_checkins
   end
 end

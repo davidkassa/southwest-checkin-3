@@ -16,6 +16,10 @@ module Southwest
       flight_checkin_new.body['output']
     end
 
+    def multiple_passengers?
+      boarding_pass_documents.any?
+    end
+
     def boarding_pass_documents
       get_all_boarding_passes.body['Document']
     end
