@@ -17,18 +17,22 @@ module Southwest
     end
 
     def multiple_passengers?
-      boarding_pass_documents.any?
+      multiple_passenger_documents.any?
     end
 
-    def boarding_pass_documents
+    def missing_passengers?
+      multiple_passenger_documents.none? && single_passenger_documents.none?
+    end
+
+    def multiple_passenger_documents
       get_all_boarding_passes.body['Document']
     end
 
-    def boarding_pass_details
+    def single_passenger_details
       get_all_boarding_passes.body['mbpDetails']
     end
 
-    def checkin_details
+    def single_passenger_documents
       get_all_boarding_passes.body['mbpPassenger']
     end
   end

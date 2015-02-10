@@ -58,7 +58,7 @@ RSpec.describe Southwest::Checkin do
         ["arrivalCityCode", "stop1", "changeplaneImage", "departRouting", "wifiInfo", "departTime", "flightOperator", "departCityCode", "seperatorflag", "departCity", "stopmsg", "travelDate", "flightNumber", "date", "arrivalCityName", "arrivalTime", "traveltime", "scheduleDepart", "stop3", "stop2", "arriveCity"]
       }
 
-      let(:expected_boarding_pass_details_keys) {
+      let(:expected_single_passenger_details_keys) {
         ['mbpDepartDate', 'departCode', 'pass_rr_number', 'itineraryHeader', 'mbp_confirmationNumber', 'mbp_tier_status', 'mbprouting', 'arriveCode', 'departCity', 'mbpDepartTime', 'mbp_gateValue', 'itineraryRouting', 'arriveCity']
       }
 
@@ -100,17 +100,17 @@ RSpec.describe Southwest::Checkin do
 
       it 'must return boarding pass documents or details' do
         VCR.use_cassette cassette do
-          total = subject.boarding_pass_documents.count + subject.boarding_pass_details.count
+          total = subject.multiple_passenger_documents.count + subject.single_passenger_details.count
           expect(total).to be > 0
         end
       end
 
-      describe '#boarding_pass_documents' do
+      describe '#multiple_passenger_documents' do
         let(:expected_checkin_document_keys) { ["documentType", "docType", "boardingroup_sec", "routing", "flight_operator", "flight_num", "boadingPassNotIssuedSeatMsg", "name", "boardingroupsec_text", "at_return_time", "flightOperatorDocDescription", "boardingroup_text", "position_1_sec", "position2sec_text", "dep_date", "position_2", "position2_text", "at_seat", "position_1", "boardingroup", "pnr", "at_depart_time", "position1_text", "boardingPassNotIssued", "at_return_station", "position_2_sec", "at_gate", "route", "at_depart_station", "secDocText", "position1sec_text", "cntFltNo", "at_zone"] }
 
         it 'returns the correct checkin document keys' do
           VCR.use_cassette cassette do
-            subject.boarding_pass_documents.each do |doc|
+            subject.multiple_passenger_documents.each do |doc|
               expect(doc).to include(*expected_checkin_document_keys)
             end
           end
@@ -120,15 +120,15 @@ RSpec.describe Southwest::Checkin do
 
       it 'boarding pass details contain the correct data' do
         VCR.use_cassette cassette do
-          subject.boarding_pass_details.each do |flight|
-            expect(flight).to include(*expected_boarding_pass_details_keys)
+          subject.single_passenger_details.each do |flight|
+            expect(flight).to include(*expected_single_passenger_details_keys)
           end
         end
       end
 
       it 'checkin details contain the correct data' do
         VCR.use_cassette cassette do
-          subject.checkin_details.each do |flight|
+          subject.single_passenger_documents.each do |flight|
             expect(flight).to include(*expected_check_in_details_keys)
           end
         end

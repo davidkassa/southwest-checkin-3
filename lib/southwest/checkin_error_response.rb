@@ -26,11 +26,11 @@ module Southwest
       nil
     end
 
-    def boarding_pass_details
+    def single_passenger_details
       nil
     end
 
-    def checkin_details
+    def single_passenger_documents
       nil
     end
   end

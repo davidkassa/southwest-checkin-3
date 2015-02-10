@@ -16,7 +16,7 @@ class CheckinParser
   end
 
   def flight_checkin_for_single_passenger
-    checkin_response.checkin_details.map do |doc_json|
+    checkin_response.single_passenger_documents.map do |doc_json|
       doc = CheckinDocument.new(doc_json)
       flight_checkin(doc)
     end
@@ -24,7 +24,7 @@ class CheckinParser
 
   def flight_checkins_for_multiple_passengers
     previous = nil
-    checkin_response.boarding_pass_documents.map do |doc_json|
+    checkin_response.multiple_passenger_documents.map do |doc_json|
       doc = CheckinDocument.new(doc_json)
 
       if doc.full_name.present?
@@ -79,9 +79,5 @@ class CheckinParser
     raise SouthwestCheckin::AirportNotFound, "#{flight_json["arrivalCityCode"]} airport cound not be found" unless arrival_airport
 
     reservation.flights.where(departure_airport_id: departure_airport.id, arrival_airport_id: arrival_airport.id).try(:first)
-  end
-
-  def checkin_details_for(flight_json)
-    checkin_response.checkin_details.select { |c| c["flight_num"] == flight_json["flightNumber"] }.first
   end
 end
