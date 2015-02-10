@@ -16,6 +16,10 @@ class CheckinJob < ActiveJob::Base
       }
     })
 
+    if checkin_response.error?
+      raise SouthwestCheckin::FailedCheckin, "The checkin for reservation '#{flight.reservation.id}' and flight '#{flight.id}' failed. Checkin record '#{checkin_record.id}' contains the payload.\n\nError:\n\t#{checkin_response.error}\n\n"
+    end
+
     flight_checkins(checkin_response, checkin_record).each do |flight_attributes|
       FlightCheckin.create(flight_attributes)
     end

@@ -3,10 +3,10 @@
 # for checking things like `cancelled_reservation?`.
 module Southwest
   class CheckinErrorResponse
-    attr_reader :error
     attr_reader :flight_checkin_new
     attr_reader :get_all_boarding_passes
     attr_reader :view_boarding_passes
+    attr_reader :error
 
     def initialize(error:,
                    flight_checkin_new: nil,
@@ -16,6 +16,10 @@ module Southwest
       @flight_checkin_new      = flight_checkin_new
       @get_all_boarding_passes = get_all_boarding_passes
       @view_boarding_passes    = view_boarding_passes
+    end
+
+    def error?
+      true
     end
 
     def cancelled_reservation?
