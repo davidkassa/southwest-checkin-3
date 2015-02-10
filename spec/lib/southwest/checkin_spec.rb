@@ -22,7 +22,7 @@ RSpec.describe Southwest::Checkin do
       describe '#get_travel_info' do
         before do
           VCR.use_cassette 'getTravelInfo' do
-            subject.get_travel_info
+            subject.send :get_travel_info
           end
         end
 
@@ -39,7 +39,7 @@ RSpec.describe Southwest::Checkin do
     describe '#check_intravel_alerts' do
       it 'returns a green app state' do
         VCR.use_cassette 'checkIntravelAlerts' do
-          expect(JSON.parse(subject.check_intravel_alerts.body)['appState']).to eql('green')
+          expect(JSON.parse(subject.send(:check_intravel_alerts).body)['appState']).to eql('green')
         end
       end
     end
@@ -206,6 +206,34 @@ RSpec.describe Southwest::Checkin do
           VCR.use_cassette 'checkin cancelled reservation' do
             expect(subject.cancelled_reservation?).to be true
           end
+        end
+      end
+    end
+
+    context 'missing flight information' do
+      it 'returns a CheckinErrorResponse' do
+        VCR.use_cassette 'checkin single MDW MCI missing flight information' do
+          expect(subject).to be_a(Southwest::CheckinErrorResponse)
+        end
+      end
+
+      it 'contains the error message' do
+        VCR.use_cassette 'checkin single MDW MCI missing flight information' do
+          expect(subject.error).to eql("The request to 'flight_checkin_new' was successful, however the response had missing flight information. Check the response for more detail.")
+        end
+      end
+    end
+
+    context 'missing boarding pass information' do
+      it 'returns a CheckinErrorResponse' do
+        VCR.use_cassette 'checkin single MDW MCI missing boarding pass information' do
+          expect(subject).to be_a(Southwest::CheckinErrorResponse)
+        end
+      end
+
+      it 'contains the error message' do
+        VCR.use_cassette 'checkin single MDW MCI missing boarding pass information' do
+          expect(subject.error).to eql("The request to 'getallboardingpass' was successful, however the response had missing boarding pass information. Check the response for more detail.")
         end
       end
     end

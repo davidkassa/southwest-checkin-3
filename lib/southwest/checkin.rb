@@ -13,13 +13,24 @@ module Southwest
       create_session
 
       flight_checkin_new_response = Response.new(flight_checkin_new)
+
       if flight_checkin_new_response.error?
         return CheckinErrorResponse.new(flight_checkin_new: flight_checkin_new_response,
                                         error: flight_checkin_new_response.error)
+      elsif missing_flight_information?(flight_checkin_new_response)
+        return CheckinErrorResponse.new(flight_checkin_new: flight_checkin_new_response,
+                                        error: "The request to 'flight_checkin_new' was successful, however the response had missing flight information. Check the response for more detail.")
       end
 
       breathe
       get_all_boarding_passes_response = Response.new(get_all_boarding_passes)
+
+      if missing_boarding_pass_information?(get_all_boarding_passes_response)
+        return CheckinErrorResponse.new(flight_checkin_new: flight_checkin_new_response,
+                                        get_all_boarding_passes: get_all_boarding_passes_response,
+                                        error: "The request to 'getallboardingpass' was successful, however the response had missing boarding pass information. Check the response for more detail.")
+      end
+
       breathe
       view_boarding_passes_response = Response.new(view_boarding_passes)
 
@@ -27,6 +38,8 @@ module Southwest
                           get_all_boarding_passes: get_all_boarding_passes_response,
                           view_boarding_passes: view_boarding_passes_response)
     end
+
+    private
 
     def create_session
       get_travel_info_response = Response.new(get_travel_info)
@@ -72,7 +85,13 @@ module Southwest
       }))
     end
 
-    private
+    def missing_flight_information?(response)
+      response.body['output'].none?
+    end
+
+    def missing_boarding_pass_information?(response)
+      response.body['Document'].none? && response.body['mbpPassenger'].none?
+    end
 
     def is_cancelled_reservation?(response)
       response.body["errmsg"] =~ /cancelled/i
