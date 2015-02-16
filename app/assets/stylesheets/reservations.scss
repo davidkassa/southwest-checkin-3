@@ -1,0 +1,52 @@
+$Reservation-bg-color: darken($logo-blue, 10%);
+
+.Reservation {
+  margin: 0 auto;
+  padding-top: 30px;
+}
+
+.ReservationCard {
+  color: $light-text-color;
+  width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: $Reservation-bg-color;
+  border-radius: 10px;
+}
+
+.ReservationCard-label {
+  @extend %smallest-font-size;
+  margin-bottom: 5px;
+  color: rgb(231, 217, 123);
+  text-transform: uppercase;
+}
+
+.ReservationCard-confirmation-number-group {
+}
+
+.ReservationCard-confirmation-number {
+  @extend %largest-font-size;
+}
+
+.ReservationCard-indention-top {
+  padding-bottom: 15px;
+  border-bottom: 1px solid #134B90;
+}
+
+.ReservationCard-indention-bottom {
+  padding-top: 15px;
+  border-top: 1px solid #297DE5;
+}
+
+.ReservationCard-flight-title {
+  @extend %large-font-size;
+}
+
+.ReservationCard-flight {
+  margin-bottom: 15px;
+}
+
+.ReservationCard-passengers {
+  float: right;
+  text-align: right;
+}

@@ -13,3 +13,5 @@
 /tmp
 
 *.pyc
+
+.DS_Store

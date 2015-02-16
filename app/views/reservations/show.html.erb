@@ -1,17 +1,37 @@
-<p>
-  <strong>Confirmation number:</strong>
-  <%= @reservation.confirmation_number %>
-</p>
+<div class="Reservation">
+  <div class="ReservationCard">
+    <div class="ReservationCard-header ReservationCard-indention-top">
+      <div class="ReservationCard-passengers">
+        <div class="ReservationCard-label">Passengers</div>
+        <% @reservation.passengers.each do |passenger| %>
+          <div class="ReservationCard-passenger">
+            <%= passenger.full_name %>
+          </div>
+        <% end %>
+      </div>
+      <div class="ReservationCard-confirmation-number-group">
+        <div class="ReservationCard-label">Confirmation #</div>
+        <div class="ReservationCard-confirmation-number"><%= @reservation.confirmation_number %></div>
+      </div>
+    </div>
+    <div class="ReservationCard-flights ReservationCard-indention-bottom">
+      <% @reservation.flights.each do |flight| %>
+        <div class="ReservationCard-flight">
+          <div class="ReservationCard-flight-title">
+            <%= flight.departure_airport.iata %>
+            <span class="Icon-plane-arrow Icon--large Icon--padded"></span>
+            <%= flight.arrival_airport.iata %>
+          </div>
+          <div class="ReservationCard-flight-times">
+            <div class="ReservationCard-flight-times-depart"></div>
+            <div class="ReservationCard-flight-times-arrive"></div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
 
-<p>
-  <strong>Trip name:</strong>
-  <%= @reservation.trip_name %>
-</p>
-
-<p>
-  <strong>Arrival city name:</strong>
-  <%= @reservation.arrival_city_name %>
-</p>
 
 <%= link_to 'Edit', edit_reservation_path(@reservation) %> |
 <%= link_to 'Back', reservations_path %>

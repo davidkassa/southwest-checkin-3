@@ -1,0 +1,28 @@
+[class^="Icon-"] {
+  display: inline-block;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+.Icon-plane-arrow {
+  background-image: image-url('plane-arrow-ECF0F1.svg');
+
+  &.Icon--large {
+    height: 17px;
+    min-width: 36px;
+  }
+}
+
+.Icon--large {
+  height: $icon-size-mobile-large;
+  min-width: $icon-size-mobile-large;
+
+  @include tablet-landscape-and-up {
+    height: $icon-size-desktop-large;
+    min-width: $icon-size-mobile-large;
+  }
+}
+
+.Icon--padded {
+  margin: 0 5px;
+}

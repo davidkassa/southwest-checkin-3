@@ -62,6 +62,22 @@
   }
 }
 
+%large-font-size {
+  font-size: $font-size-mobile-large;
+
+  @include tablet-landscape-and-up {
+    font-size: $font-size-desktop-large;
+  }
+}
+
+%largest-font-size {
+  font-size: $font-size-mobile-largest;
+
+  @include tablet-landscape-and-up {
+    font-size: $font-size-desktop-largest;
+  }
+}
+
 %default-font {
   @extend %default-font-size;
   font-family: 'Cooper Hewitt Light';
