@@ -1,5 +1,6 @@
 .Header {
-  position: fixed;
+  position: absolute;
+  z-index: $Header-z-index;
   top: 0;
   background: $madison;
   width: 100%;
@@ -14,6 +15,11 @@
     text-align: center;
     padding-left: 0;
   }
+}
+
+.Header,
+.Header-login {
+  color: $athens-gray;
 }
 
 .Body {
@@ -48,11 +54,23 @@
   }
 }
 
-.Header-login {
-  color: $athens-gray;
+.Header-action {
+  display: inline-block;
+}
+
+.Header-login,
+.Header-dropdown {
   margin-left: 10px;
 
   @include tablet-landscape-and-up {
     margin-left: 20px;
+  }
+}
+
+.Header-dropdown .Dropdown-menu {
+  top: $Header-height-mobile - 10px;
+
+  @include tablet-portrait-and-up {
+    top: $Header-height-desktop - 15px;
   }
 }

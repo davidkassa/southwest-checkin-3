@@ -10,11 +10,26 @@
 <body>
   <header class="Header">
     <div class="Header-actions">
-      <%= link_to 'Add a Reservation', new_reservation_path, class: 'GhostButtonLink' %>
+      <div class="Header-action">
+        <%= link_to 'Add a Reservation', new_reservation_path, class: 'GhostButtonLink' %>
+      </div>
       <% if user_signed_in? %>
-        <%= link_to 'Logout', destroy_user_session_path, method: :delete, class: 'Header-login' %>
+        <div class="Header-action Header-dropdown">
+          <% content_for :dropdown_toggle do %>
+            <%= current_user.email %> <span class="Dropdown-toggle-down-arrow">▾</span>
+          <% end %>
+          <% content_for :dropdown_menu do %>
+            <ul class='Header-dropdown-list'>
+              <li><%= link_to 'My Reservations', user_reservations_path(current_user) %></li>
+              <li><%= link_to 'Logout', destroy_user_session_path, method: :delete, class: 'Header-login' %></li>
+            </ul>
+          <% end %>
+          <%= render 'components/dropdown' %>
+        </div>
       <% else %>
-        <%= link_to 'Login', new_user_session_path, class: 'Header-login' %>
+        <div class="Header-action">
+          <%= link_to 'Login', new_user_session_path, class: 'Header-login' %>
+        </div>
       <% end %>
     </div>
     <div class="Header-logo">
@@ -27,7 +42,6 @@
   <section class="Body">
     <% if notice %><div class="notice js-notice"><div class="notice-inner"><%= notice %></div></div><% end %>
     <% if alert %><div class="alert js-notice"><div class="notice-inner"><%= alert %></div></div><% end %>
-
     <%= yield %>
   </section>
 </body>

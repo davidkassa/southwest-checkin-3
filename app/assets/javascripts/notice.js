@@ -1,6 +1,5 @@
 var notice = (function() {
   var timeoutID = null;
-
   var delay = 4000;
 
   return {
