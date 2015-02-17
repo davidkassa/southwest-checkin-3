@@ -50,3 +50,7 @@ $Reservation-bg-color: darken($logo-blue, 10%);
   float: right;
   text-align: right;
 }
+
+.ReservationCard-flight-times {
+  @extend %smallest-font-size;
+}
