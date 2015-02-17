@@ -7,8 +7,10 @@
   height: $Header-height-mobile;
   line-height: $Header-height-mobile;
   padding-left: $Header-padding-mobile;
+  font-size: $font-size-mobile-smaller;
 
   @include tablet-landscape-and-up {
+    font-size: $font-size-desktop-smaller;
     height: $Header-height-desktop;
     line-height: $Header-height-desktop;
     padding-left: $Header-padding-desktop;
@@ -79,6 +81,6 @@
   }
 
   .Dropdown-menu-arrow {
-    margin-left: 31px;
+    margin-left: 25px;
   }
 }
