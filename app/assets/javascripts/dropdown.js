@@ -7,15 +7,14 @@ var dropdown = (function() {
 
   var attachToggleHandler = function(selector, events) {
     $(selector).on(events, function(e) {
-      var parent = $(e.target).parent();
-      var menu = parent.find(menuSelector).toggleClass('js-open');
+      $(e.target).parents(dropdownSelector).toggleClass('js-open');
     });
   };
 
   var attachWindowClick = function() {
     $(document).click(function(e) {
-      if (!$(e.target).hasClass(toggleClass)) {
-        $(menuSelector).removeClass('js-open');
+      if ($(e.target).parents(toggleSelector).length === 0) {
+        $(dropdownSelector).removeClass('js-open');
       }
     });
   }

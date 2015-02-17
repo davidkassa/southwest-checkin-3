@@ -13,6 +13,10 @@
   }
 }
 
+.Icon-gear {
+  background-image: image-url('gear-FFF.svg');
+}
+
 .Icon--large {
   height: $icon-size-mobile-large;
   min-width: $icon-size-mobile-large;

@@ -3,6 +3,11 @@ $Dropdown-arrow-size: 8px;
 .Dropdown {
   position: relative;
   text-align: center;
+
+  &.js-open .Dropdown-menu {
+    opacity: 1;
+    transform: translateY(0px);
+  }
 }
 
 .Dropdown-toggle {
@@ -51,13 +56,6 @@ $Dropdown-arrow-size: 8px;
   &,
   & a {
     color: $text-color;
-  }
-
-  &.js-open {
-    right: auto;
-    display: block;
-    opacity: 1;
-    transform: translateY(0px);
   }
 }
 

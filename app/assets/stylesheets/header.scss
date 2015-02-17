@@ -18,8 +18,10 @@
 }
 
 .Header,
-.Header-login {
+.Header-action,
+.Header-action > a {
   color: $athens-gray;
+  text-decoration: none;
 }
 
 .Body {
@@ -56,21 +58,27 @@
 
 .Header-action {
   display: inline-block;
-}
-
-.Header-login,
-.Header-dropdown {
   margin-left: 10px;
 
   @include tablet-landscape-and-up {
-    margin-left: 20px;
+    margin-left: 15px;
+  }
+
+  & > a:hover {
+    color: white;
   }
 }
 
 .Header-dropdown .Dropdown-menu {
+  right: -10px;
   top: $Header-height-mobile - 10px;
 
   @include tablet-portrait-and-up {
     top: $Header-height-desktop - 15px;
+    right: -15px;
+  }
+
+  .Dropdown-menu-arrow {
+    margin-left: 31px;
   }
 }

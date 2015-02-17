@@ -14,9 +14,12 @@
         <%= link_to 'Add a Reservation', new_reservation_path, class: 'GhostButtonLink' %>
       </div>
       <% if user_signed_in? %>
+        <div class="Header-action">
+          <%= link_to 'My Reservations', user_reservations_path(current_user) %>
+        </div>
         <div class="Header-action Header-dropdown">
           <% content_for :dropdown_toggle do %>
-            <%= current_user.email %> <span class="Dropdown-toggle-down-arrow">▾</span>
+            <span class="Icon-gear Icon--large"></span>
           <% end %>
           <% content_for :dropdown_menu do %>
             <ul class='Header-dropdown-list'>
