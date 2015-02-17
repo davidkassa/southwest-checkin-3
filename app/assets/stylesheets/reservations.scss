@@ -51,6 +51,12 @@ $Reservation-bg-color: darken($logo-blue, 10%);
   text-align: right;
 }
 
+.ReservationCard-flight-checkins,
 .ReservationCard-flight-times {
   @extend %smallest-font-size;
+}
+
+.ReservationCard-flight-checkins {
+  @extend %medium;
+  color: $success-green;
 }

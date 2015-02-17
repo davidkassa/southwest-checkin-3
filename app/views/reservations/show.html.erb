@@ -26,6 +26,15 @@
             <div class="ReservationCard-flight-times-depart">Departs <%= flight_time flight.local_departure_time %></div>
             <div class="ReservationCard-flight-times-arrive">Arrives <%= flight_time flight.local_arrival_time %></div>
           </div>
+          <% if flight.flight_checkins.any? %>
+            <div class="ReservationCard-flight-checkins">
+              <% flight.flight_checkins.each do |flight_checkin| %>
+                <div class="ReservationCard-flight-checkin">
+                  <span class="Icon-checkmark Icon--tiny Icon--padded-right"></span> <%= flight_checkin.passenger.full_name %> checked in at <%= flight_checkin.boarding_group %><%= flight_checkin.boarding_position %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
         </div>
       <% end %>
     </div>

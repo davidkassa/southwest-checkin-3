@@ -1,7 +1,18 @@
+@mixin icon-size($mobile, $desktop) {
+  height: $mobile;
+  min-width: $mobile;
+
+  @include tablet-landscape-and-up {
+    height: $desktop;
+    min-width: $desktop;
+  }
+}
+
 [class^="Icon-"] {
   display: inline-block;
   background-size: 100% 100%;
   background-repeat: no-repeat;
+  @include icon-size($font-size-mobile, $font-size-desktop)
 }
 
 .Icon-plane-arrow {
@@ -17,16 +28,46 @@
   background-image: image-url('gear-FFF.svg');
 }
 
-.Icon--large {
-  height: $icon-size-mobile-large;
-  min-width: $icon-size-mobile-large;
+.Icon-checkmark {
+  background-image: image-url('checkmark-45BF55.svg');
+}
 
-  @include tablet-landscape-and-up {
-    height: $icon-size-desktop-large;
-    min-width: $icon-size-mobile-large;
-  }
+.Icon--smallest {
+
+}
+
+.Icon--large {
+  @include icon-size($font-size-mobile-large, $font-size-desktop-large)
+}
+
+.Icon--smaller {
+  @include icon-size($font-size-mobile-smaller, $font-size-desktop-smaller)
+}
+
+.Icon--smallest {
+  @include icon-size($font-size-mobile-smallest, $font-size-desktop-smallest)
+}
+
+.Icon--tiny {
+  @include icon-size($font-size-mobile-tiny, $font-size-desktop-tiny)
+}
+
+.Icon--large {
+  @include icon-size($font-size-mobile-large, $font-size-desktop-large)
+}
+
+.Icon--largest {
+  @include icon-size($font-size-mobile-largest, $font-size-desktop-largest)
 }
 
 .Icon--padded {
   margin: 0 5px;
+}
+
+.Icon--padded-right {
+  margin-right: 5px;
+}
+
+.Icon--padded-left {
+  margin-left: 5px;
 }

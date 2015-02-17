@@ -38,44 +38,36 @@
        font-url('cooper_hewitt/CooperHewitt-Semibold.svg#svgFontName') format('svg'); /* Legacy iOS */
 }
 
-%default-font-size {
-  font-size: $font-size-mobile;
+@mixin font-size($mobile, $desktop) {
+  font-size: $mobile;
 
   @include tablet-landscape-and-up {
-    font-size: $font-size-desktop;
+    font-size: $desktop;
   }
+}
+
+%default-font-size {
+  @include font-size($font-size-mobile, $font-size-desktop)
 }
 
 %smaller-font-size {
-  font-size: $font-size-mobile-smaller;
-
-  @include tablet-landscape-and-up {
-    font-size: $font-size-desktop-smaller;
-  }
+  @include font-size($font-size-mobile-smaller, $font-size-desktop-smaller)
 }
 
 %smallest-font-size {
-  font-size: $font-size-mobile-smallest;
+  @include font-size($font-size-mobile-smallest, $font-size-desktop-smallest)
+}
 
-  @include tablet-landscape-and-up {
-    font-size: $font-size-desktop-smallest;
-  }
+%tiny-font-size {
+  @include font-size($font-size-mobile-tiny, $font-size-desktop-tiny)
 }
 
 %large-font-size {
-  font-size: $font-size-mobile-large;
-
-  @include tablet-landscape-and-up {
-    font-size: $font-size-desktop-large;
-  }
+  @include font-size($font-size-mobile-large, $font-size-desktop-large)
 }
 
 %largest-font-size {
-  font-size: $font-size-mobile-largest;
-
-  @include tablet-landscape-and-up {
-    font-size: $font-size-desktop-largest;
-  }
+  @include font-size($font-size-mobile-largest, $font-size-desktop-largest)
 }
 
 %default-font {

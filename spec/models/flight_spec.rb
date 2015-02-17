@@ -15,7 +15,7 @@ RSpec.describe Flight, :type => :model do
   it { should belong_to :reservation }
   it { should belong_to :departure_airport }
   it { should belong_to :arrival_airport }
-  it { should have_one :flight_checkin }
+  it { should have_many :flight_checkins }
 
   it { should define_enum_for(:flight_type).with(%w{departure return}) }
 
