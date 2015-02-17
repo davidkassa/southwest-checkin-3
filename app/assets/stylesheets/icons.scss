@@ -60,6 +60,7 @@
   @include icon-size($font-size-mobile-largest, $font-size-desktop-largest)
 }
 
+.u-text-padded,
 .Icon--padded {
   margin: 0 5px;
 }

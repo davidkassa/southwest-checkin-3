@@ -146,19 +146,26 @@ form,
   }
 }
 
-.FieldGroupTitle {
+.FieldGroupTitle,
+.TableHeader {
   @extend %smallest-font-size;
   @extend %medium;
-  margin-left: $Form-margin;
-  margin-bottom: 5px;
   color: $muted-text-color-mobile;
   text-transform: uppercase;
   font-size: 13px;
 
   @include tablet-portrait-and-up {
     font-family: 'Cooper Hewitt Book';
-    margin: $Form-margin*2 0 $Form-margin $Form-margin;
     color: $text-color;
+  }
+}
+
+.FieldGroupTitle {
+  margin-left: $Form-margin;
+  margin-bottom: 5px;
+
+  @include tablet-portrait-and-up {
+    margin: $Form-margin*2 0 $Form-margin $Form-margin;
   }
 }
 

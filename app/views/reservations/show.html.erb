@@ -20,7 +20,7 @@
           <div class="ReservationCard-flight-title">
             <%= flight.departure_airport.iata %>
             <span class="Icon-plane-arrow Icon--large Icon--padded"></span>
-            <%= flight.arrival_airport.iata %> <span class='Icon--padded'>·</span> <%= flight_date flight.local_departure_time %>
+            <%= flight.arrival_airport.iata %> <span class='u-text-padded'>·</span> <%= flight_date flight.local_departure_time %>
           </div>
           <div class="ReservationCard-flight-times">
             <div class="ReservationCard-flight-times-depart">Departs <%= flight_time flight.local_departure_time %></div>

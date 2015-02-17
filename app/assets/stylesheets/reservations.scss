@@ -1,5 +1,6 @@
 $Reservation-bg-color: darken($logo-blue, 10%);
 
+.Reservations,
 .Reservation {
   margin: 0 auto;
   padding-top: 30px;
@@ -59,4 +60,18 @@ $Reservation-bg-color: darken($logo-blue, 10%);
 .ReservationCard-flight-checkins {
   @extend %medium;
   color: $success-green;
+}
+
+.Reservations {
+  max-width: 800px;
+  width: 90%;
+}
+
+.Reservations-table {
+  width: 100%;
+
+  th {
+    text-align: left;
+    padding-left: 0;
+  }
 }
