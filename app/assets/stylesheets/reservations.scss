@@ -62,7 +62,27 @@ $Reservation-bg-color: darken($logo-blue, 10%);
   color: $success-green;
 }
 
+.ReservationCard-flight-checkin {
+  margin: 3px 0;
+}
+
 .Reservations {
   max-width: 800px;
   width: 90%;
+}
+
+.ReservationCard-badge {
+  background-color: $success-green;
+  padding: 4px 4px 1px;
+  line-height: 1;
+  border-radius: 4px;
+  color: $light-text-color;
+}
+
+.Header-my-reservations {
+  display: none;
+
+  @include tablet-portrait-and-up {
+    display: inline-block;
+  }
 }

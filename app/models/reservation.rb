@@ -28,6 +28,10 @@ class Reservation < ActiveRecord::Base
     flights.return.order(:departure_time)
   end
 
+  def time
+    departure_flights.first.departure_time
+  end
+
   private
 
   def upcase_confirmation_number

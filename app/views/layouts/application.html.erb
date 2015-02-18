@@ -14,7 +14,7 @@
         <%= link_to 'Add a Reservation', new_reservation_path, class: 'GhostButtonLink' %>
       </div>
       <% if user_signed_in? %>
-        <div class="Header-action">
+        <div class="Header-action Header-my-reservations">
           <%= link_to 'My Reservations', user_reservations_path(current_user) %>
         </div>
         <div class="Header-action Header-dropdown">

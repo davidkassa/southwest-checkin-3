@@ -30,7 +30,9 @@
             <div class="ReservationCard-flight-checkins">
               <% flight.flight_checkins.each do |flight_checkin| %>
                 <div class="ReservationCard-flight-checkin">
-                  <span class="Icon-checkmark Icon--tiny Icon--padded-right"></span> <%= flight_checkin.passenger.full_name %> checked in at <%= flight_checkin.boarding_group %><%= flight_checkin.boarding_position %>
+                  <span class="Icon-checkmark Icon--tiny Icon--padded-right"></span>
+                  <span class="ReservationCard-badge u-text-padded-right"><%= flight_checkin.boarding_group %><%= flight_checkin.boarding_position %></span>
+                  <%= flight_checkin.passenger.full_name %>
                 </div>
               <% end %>
             </div>
