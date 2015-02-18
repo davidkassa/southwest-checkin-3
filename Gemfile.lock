@@ -133,6 +133,8 @@ GEM
       method_source (~> 0.8.1)
       slop (~> 3.4)
     rack (1.6.0)
+    rack-protection (1.5.3)
+      rack
     rack-test (0.6.2)
       rack (>= 1.0)
     rails (4.2.0)
@@ -210,9 +212,15 @@ GEM
       json
       redis (>= 3.0.6)
       redis-namespace (>= 1.3.1)
+    sinatra (1.4.5)
+      rack (~> 1.4)
+      rack-protection (~> 1.4)
+      tilt (~> 1.3, >= 1.3.4)
     slop (3.6.0)
     spring (1.2.0)
     spring-commands-rspec (1.0.4)
+      spring (>= 0.9.1)
+    spring-commands-sidekiq (1.0.0)
       spring (>= 0.9.1)
     sprockets (2.12.3)
       hike (~> 1.2)
@@ -270,8 +278,10 @@ DEPENDENCIES
   sdoc (~> 0.4.0)
   shoulda-matchers
   sidekiq
+  sinatra
   spring
   spring-commands-rspec
+  spring-commands-sidekiq
   timecop
   turbolinks
   typhoeus (~> 0.7)

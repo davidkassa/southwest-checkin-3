@@ -27,6 +27,7 @@ gem 'typhoeus', '~> 0.7' # HTTP request client
 gem 'devise', '~> 3.4' # Authentication
 
 gem 'sidekiq' # Background job processing queue
+gem 'sinatra', :require => nil # Required for sidekiq web UI
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -52,6 +53,7 @@ group :development, :test do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-commands-rspec'
+  gem 'spring-commands-sidekiq'
 end
 
 group :test do
