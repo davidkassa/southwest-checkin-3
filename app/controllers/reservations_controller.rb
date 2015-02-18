@@ -8,7 +8,7 @@ class ReservationsController < ApplicationController
   respond_to :html
 
   def index
-    @reservations = Reservation.all
+    @reservations = current_user.reservations.all
     respond_with(@reservations)
   end
 
