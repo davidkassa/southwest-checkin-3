@@ -48,7 +48,7 @@ class ReservationsController < ApplicationController
   end
 
   def set_reservation
-    @reservation = Reservation.includes(:flights, :passengers).find(params[:id])
+    @reservation = Reservation.includes({ flights: [{ flight_checkins: [:passenger] }, :departure_airport, :arrival_airport] }, :passengers).find(params[:id])
   end
 
   def reservation_params
