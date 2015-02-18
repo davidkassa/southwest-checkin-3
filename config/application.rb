@@ -35,6 +35,7 @@ module SouthwestCheckin
     config.autoload_paths << Rails.root.join('lib')
     config.autoload_paths << Rails.root.join('app', 'parsers')
     require Rails.root.join('lib', 'errors.rb')
+    require Rails.root.join('lib', 'southwest', 'errors.rb')
 
     config.active_job.queue_adapter = :sidekiq
   end
