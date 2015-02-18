@@ -20,6 +20,14 @@ class Reservation < ActiveRecord::Base
             :payload,
             presence: true
 
+  def departure_flights
+    flights.departure.order(:departure_time)
+  end
+
+  def return_flights
+    flights.return.order(:departure_time)
+  end
+
   private
 
   def upcase_confirmation_number

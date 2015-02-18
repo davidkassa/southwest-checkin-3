@@ -1,9 +1,10 @@
 <div class="Reservations">
-  <table class="Reservations-table">
+  <table class="Table">
     <thead>
       <tr>
-        <th><div class="TableHeader">Confirmation number</div></th>
-        <th><div class="TableHeader">Arrival city name</div></th>
+        <th>Confirmation number</th>
+        <th>Traveling to</th>
+        <th>Flights</th>
         <th colspan="3"></th>
       </tr>
     </thead>
@@ -11,8 +12,17 @@
     <tbody>
       <% @reservations.each do |reservation| %>
         <tr>
-          <td><%= reservation.confirmation_number %></td>
+          <td><%= link_to reservation.confirmation_number, reservation %></td>
           <td><%= reservation.arrival_city_name %></td>
+          <td>
+            <%= reservation.departure_flights.first.departure_airport.iata %>
+            <span class="Icon-plane-arrow Icon--padded"></span>
+            <%= reservation.departure_flights.last.arrival_airport.iata %>
+            <span class='u-text-padded'>·</span>
+            <%= reservation.return_flights.first.departure_airport.iata %>
+            <span class="Icon-plane-arrow Icon--padded"></span>
+            <%= reservation.return_flights.last.arrival_airport.iata %>
+          </td>
           <td><%= link_to 'Show', reservation %></td>
           <td><%= link_to 'Edit', edit_reservation_path(reservation) %></td>
           <td><%= link_to 'Destroy', reservation, method: :delete, data: { confirm: 'Are you sure?' } %></td>

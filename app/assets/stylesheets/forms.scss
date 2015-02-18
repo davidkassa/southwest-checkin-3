@@ -146,18 +146,8 @@ form,
   }
 }
 
-.FieldGroupTitle,
-.TableHeader {
-  @extend %smallest-font-size;
-  @extend %medium;
-  color: $muted-text-color-mobile;
-  text-transform: uppercase;
-  font-size: 13px;
-
-  @include tablet-portrait-and-up {
-    font-family: 'Cooper Hewitt Book';
-    color: $text-color;
-  }
+.FieldGroupTitle {
+  @extend %header;
 }
 
 .FieldGroupTitle {

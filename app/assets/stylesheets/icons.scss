@@ -16,11 +16,17 @@
 }
 
 .Icon-plane-arrow {
-  background-image: image-url('plane-arrow-ECF0F1.svg');
+  background-image: image-url('plane-arrow-555.svg');
+  height: 13px;
+  min-width: 28px;
 
   &.Icon--large {
     height: 17px;
     min-width: 36px;
+  }
+
+  &.light {
+    background-image: image-url('plane-arrow-ECF0F1.svg');
   }
 }
 
