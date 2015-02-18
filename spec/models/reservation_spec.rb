@@ -60,6 +60,14 @@ RSpec.describe Reservation, type: :model do
           end
         end
       end
+
+      it 'each flight has a flight number' do
+        VCR.use_cassette(cassette) do
+          subject.flights.each do |flight|
+            expect(flight.flight_number).to_not be_nil
+          end
+        end
+      end
     end
 
     context 'viewAirReservation' do

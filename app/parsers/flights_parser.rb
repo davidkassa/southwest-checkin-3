@@ -14,7 +14,8 @@ class FlightsParser
       flight(flight_key: k,
              flight_hash: v,
              departure_date_string: depart_date_string(v),
-             arrival_date_string: depart_date_string(v))
+             arrival_date_string: depart_date_string(v),
+             flight_number: depart_flight_number(v))
     end.sort_by { |flight| flight[:position] }
   end
 
@@ -23,13 +24,14 @@ class FlightsParser
       flight(flight_key: k,
              flight_hash: v,
              departure_date_string: return_date_string(v),
-             arrival_date_string: return_date_string(v))
+             arrival_date_string: return_date_string(v),
+             flight_number: return_flight_number(v))
     end.sort_by { |flight| flight[:position] }
   end
 
   private
 
-  def flight(flight_key:, flight_hash:, departure_date_string:, arrival_date_string:)
+  def flight(flight_key:, flight_hash:, departure_date_string:, arrival_date_string:, flight_number:)
     flight_time_departure = FlightTimeParser.new(city_string: flight_hash["departCity"], date_string: departure_date_string)
     flight_time_arrival = FlightTimeParser.new(city_string: flight_hash["arrivalCity"], date_string: arrival_date_string)
 
@@ -52,6 +54,7 @@ class FlightsParser
       arrival_airport: flight_time_arrival.airport,
       flight_type: flight_type(flight_key),
       position: flight_position(flight_key),
+      flight_number: flight_number,
       payload: flight_hash
     }
   end
@@ -70,6 +73,14 @@ class FlightsParser
 
   def depart_date_string(flight_hash)
     flight_hash["departDate"] || select_departure_flights.select {|k,v| v["departDate"] }.first[1]["departDate"]
+  end
+
+  def return_flight_number(flight_hash)
+    flight_hash["returnFlightNo"]
+  end
+
+  def depart_flight_number(flight_hash)
+    flight_hash["departFlightNo"]
   end
 
   def select_departure_flights
