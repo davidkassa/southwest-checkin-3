@@ -4,11 +4,14 @@ $Reservation-bg-color: darken($logo-blue, 10%);
 .Reservation {
   margin: 0 auto;
   padding-top: 30px;
-  text-align: center;
 
   & > * {
     text-align: left;
   }
+}
+
+.Reservation {
+  text-align: center;
 }
 
 .ReservationCard {
@@ -116,4 +119,10 @@ $Reservation-bg-color: darken($logo-blue, 10%);
   &:last-child {
     margin-right: 0;
   }
+}
+
+.ReservationCard-footer {
+  @extend %smaller-font-size;
+  margin-top: 10px;
+  text-align: center;
 }

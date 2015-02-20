@@ -103,6 +103,7 @@
       </div>
     </div>
   </div>
+  <div class='ReservationCard-footer'>
+    <%= link_to 'Remove Reservation', @reservation, method: :delete, data: { confirm: 'Are you sure?' } %>
+  </div>
 </div>
-<%= link_to 'Edit', edit_reservation_path(@reservation) %> |
-<%= link_to 'Back', reservations_path %>

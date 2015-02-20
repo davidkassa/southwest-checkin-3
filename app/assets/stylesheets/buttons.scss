@@ -18,23 +18,36 @@
 
 .GhostButtonLink {
   @extend %BaseButton;
-  background-color: $madison;
   display: inline-block;
   text-decoration: none;
   line-height: 1;
-  color: $athens-gray;
-  border: 2px solid $logo-blue;
+  border: 2px solid $curious-blue-light;
   padding: 10px 10px 5px;
 
   &:hover {
-    color: white;
-    border-color: darken($logo-blue, 10%);
-    background-color: darken($madison, 3%);
+    color: darken($curious-blue-light, 10%);
+    border-color: darken($curious-blue-light, 10%);
     text-decoration: none;
   }
 
   &:active {
-    border-color: darken($logo-blue, 20%);
+    border-color: darken($curious-blue-light, 20%);
+  }
+
+  &.GhostButtonLink--dark {
+    border: 2px solid $logo-blue;
+    background-color: $madison;
+    color: $athens-gray;
+
+    &:hover {
+      color: white;
+      border-color: darken($logo-blue, 10%);
+      background-color: darken($madison, 3%);
+    }
+
+    &:active {
+      border-color: darken($logo-blue, 20%);
+    }
   }
 }
 

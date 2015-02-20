@@ -29,8 +29,7 @@
               <%= reservation.return_flights.last.arrival_airport.iata %>
             <% end %>
           </td>
-          <td><%= link_to 'Edit', edit_reservation_path(reservation) %></td>
-          <td><%= link_to 'Destroy', reservation, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          <td><%= link_to 'Remove', reservation, method: :delete, data: { confirm: 'Are you sure?' } %></td>
         </tr>
       <% end %>
     </tbody>
@@ -38,5 +37,5 @@
 
   <br>
 
-  <%= link_to 'New Reservation', new_reservation_path %>
+  <%= link_to 'Add a Reservation', new_reservation_path, class: 'GhostButtonLink' %>
 </div>
