@@ -6,4 +6,11 @@ class User < ActiveRecord::Base
          :validatable, :lockable
 
   has_many :reservations
+  after_create :send_welcome_email
+
+  private
+
+  def send_welcome_email
+    UserMailer.welcome_email(self)
+  end
 end
