@@ -4,21 +4,30 @@ $Reservation-bg-color: darken($logo-blue, 10%);
 .Reservation {
   margin: 0 auto;
   padding-top: 30px;
+  text-align: center;
+
+  & > * {
+    text-align: left;
+  }
 }
 
 .ReservationCard {
   color: $light-text-color;
-  width: 400px;
+  display: inline-block;
   margin: 0 auto;
   padding: 20px;
   background-color: $Reservation-bg-color;
   border-radius: 10px;
 }
 
+.ReservationCard-label,
+.ReservationCard-flight-group-title {
+  color: $wild-rice;
+}
+
 .ReservationCard-label {
   @extend %smallest-font-size;
   margin-bottom: 5px;
-  color: rgb(231, 217, 123);
   text-transform: uppercase;
 }
 
@@ -89,5 +98,22 @@ $Reservation-bg-color: darken($logo-blue, 10%);
 
   @include tablet-portrait-and-up {
     display: inline-block;
+  }
+}
+
+.ReservationCard-flight-group-title {
+  @extend %large-font-size;
+  text-align: center;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.ReservationCard-flights {
+  display: inline-block;
+  vertical-align: top;
+  margin-right: 30px;
+
+  &:last-child {
+    margin-right: 0;
   }
 }
