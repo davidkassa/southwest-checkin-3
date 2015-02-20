@@ -73,9 +73,13 @@ GEM
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
     diff-lcs (1.2.5)
+    dotenv (0.9.0)
+    dotenv-rails (0.9.0)
+      dotenv (= 0.9.0)
     erubis (2.7.0)
     ethon (0.7.2)
       ffi (>= 1.3.0)
+    excon (0.44.2)
     execjs (2.2.2)
     ffi (1.9.6)
     formatador (0.2.5)
@@ -115,6 +119,9 @@ GEM
     lumberjack (1.0.9)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
+    mandrill-api (1.0.53)
+      excon (>= 0.16.0, < 1.0)
+      json (>= 1.7.7, < 2.0)
     method_source (0.8.2)
     mime-types (2.4.3)
     mini_portile (0.6.2)
@@ -266,10 +273,12 @@ DEPENDENCIES
   awesome_print
   byebug
   devise (~> 3.4)
+  dotenv-rails
   guard
   guard-rspec
   jbuilder (~> 2.0)
   jquery-rails
+  mandrill-api
   pg
   pry
   rails (= 4.2.0)

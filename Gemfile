@@ -29,6 +29,8 @@ gem 'devise', '~> 3.4' # Authentication
 gem 'sidekiq' # Background job processing queue
 gem 'sinatra', :require => nil # Required for sidekiq web UI
 
+gem 'mandrill-api'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
@@ -39,6 +41,7 @@ gem 'sinatra', :require => nil # Required for sidekiq web UI
 # gem 'capistrano-rails', group: :development
 
 group :development, :test do
+  gem 'dotenv-rails'
   gem 'rspec-rails', '~> 3.0'
   gem 'vcr', '~> 2.9'
   gem 'awesome_print'
