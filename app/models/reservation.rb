@@ -69,7 +69,13 @@ class Reservation < ActiveRecord::Base
 
   def schedule_checkins
     flights.where(position: 1).where("departure_time > ?", Time.zone.now).each do |flight|
-      CheckinJob.set(wait_until: flight.departure_time - 1.day + 1.second).perform_later(flight)
+      schedule_for = flight.departure_time - 1.day + 1.second
+      job = CheckinJob.set(wait_until: schedule_for).perform_later(flight)
+      checkin = Checkin.find_or_initialize_by(flight: flight)
+      checkin.update({
+        scheduled_at: schedule_for,
+        job_id: job.job_id
+      })
     end
   end
 end

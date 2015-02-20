@@ -1,9 +1,8 @@
 class Checkin < ActiveRecord::Base
-  belongs_to :reservation
-  has_many :flight_checkins
-  has_many :flights, through: :flight_checkins
+  belongs_to :flight
+  has_many :passenger_checkins
 
-  validates :reservation,
-            :payload,
+  validates :flight,
+            :scheduled_at,
             presence: true
 end

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe FlightCheckin, :type => :model do
+RSpec.describe PassengerCheckin, :type => :model do
   it { should validate_presence_of :flight }
   it { should validate_presence_of :checkin }
 

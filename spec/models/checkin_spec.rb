@@ -1,9 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Checkin, :type => :model do
-  it { should validate_presence_of :reservation }
-  it { should validate_presence_of :payload }
-  it { should belong_to :reservation }
-  it { should have_many :flight_checkins }
-  it { should have_many :flights }
+  it { should validate_presence_of :flight }
+  it { should belong_to :flight }
+  it { should have_many :passenger_checkins }
 end

@@ -12,11 +12,16 @@ RSpec.describe CheckinJob, :type => :job do
       })
     }
     let(:flight) { reservation.flights.where(position: 1).first }
-    let(:flight_checkins) { reservation.checkin.reload.flight_checkins }
+    let(:passenger_checkins) { flight.checkin.reload.passenger_checkins }
+
+    # Flight checkins are not scheduled unless they are in the future
+    let(:before_all_departure_times) { Time.zone.parse('1 Jan 2015') }
 
     before do
       VCR.use_cassette reservation_cassette do
-        reservation
+        Timecop.freeze(before_all_departure_times) do
+          reservation
+        end
       end
     end
   end
@@ -35,15 +40,17 @@ RSpec.describe CheckinJob, :type => :job do
 
     include_context 'setup existing reservation'
 
-    it 'creates a checkin' do
+    it 'updates the checkin' do
       perform do
-        expect { CheckinJob.perform_later(flight) }.to change(Checkin, :count).by(1)
+        CheckinJob.perform_later(flight)
+        expect(flight.checkin.payload).to_not be_nil
+        expect(flight.checkin.completed_at).to_not be_nil
       end
     end
 
     it 'creates 1 flight checkin' do
       perform do
-        expect { CheckinJob.perform_later(flight) }.to change(FlightCheckin, :count).by(1)
+        expect { CheckinJob.perform_later(flight) }.to change(PassengerCheckin, :count).by(1)
       end
     end
   end
@@ -51,23 +58,25 @@ RSpec.describe CheckinJob, :type => :job do
   context 'checkin multiple passengers sfo bwi 1 stop' do
     let(:reservation_cassette) { 'viewAirReservation multiple passengers sfo bwi 1 stop' }
     let(:checkin_cassette) { 'checkin multiple passengers sfo bwi 1 stop' }
-    let(:ordered_passenger_names) { flight_checkins.includes(:passenger).map { |c| c.passenger.full_name } }
+    let(:ordered_passenger_names) { passenger_checkins.includes(:passenger).map { |c| c.passenger.full_name } }
 
     include_context 'setup existing reservation'
 
-    it 'creates a checkin' do
+    it 'updates the checkin' do
       perform do
-        expect { CheckinJob.perform_later(flight) }.to change(Checkin, :count).by(1)
+        CheckinJob.perform_later(flight)
+        expect(flight.checkin.payload).to_not be_nil
+        expect(flight.checkin.completed_at).to_not be_nil
       end
     end
 
     it 'creates 4 flight checkins' do
       perform do
-        expect { CheckinJob.perform_later(flight) }.to change(FlightCheckin, :count).by(4)
+        expect { CheckinJob.perform_later(flight) }.to change(PassengerCheckin, :count).by(4)
       end
     end
 
-    it 'flight_checkins have the correct passengers' do
+    it 'passenger_checkins have the correct passengers' do
       perform do
         CheckinJob.perform_later(flight)
         expect(ordered_passenger_names).to eql([

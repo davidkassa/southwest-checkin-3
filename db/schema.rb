@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150220042358) do
+ActiveRecord::Schema.define(version: 20150220053507) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,28 +38,16 @@ ActiveRecord::Schema.define(version: 20150220042358) do
   add_index "airports", ["icao"], name: "index_airports_on_icao", using: :btree
 
   create_table "checkins", force: :cascade do |t|
-    t.integer  "reservation_id", null: false
-    t.json     "payload",        null: false
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.json     "payload"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.datetime "scheduled_at", null: false
+    t.string   "job_id"
+    t.datetime "completed_at"
+    t.integer  "flight_id",    null: false
   end
 
-  add_index "checkins", ["reservation_id"], name: "index_checkins_on_reservation_id", using: :btree
-
-  create_table "flight_checkins", force: :cascade do |t|
-    t.string   "flight_number",     null: false
-    t.string   "boarding_group",    null: false
-    t.integer  "boarding_position", null: false
-    t.integer  "flight_id",         null: false
-    t.integer  "checkin_id",        null: false
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
-    t.integer  "passenger_id",      null: false
-  end
-
-  add_index "flight_checkins", ["checkin_id"], name: "index_flight_checkins_on_checkin_id", using: :btree
-  add_index "flight_checkins", ["flight_id"], name: "index_flight_checkins_on_flight_id", using: :btree
-  add_index "flight_checkins", ["passenger_id"], name: "index_flight_checkins_on_passenger_id", using: :btree
+  add_index "checkins", ["flight_id"], name: "index_checkins_on_flight_id", using: :btree
 
   create_table "flights", force: :cascade do |t|
     t.datetime "departure_time",                   null: false
@@ -80,6 +68,21 @@ ActiveRecord::Schema.define(version: 20150220042358) do
   add_index "flights", ["arrival_airport_id"], name: "index_flights_on_arrival_airport_id", using: :btree
   add_index "flights", ["departure_airport_id"], name: "index_flights_on_departure_airport_id", using: :btree
   add_index "flights", ["reservation_id"], name: "index_flights_on_reservation_id", using: :btree
+
+  create_table "passenger_checkins", force: :cascade do |t|
+    t.string   "flight_number",     null: false
+    t.string   "boarding_group",    null: false
+    t.integer  "boarding_position", null: false
+    t.integer  "flight_id",         null: false
+    t.integer  "checkin_id",        null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.integer  "passenger_id",      null: false
+  end
+
+  add_index "passenger_checkins", ["checkin_id"], name: "index_passenger_checkins_on_checkin_id", using: :btree
+  add_index "passenger_checkins", ["flight_id"], name: "index_passenger_checkins_on_flight_id", using: :btree
+  add_index "passenger_checkins", ["passenger_id"], name: "index_passenger_checkins_on_passenger_id", using: :btree
 
   create_table "passengers", force: :cascade do |t|
     t.boolean  "is_companion",   default: false, null: false
@@ -130,13 +133,12 @@ ActiveRecord::Schema.define(version: 20150220042358) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
 
-  add_foreign_key "checkins", "reservations"
-  add_foreign_key "flight_checkins", "checkins"
-  add_foreign_key "flight_checkins", "flights"
-  add_foreign_key "flight_checkins", "passengers"
   add_foreign_key "flights", "airports", column: "arrival_airport_id"
   add_foreign_key "flights", "airports", column: "departure_airport_id"
   add_foreign_key "flights", "reservations"
+  add_foreign_key "passenger_checkins", "checkins"
+  add_foreign_key "passenger_checkins", "flights"
+  add_foreign_key "passenger_checkins", "passengers"
   add_foreign_key "passengers", "reservations"
   add_foreign_key "reservations", "users"
 end

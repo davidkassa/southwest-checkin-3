@@ -7,7 +7,7 @@ class CheckinParser
     @checkin_record = checkin_record
   end
 
-  def flight_checkins
+  def passenger_checkins
     if checkin_response.multiple_passengers?
       flight_checkins_for_multiple_passengers
     else
@@ -68,7 +68,7 @@ class CheckinParser
   end
 
   def reservation
-    checkin_record.reservation
+    checkin_record.flight.reservation
   end
 
   def find_flight_record(flight_json)
