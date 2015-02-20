@@ -9,7 +9,7 @@ class Reservation < ActiveRecord::Base
   before_create :create_passengers
   before_create :create_flights
   before_save :upcase_confirmation_number
-  after_save :schedule_checkins
+  after_create :schedule_checkins
 
   validates_associated :passengers
   validates :confirmation_number, length: { is: 6 }
