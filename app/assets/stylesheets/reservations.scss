@@ -3,7 +3,7 @@ $Reservation-bg-color: darken($logo-blue, 10%);
 .Reservations,
 .Reservation {
   margin: 0 auto;
-  padding-top: 30px;
+  padding: 30px 10px 10px 10px;
 
   & > * {
     text-align: left;
