@@ -31,6 +31,10 @@ class Flight < ActiveRecord::Base
     end
   end
 
+  def scheduled?
+    checkin && !checkin.completed?
+  end
+
   def schedule_checkin
     schedule_at = departure_time - 1.day + 1.second
     job = CheckinJob.set(wait_until: schedule_at).perform_later(self)

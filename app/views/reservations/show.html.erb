@@ -54,6 +54,16 @@
                   <% end %>
                 </div>
               <% end %>
+              <% if flight.scheduled? %>
+                <div class="ReservationCard-scheduled">
+                    <span class="ReservationCard-label">
+                      <span class='Icon-clock Icon--smallest'></span> Automatic checkin at
+                    </span>
+                    <div>
+                      <%= flight_time flight.checkin.local_scheduled_at %> <%= flight_date flight.checkin.local_scheduled_at %>
+                    </div>
+                </div>
+              <% end %>
             </div>
           </div>
         <% end %>
@@ -95,6 +105,16 @@
                       <%= passenger_checkin.passenger.full_name %>
                     </div>
                   <% end %>
+                </div>
+              <% end %>
+              <% if flight.scheduled? %>
+                <div class="ReservationCard-scheduled">
+                    <span class="ReservationCard-label">
+                      <span class='Icon-clock Icon--smallest'></span> Automatic checkin at
+                    </span>
+                    <div>
+                      <%= flight_time flight.checkin.local_scheduled_at %> <%= flight_date flight.checkin.local_scheduled_at %>
+                    </div>
                 </div>
               <% end %>
             </div>

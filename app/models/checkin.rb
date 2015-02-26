@@ -9,4 +9,10 @@ class Checkin < ActiveRecord::Base
   def completed?
     completed_at.present?
   end
+
+  def local_scheduled_at
+    Time.use_zone(flight.departure_airport.timezone) do
+      scheduled_at.in_time_zone
+    end
+  end
 end
