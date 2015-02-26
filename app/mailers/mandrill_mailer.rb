@@ -16,9 +16,9 @@ class MandrillMailer
 
   private
 
-  def self.required!(hash, required_keys)
+  def self.required!(params, required_keys)
     required_keys.each do |r|
-      raise ArgumentError, "`#{r}` is required_keys for #{caller_locations(1,1)[0].label}" unless hash[r].present?
+      raise ArgumentError, "`#{r}` is required for #{caller_locations(1,1)[0].label}" unless params[r].present?
     end
   end
 end
