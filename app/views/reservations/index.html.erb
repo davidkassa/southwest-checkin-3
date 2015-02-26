@@ -32,6 +32,11 @@
           <td><%= link_to 'Remove', reservation, method: :delete, data: { confirm: 'Are you sure?' } %></td>
         </tr>
       <% end %>
+      <% if @reservations.empty? %>
+        <tr>
+          <td><strong>You have no reservations.</strong></td>
+        </tr>
+      <% end %>
     </tbody>
   </table>
 
