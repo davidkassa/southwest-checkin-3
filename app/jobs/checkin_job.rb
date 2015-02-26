@@ -8,6 +8,7 @@ class CheckinJob < ActiveJob::Base
       record_locator: flight.reservation.confirmation_number)
 
     checkin_record = Checkin.find_or_initialize_by(flight: flight)
+
     checkin_record.update!({
       completed_at: Time.zone.now,
       payload: {

@@ -2,7 +2,7 @@ class Reservation < ActiveRecord::Base
   belongs_to :user
   has_many :passengers, inverse_of: :reservation, autosave: true
   has_many :flights, inverse_of: :reservation, autosave: true
-  has_one :checkin
+  has_many :checkins, through: :flights
   accepts_nested_attributes_for :user
 
   before_validation :retrieve_reservation, on: :create
@@ -69,13 +69,7 @@ class Reservation < ActiveRecord::Base
 
   def schedule_checkins
     flights.where(position: 1).where("departure_time > ?", Time.zone.now).each do |flight|
-      schedule_for = flight.departure_time - 1.day + 1.second
-      job = CheckinJob.set(wait_until: schedule_for).perform_later(flight)
-      checkin = Checkin.find_or_initialize_by(flight: flight)
-      checkin.update({
-        scheduled_at: schedule_for,
-        job_id: job.job_id
-      })
+      flight.schedule_checkin
     end
   end
 end

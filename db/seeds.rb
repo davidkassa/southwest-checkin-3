@@ -3,6 +3,9 @@
 
 require 'csv'
 
+puts "== db:seed"
+puts "-- airports"
+
 airports_file = File.read(Rails.root.join('db', 'seeds', 'airports.dat'))
 CSV.parse(airports_file).each do |row|
   airport = Airport.find_or_initialize_by(airport_id: row[0])
@@ -20,3 +23,5 @@ CSV.parse(airports_file).each do |row|
     timezone: row[11]
   )
 end
+
+puts "== DONE db:seed"

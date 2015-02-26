@@ -18,14 +18,24 @@ def create_reservation(cassette, user)
   end
 end
 
-def checkin_flight(cassette, reservation)
-  if !reservation.checkin
+def checkin_reservation(cassette, reservation)
+  if reservation.checkins.count == 0
     VCR.use_cassette cassette do
       flight = reservation.flights.where(position: 1).first
-      Rails.application.config.active_job.queue_adapter = :inline
-      CheckinJob.perform_later(flight)
+      checkin_flight(flight)
     end
   end
+end
+
+def checkin_flight(flight)
+    Rails.application.config.active_job.queue_adapter = :inline
+    checkin = Checkin.find_or_initialize_by(flight: flight)
+    checkin.scheduled_at = Time.zone.now
+    checkin.save!
+
+    job = CheckinJob.perform_later(flight)
+
+    checkin.update({ job_id: job.job_id })
 end
 
 namespace :dev do
@@ -36,6 +46,6 @@ namespace :dev do
 
     fuu = create_user
     reservation = create_reservation(reservation_cassette, fuu)
-    checkin_flight(checkin_cassette, reservation)
+    checkin_reservation(checkin_cassette, reservation)
   end
 end
