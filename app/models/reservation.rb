@@ -1,8 +1,8 @@
 class Reservation < ActiveRecord::Base
   belongs_to :user
-  has_many :passengers, inverse_of: :reservation, autosave: true
-  has_many :flights, inverse_of: :reservation, autosave: true
-  has_many :checkins, through: :flights
+  has_many :passengers, inverse_of: :reservation, autosave: true, dependent: :destroy
+  has_many :flights, inverse_of: :reservation, autosave: true, dependent: :destroy
+  has_many :checkins, through: :flights, dependent: :destroy
   accepts_nested_attributes_for :user
 
   before_validation :retrieve_reservation, on: :create
