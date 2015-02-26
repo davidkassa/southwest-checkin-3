@@ -5,4 +5,8 @@ class Checkin < ActiveRecord::Base
   validates :flight,
             :scheduled_at,
             presence: true
+
+  def completed?
+    completed_at.present?
+  end
 end
