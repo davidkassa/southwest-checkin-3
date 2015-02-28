@@ -11,4 +11,10 @@ class ApplicationController < ActionController::Base
       redirect_to root_path, alert: 'You are not authorized.'
     end
   end
+
+  def current_user_only!(user_id_param)
+    if !current_user.admin? && user_id_param && current_user.id != user_id_param.to_i
+      raise ActionController::RoutingError.new('Not Found')
+    end
+  end
 end
