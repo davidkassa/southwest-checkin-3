@@ -53,7 +53,7 @@ $Reservation-bg-color: darken($logo-blue, 10%);
 
 .ReservationCard-flight-title {
   @extend %large-font-size;
-  margin-bottom: 10px;
+  margin-bottom: 3px;
 }
 
 .ReservationCard-flight {
@@ -128,6 +128,7 @@ $Reservation-bg-color: darken($logo-blue, 10%);
   text-align: center;
 }
 
-.ReservationCard-scheduled {
-  margin-top: 10px;
+.ReservationCard-scheduled,
+.ReservationCard-flight-checkins {
+  margin-top: 5px;
 }
