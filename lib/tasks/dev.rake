@@ -1,6 +1,3 @@
-require 'vcr'
-require_relative '../../spec/helpers/vcr_helper'
-
 def create_user
   User.where(email:'fuu.bar@baz.com').first_or_create do |user|
     user.password = 'password'
@@ -41,6 +38,9 @@ end
 namespace :dev do
   desc "Load the database with development seed data"
   task prime: :environment do
+    require 'vcr'
+    require_relative '../../spec/helpers/vcr_helper'
+
     reservation_cassette = 'viewAirReservation multiple passengers sfo bwi 1 stop'
     checkin_cassette = 'checkin multiple passengers sfo bwi 1 stop'
 
