@@ -22,7 +22,7 @@ set :branch, ENV['DEPLOY_BRANCH']
 
 # Manually create these paths in shared/ (eg: shared/config/database.yml) in your server.
 # They will be linked in the 'deploy:link_shared_paths' step.
-set :shared_paths, ['config/database.yml', 'log', '.env']
+set :shared_paths, ['log', '.env']
 
 # Optional settings:
 set :user, ENV['DEPLOY_USER']    # Username in the server to SSH to.
@@ -55,9 +55,6 @@ task :setup => :environment do
 
   queue! %[mkdir -p "#{deploy_to}/#{shared_path}/tmp/pids"]
   queue! %[chmod g+rx,u+rwx "#{deploy_to}/#{shared_path}/tmp/pids"]
-
-  queue! %[touch "#{deploy_to}/#{shared_path}/config/database.yml"]
-  queue  %[echo "-----> Be sure to edit '#{deploy_to}/#{shared_path}/config/database.yml'."]
 end
 
 desc "Deploys the current version to the server."
