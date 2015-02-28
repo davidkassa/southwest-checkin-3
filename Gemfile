@@ -43,8 +43,9 @@ gem 'mina'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+gem 'dotenv-rails'
+
 group :development, :test do
-  gem 'dotenv-rails'
   gem 'rspec-rails', '~> 3.0'
   gem 'awesome_print'
   gem 'vcr', '~> 2.9'
