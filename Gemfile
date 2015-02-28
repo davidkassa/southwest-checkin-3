@@ -40,9 +40,6 @@ gem 'mandrill-api'
 # Use Mina for deployment
 gem 'mina'
 
-# VCR is required for dev.rake
-gem 'vcr', '~> 2.9'
-
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
@@ -50,6 +47,7 @@ group :development, :test do
   gem 'dotenv-rails'
   gem 'rspec-rails', '~> 3.0'
   gem 'awesome_print'
+  gem 'vcr', '~> 2.9'
 
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
