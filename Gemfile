@@ -40,6 +40,7 @@ gem 'puma'
 # Use Mina for deployment
 gem 'mina'
 gem 'mina-puma', :require => false
+gem 'mina-sidekiq', :require => false
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

@@ -129,6 +129,8 @@ GEM
       rake
     mina-puma (0.2.0)
       mina
+    mina-sidekiq (0.3.1)
+      mina
     mini_portile (0.6.2)
     minitest (5.5.0)
     multi_json (1.10.1)
@@ -289,6 +291,7 @@ DEPENDENCIES
   mandrill-api
   mina
   mina-puma
+  mina-sidekiq
   pg
   pry
   puma
