@@ -42,10 +42,10 @@ gem 'mina'
 gem 'mina-puma', :require => false
 gem 'mina-sidekiq', :require => false
 
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
-
 gem 'dotenv-rails'
+
+# Skylight for performance monitoring
+gem 'skylight'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.0'
