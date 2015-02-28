@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable,
          :validatable, :lockable
 
-  has_many :reservations
+  has_many :reservations, dependent: :destroy
   after_create :send_welcome_email
 
   private
