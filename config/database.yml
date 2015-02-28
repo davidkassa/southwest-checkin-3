@@ -80,6 +80,6 @@ test:
 #
 production:
   <<: *default
-  database: southwest-checkin_production
-  username: southwest-checkin
-  password: <%= ENV['SOUTHWEST-CHECKIN_DATABASE_PASSWORD'] %>
+  database: southwest_checkin_production
+  username: southwest_checkin
+  password: <%= ENV['SOUTHWEST_CHECKIN_DATABASE_PASSWORD'] %>
