@@ -53,6 +53,7 @@ $Reservation-bg-color: darken($logo-blue, 10%);
 
 .ReservationCard-flight-title {
   @extend %large-font-size;
+  margin-bottom: 10px;
 }
 
 .ReservationCard-flight {
