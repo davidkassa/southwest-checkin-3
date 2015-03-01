@@ -15,7 +15,7 @@
       </div>
       <% if user_signed_in? %>
         <div class="Header-action Header-my-reservations">
-          <%= link_to 'My Reservations', user_reservations_path(current_user) %>
+          <%= link_to 'My Reservations', reservations_path %>
         </div>
         <div class="Header-action Header-dropdown">
           <% content_for :dropdown_toggle do %>
@@ -23,7 +23,8 @@
           <% end %>
           <% content_for :dropdown_menu do %>
             <ul class='Header-dropdown-list'>
-              <li><%= link_to 'My Reservations', user_reservations_path(current_user) %></li>
+              <li><%= link_to 'My Reservations', reservations_path %></li>
+              <li><%= link_to 'My Account', profile_path %></li>
               <li><%= link_to 'Logout', destroy_user_session_path, method: :delete, class: 'Header-login' %></li>
             </ul>
           <% end %>
