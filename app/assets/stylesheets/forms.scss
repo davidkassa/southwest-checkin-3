@@ -141,6 +141,10 @@ form,
         &:last-child {
           border-radius: 0 0 $Form-border-radius-desktop $Form-border-radius-desktop;
         }
+
+        &:first-child:last-child {
+          border-radius: $Form-border-radius-desktop;
+        }
       }
     }
   }
