@@ -4,6 +4,7 @@ require 'spec_helper'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'shoulda/matchers'
+require 'sidekiq/testing'
 require 'helpers/vcr_helper'
 # Add additional requires below this line. Rails is not loaded until this point!
 
@@ -52,4 +53,34 @@ RSpec.configure do |config|
 
   config.include Devise::TestHelpers, type: :controller
   config.include ActiveJob::TestHelper
+
+  # For testing Sidekiq directly if ActiveJob testing
+  # is not sufficient. This will use the `sidekiq` ActiveJob
+  # adapter instead of the `test` adapter.
+  #
+  # https://github.com/mperham/sidekiq/wiki/Testing
+  #
+  # Usage:
+  #
+  #   context "with sidekiq", sidekiq: :fake do
+  #     ...
+  #   end
+  #
+  config.before(:each) do |example|
+    Sidekiq::Worker.clear_all
+
+    if example.metadata[:sidekiq]
+      ActiveJob::Base.queue_adapter = :sidekiq
+    end
+
+    if example.metadata[:sidekiq] == :fake
+      Sidekiq::Testing.fake!
+    elsif example.metadata[:sidekiq] == :inline
+      Sidekiq::Testing.inline!
+    elsif example.metadata[:type] == :feature
+      Sidekiq::Testing.inline!
+    else
+      Sidekiq::Testing.fake!
+    end
+  end
 end

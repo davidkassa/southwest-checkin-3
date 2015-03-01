@@ -1,4 +1,5 @@
 class CheckinJob < ActiveJob::Base
+  extend Cancelable
   queue_as :checkin
 
   def perform(flight)
