@@ -8,16 +8,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
 </head>
 <body>
-  <%= render 'components/header' %>
-
+  <header class="Header Header--static">
+    <div class="Header-logo">
+      <a href="/">
+        <%= image_tag 'logo.svg', class: 'Header-logo-img' %>
+      </a>
+    </div>
+  </header>
   <section class="Body">
-    <% if notice %>
-      <div class="notice js-notice"><div class="notice-inner"><%= notice %></div></div>
-    <% end %>
-    <% if alert %>
-      <div class="alert js-notice"><div class="notice-inner"><%= alert %></div></div>
-    <% end %>
-
     <%= yield %>
   </section>
 </body>

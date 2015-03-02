@@ -24,15 +24,20 @@
 @import 'buttons';
 @import 'dropdown';
 @import 'header';
+@import 'footer';
 @import 'notice';
 @import 'forms';
 @import 'tables';
 @import 'hero';
 @import 'reservations';
+@import 'static';
 
-body {
+.Home {
+  background-color: $madison;
+}
+
+body,
+html {
   margin: 0;
   padding: 0;
 }
-
-

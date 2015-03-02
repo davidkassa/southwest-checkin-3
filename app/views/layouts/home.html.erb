@@ -7,7 +7,7 @@
   <%= csrf_meta_tags %>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
 </head>
-<body>
+<body class="Home">
   <%= render 'components/header' %>
 
   <section class="Body">
@@ -19,6 +19,17 @@
     <% end %>
 
     <%= yield %>
+
   </section>
+
+  <footer class='Footer Footer--dark'>
+    <ul class='DotList'>
+      <li><a href="/privacy">Privacy Policy</a></li>
+      <li><a href="https://github.com/aortbals/southwest-checkin">Open Source</a></li>
+    </ul>
+    <div class="Footer-notice">
+      Copyright © 2015 chkmein.co, All rights reserved.
+    </div>
+  </footer>
 </body>
 </html>
