@@ -66,17 +66,14 @@
   @include icon-size($font-size-mobile-largest, $font-size-desktop-largest)
 }
 
-.u-text-padded,
 .Icon--padded {
-  margin: 0 5px;
+  @extend %u-text-padded;
 }
 
-.u-text-padded-right,
 .Icon--padded-right {
-  margin-right: 5px;
+  @extend %u-text-padded-right;
 }
 
-.u-text-padded-left,
 .Icon--padded-left {
-  margin-left: 5px;
+  @extend %u-text-padded-left;
 }
