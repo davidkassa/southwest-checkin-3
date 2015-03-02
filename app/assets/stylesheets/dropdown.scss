@@ -5,8 +5,7 @@ $Dropdown-arrow-size: 8px;
   text-align: center;
 
   &.js-open .Dropdown-menu {
-    opacity: 1;
-    transform: translateY(0px);
+    display: block;
   }
 }
 
@@ -18,14 +17,13 @@ $Dropdown-arrow-size: 8px;
 .Dropdown-menu {
   position: absolute;
   z-index: $Dropdown-z-index;
-  opacity: 0;
+  display: none;
   background-color: $Dropdown-bg-color;
   min-width: 100%;
   padding: 5px 0;
   white-space: nowrap;
   border-radius: 5px;
   box-shadow: 0 0 5px rgba(0,0,0,.3);
-  transform: translateY(9999px);
   font-size: 90%;
 
   ul {
