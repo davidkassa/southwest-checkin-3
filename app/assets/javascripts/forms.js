@@ -8,7 +8,7 @@ var forms = (function() {
       on page load
     */
     checkCurrentElement: function() {
-      if ($(document.activeElement).parents('.js-FieldGroup').addClass(focusClass)) {
+      if ($(document.activeElement).parents('.js-FieldGroup').length > 0) {
         $(document.activeElement).parent().addClass(focusClass);
       }
     },
