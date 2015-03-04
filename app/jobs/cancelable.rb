@@ -3,10 +3,10 @@
 #
 # NOTE: `Sidekiq::ScheduledSet` does not provide a test adapter.
 # It works directly with Redis, so be aware that **there is no
-# protection against mutation your redis store**.
+# protection against mutating your redis store**.
 #
-# This does not support ActiveJob::QueueAdapters::TestAdapter. The
-# test adapter does not support `job_id` in the in-memory store:
+# This does not support `ActiveJob::QueueAdapters::TestAdapter`. The
+# test adapter doesn't (yet) support `job_id` in the in-memory store:
 #
 # https://github.com/rails/rails/blob/c9a4c2a5ce3eab52e2335362fe643328831a0ac4/activejob/lib/active_job/queue_adapters/test_adapter.rb#L18
 #

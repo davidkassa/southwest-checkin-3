@@ -52,6 +52,8 @@ group :development, :test do
   gem 'awesome_print'
   gem 'vcr', '~> 2.9'
 
+  gem 'letter_opener'
+
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
   gem 'pry'

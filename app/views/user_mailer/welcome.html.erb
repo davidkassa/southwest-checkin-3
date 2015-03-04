@@ -1,0 +1,22 @@
+<% content_for :header_title do %>
+  Welcome to <%= ENV['SITE_NAME'] %>
+<% end %>
+
+<% content_for :footer do %>
+  <span class="block">
+    <span>
+      <%= link_to 'Manage Your Account', profile_url, style: "font-weight:bold;text-decoration:none;", lang: "en" %>
+      <!-- Disabled seperator -->
+      <!-- span class="hide">&nbsp;&nbsp;|&nbsp;&nbsp;</span -->
+    </span>
+  </span>
+<% end %>
+
+<h1>Welcome to <%= link_to ENV['SITE_NAME'], ENV['SITE_URL'] %>!</h1>
+<p>
+  Thanks for joining <%= @email %>. You can get started by <%= link_to "adding a reservation", new_reservation_url %>, or <%= link_to 'viewing your current reservations', reservations_url %>.
+</p>
+<p>
+  Cheers,<br>
+  <%= link_to ENV['SITE_NAME'], ENV['SITE_URL'] %>
+</p>

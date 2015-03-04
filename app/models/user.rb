@@ -6,11 +6,11 @@ class User < ActiveRecord::Base
          :validatable, :lockable
 
   has_many :reservations, dependent: :destroy
-  after_create :send_welcome_email
+  after_commit :send_welcome_email, on: :create
 
   private
 
   def send_welcome_email
-    UserMailer.welcome_email(self)
+    UserMailer.welcome(self.email).deliver_later
   end
 end
