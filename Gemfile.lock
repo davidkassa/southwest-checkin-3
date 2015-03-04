@@ -243,8 +243,6 @@ GEM
     spring (1.2.0)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
-    spring-commands-sidekiq (1.0.0)
-      spring (>= 0.9.1)
     sprockets (2.12.3)
       hike (~> 1.2)
       multi_json (~> 1.0)
@@ -312,7 +310,6 @@ DEPENDENCIES
   skylight
   spring
   spring-commands-rspec
-  spring-commands-sidekiq
   timecop
   turbolinks
   typhoeus (~> 0.7)
