@@ -41,6 +41,10 @@ form {
 
     .field_with_errors input {
       line-height: $Form-height-mobile - 1px;
+
+      @include tablet-portrait-and-up {
+        line-height: $Form-height-desktop - 1px;
+      }
     }
 
     input {
@@ -90,7 +94,8 @@ form {
     margin-top: 20px;
     text-align: center;
 
-    input[type="submit"] {
+    input[type="submit"],
+    button[type="submit"] {
       @extend %BlueSubmitButton;
     }
   }

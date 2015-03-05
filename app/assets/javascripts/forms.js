@@ -9,17 +9,17 @@ var forms = (function() {
     */
     checkCurrentElement: function() {
       if ($(document.activeElement).parents('.js-FieldGroup').length > 0) {
-        $(document.activeElement).parent().addClass(focusClass);
+        $(document.activeElement).parents('.field').addClass(focusClass);
       }
     },
 
     highlightFormInput: function() {
       $(selector).focusin(function(event) {
-        $(event.target).parent().addClass(focusClass);
+        $(event.target).parents('.field').addClass(focusClass);
       });
 
       $(selector).focusout(function(event) {
-        $(event.target).parent().removeClass(focusClass);
+        $(event.target).parents('.field').removeClass(focusClass);
       });
     }
   }
