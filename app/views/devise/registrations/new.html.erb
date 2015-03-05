@@ -25,7 +25,13 @@
   <% end %>
 
   <div class="actions">
-    <%= f.submit "Sign up" %>
+    <%= button_tag type: 'submit' do %>
+      <% if flash[:from_reservations] %>
+        Continue to add your reservation <span class='ButtonPointingAngle'>»</span>
+      <% else %>
+        Sign up
+      <% end %>
+    <% end %>
   </div>
 <% end %>
 

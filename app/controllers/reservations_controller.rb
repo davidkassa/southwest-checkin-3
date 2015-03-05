@@ -1,7 +1,8 @@
 require_relative '../../lib/southwest/errors'
 
 class ReservationsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_or_redirect_to_signup!, only: :new
+  before_action :authenticate_user!, except: :new
   before_action :current_user_only!
   before_action :set_user, only: [:index, :create]
   before_action :set_reservation, only: [:show, :edit, :update, :destroy]
@@ -43,6 +44,16 @@ class ReservationsController < ApplicationController
   end
 
   private
+
+  def authenticate_or_redirect_to_signup!
+    if user_signed_in?
+      return true
+    else
+      flash[:notice] = 'Start by creating an account to track your reservations.'
+      flash[:from_reservations] = true
+      redirect_to new_registration_path(User.new)
+    end
+  end
 
   def southwest_request_error
     flash[:notice] = 'Sorry! There was an error communicating with Southwest. This has been reported. Please try to add your flight later.'
