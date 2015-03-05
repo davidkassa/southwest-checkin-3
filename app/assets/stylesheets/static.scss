@@ -1,8 +1,12 @@
+.StaticContainer {
+  background-color: $madison;
+}
+
 .Static {
   color: $light-text-color;
   max-width: 600px;
   margin: 0 auto;
-  padding: 20px 10px 0;
+  padding: 20px 10px;
 
   h1,
   h2,
