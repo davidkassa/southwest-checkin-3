@@ -67,7 +67,7 @@ Rails.application.configure do
 
   config.action_mailer.default_url_options = {
     host: ENV['MAIL_DEFAULT_HOST'],
-    port: ENV['MAIL_DEFAULT_PORT']
+    protocol: ENV['MAIL_DEFAULT_PROTOCOL'] || 'https'
   }
 
   config.action_mailer.default_options  = {
