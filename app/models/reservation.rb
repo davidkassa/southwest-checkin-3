@@ -10,6 +10,7 @@ class Reservation < ActiveRecord::Base
   before_create :create_flights
   before_save :upcase_confirmation_number
   after_create :schedule_checkins
+  after_commit :send_new_reservation_email, on: :create
 
   validates_associated :passengers
   validates :confirmation_number, length: { is: 6 }
@@ -90,5 +91,9 @@ class Reservation < ActiveRecord::Base
     else
       errors[:base] << response.error
     end
+  end
+
+  def send_new_reservation_email
+    ReservationMailer.new_reservation(self, user.email).deliver_later
   end
 end

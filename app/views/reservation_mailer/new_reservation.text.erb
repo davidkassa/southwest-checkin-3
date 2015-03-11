@@ -1,0 +1,12 @@
+Reservation #<%= @reservation.confirmation_number %> - <%= ENV['SITE_NAME'] %>
+===========================================================
+
+Reservation <%= @reservation.confirmation_number %> has been successfully added.
+
+The following passengers will be automatically checked in for each departure and return flight on the reservation:
+
+<% @reservation.passengers.each do |passenger| %>
+- <%= passenger.full_name %>
+<% end %>
+
+View your reservation details or manage your reservation at any time by using this link: <%= reservation_url(@reservation) %>.
