@@ -1,6 +1,6 @@
 var notice = (function() {
   var timeoutID = null;
-  var delay = 4000;
+  var delay = 10000;
 
   return {
     removeNoticesAfterDelay: function() {
