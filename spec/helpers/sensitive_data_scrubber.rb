@@ -28,7 +28,6 @@ class SensitiveDataScrubber
   end
 
   def scrub!(text)
-    binding.pry
     text.sub!(/#{confirmation_number}/i, 'ABC123') if confirmation_number
     text.sub!(/#{first_name.upcase}/, 'FUU') if first_name
     text.sub!(/#{last_name.upcase}/, 'BAR') if last_name

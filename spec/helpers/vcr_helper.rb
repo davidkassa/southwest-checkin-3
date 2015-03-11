@@ -30,6 +30,10 @@ VCR.configure do |c|
   c.before_playback(:feb_08_2015) {
     allow_any_instance_of(Southwest::Reservation).to receive(:todays_date_formatted).and_return('02/08/2015')
   }
+
+  c.before_playback(:mar_11_2015) {
+    allow_any_instance_of(Southwest::Reservation).to receive(:todays_date_formatted).and_return('03/11/2015')
+  }
 end
 
 VCR.use_cassette("viewAirReservation", tag: :jan_12_2015) {}
@@ -38,3 +42,4 @@ VCR.use_cassette("viewAirReservation_multiple_passengers_mco_pit_nonstop", tag: 
 VCR.use_cassette("viewAirReservation_multiple_passengers_sfo_bwi_1_stop", tag: :jan_31_2015) {}
 VCR.use_cassette("viewAirReservation_cancelled", tag: :jan_31_2015) {}
 VCR.use_cassette("viewAirReservation_single_MDW_MCI", tag: :feb_08_2015) {}
+VCR.use_cassette("bad_reservation_information", tag: :mar_11_2015) {}

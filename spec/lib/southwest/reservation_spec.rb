@@ -77,7 +77,7 @@ RSpec.describe Southwest::Reservation do
   describe 'cancelled reservation' do
     it 'returns a cancelled error message' do
       VCR.use_cassette 'viewAirReservation cancelled' do
-        expect(subject.body['errmsg']).to eql("Your reservation has been cancelled  (SW107028)")
+        expect(subject.error).to eql("Your reservation has been cancelled  (SW107028)")
       end
     end
   end
@@ -98,5 +98,15 @@ RSpec.describe Southwest::Reservation do
     let(:cassette) { 'viewAirReservation single MDW MCI' }
 
     it_behaves_like 'successful reservation retrieval'
+  end
+
+  describe 'bad reservation information' do
+    let(:cassette) { 'bad reservation information' }
+
+    it 'returns something?' do
+      VCR.use_cassette cassette do
+        expect(subject.error).to match(/We were unable to retrieve your reservation from our database/)
+      end
+    end
   end
 end
