@@ -30,6 +30,7 @@ class ReservationsController < ApplicationController
   def create
     @reservation = @user.reservations.new(reservation_params)
     @reservation.save
+    flash[:notice] = 'Your reservation has been added! You will receive an email when the passengers on this reservation have been successfully checked in.'
     respond_with(@reservation)
   end
 
