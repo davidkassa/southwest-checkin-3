@@ -39,8 +39,15 @@ class Reservation < ActiveRecord::Base
   end
 
   def retrieve_reservation
-    self.payload = southwest_reservation.to_hash
-    self.arrival_city_name = southwest_reservation.body["upComingInfo"][0]["arrivalCityName"]
+    retrieved_reservation = southwest_reservation
+
+    if retrieved_reservation.error?
+      invalidate_reservation(retrieved_reservation)
+      return false
+    end
+
+    self.payload = retrieved_reservation.to_hash
+    self.arrival_city_name = retrieved_reservation.body["upComingInfo"][0]["arrivalCityName"]
   end
 
   def create_passengers
@@ -70,6 +77,18 @@ class Reservation < ActiveRecord::Base
   def schedule_checkins
     flights.where(position: 1).where("departure_time > ?", Time.zone.now).each do |flight|
       flight.schedule_checkin
+    end
+  end
+
+  def invalidate_reservation(response)
+    if response.error.match /entered correctly/
+      errors.add(:confirmation_number, 'verify your confirmation number is entered correctly')
+      errors.add(:first_name, 'verify your first name is entered correctly')
+      errors.add(:last_name, 'verify your last name is entered correctly')
+    elsif response.error.match /cancelled/
+      errors[:base] << "Your reservation has been cancelled"
+    else
+      errors[:base] << response.error
     end
   end
 end

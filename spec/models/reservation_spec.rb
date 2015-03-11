@@ -18,6 +18,13 @@ RSpec.describe Reservation, type: :model do
   describe 'creating a reservation' do
     describe 'with invalid attributes' do
       subject { Reservation.create }
+      let(:invalid_attributes) {
+        {
+          confirmation_number: "abc123",
+          first_name: "Fuu",
+          last_name: "Bar"
+        }
+      }
 
       it { recorded { should accept_nested_attributes_for :user } }
       it { recorded { should validate_presence_of :first_name } }
@@ -25,10 +32,37 @@ RSpec.describe Reservation, type: :model do
       it { recorded { should validate_presence_of :confirmation_number } }
       it { recorded { should ensure_length_of(:confirmation_number).is_equal_to(6) } }
 
-      it 'sets the arrival_city_name before validation' do
-        recorded do
-          expect(Reservation.create(valid_attributes).arrival_city_name).to eql('Denver, CO')
+      context 'bad reservation information' do
+        let(:cassette) { 'bad reservation information' }
+
+        subject { Reservation.create(invalid_attributes) }
+
+        it 'raise a validation error' do
+          VCR.use_cassette(cassette) do
+            expect(subject.valid?).to eql(false)
+            expect(subject.errors[:confirmation_number]).to eql ['verify your confirmation number is entered correctly']
+            expect(subject.errors[:first_name]).to eql ['verify your first name is entered correctly']
+            expect(subject.errors[:last_name]).to eql ['verify your last name is entered correctly']
+          end
         end
+      end
+
+      context 'viewAirReservation cancelled' do
+        let(:cassette) { 'viewAirReservation cancelled' }
+
+        subject { Reservation.create(invalid_attributes) }
+
+        it 'raise a validation error' do
+          VCR.use_cassette(cassette) do
+            expect(subject.errors[:base].first).to match /Your reservation has been cancelled/
+          end
+        end
+      end
+    end
+
+    it 'sets the arrival_city_name before validation' do
+      recorded do
+        expect(Reservation.create(valid_attributes).arrival_city_name).to eql('Denver, CO')
       end
     end
 
