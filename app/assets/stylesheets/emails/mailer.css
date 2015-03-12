@@ -92,6 +92,11 @@
     line-height: 42px !important;
     Margin-bottom: 18px !important;
   }
+  [class=wrapper] h1.smaller {
+    font-size: 36px !important;
+    line-height: 42px !important;
+    Margin-bottom: 18px !important;
+  }
   [class=wrapper] h2 {
     font-size: 26px !important;
     line-height: 32px !important;

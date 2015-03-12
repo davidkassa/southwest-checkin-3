@@ -94,6 +94,6 @@ class Reservation < ActiveRecord::Base
   end
 
   def send_new_reservation_email
-    ReservationMailer.new_reservation(self, user.email).deliver_later
+    ReservationMailer.new_reservation(self).deliver_later
   end
 end

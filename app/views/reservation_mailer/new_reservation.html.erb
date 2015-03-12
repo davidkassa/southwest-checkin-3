@@ -1,5 +1,5 @@
 <% content_for :header_title do %>
-  Reservation #<%= @reservation.confirmation_number %> - <%= ENV['SITE_NAME'] %>
+  #<%= @reservation.confirmation_number %> - <%= render 'shared/reservation_flights_header' %> - <%= ENV['SITE_NAME'] %>
 <% end %>
 
 <% content_for :footer do %>
@@ -12,7 +12,7 @@
   </span>
 <% end %>
 
-<h1>Reservation #<%= @reservation.confirmation_number %></h1>
+<h1 class='smaller'>#<%= @reservation.confirmation_number %> - <%= render 'shared/reservation_flights_header' %></h1>
 <p>
   Reservation <%= link_to "##{@reservation.confirmation_number}", reservation_url(@reservation) %> has been successfully added.
 </p>
