@@ -1,0 +1,20 @@
+#<%= @checkin.reservation.confirmation_number %> - Flight #<%= @checkin.flight.flight_number %> - Successful Checkin
+===========================================================
+
+Great news! You've been successfully checked in to Flight #<%= @checkin.flight.flight_number %>.
+
+Flight #<%= @checkin.flight.flight_number %> Boarding Positions:
+
+<% @checkin.passenger_checkins.each do |passenger_checkin| %>
+  <%= passenger_checkin.boarding_group %><%= passenger_checkin.boarding_position %> - <%= passenger_checkin.passenger.full_name %>
+<% end %>
+
+<% if @checkin.reservation.checkins.not_completed.any? %>
+  Remaining automatic checkins:
+
+  <% @checkin.reservation.checkins.not_completed.each do |checkin| %>
+    Flight #<%= checkin.flight.flight_number %> - Automatic checkin at <%= flight_time_basic checkin.local_scheduled_at %> <%= flight_date checkin.local_scheduled_at %>
+  <% end %>
+<% end %>
+
+View your checkin details or manage your reservation at any time by using this link: <%= reservation_url(@checkin.reservation) %>.

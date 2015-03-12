@@ -5,6 +5,6 @@ class CheckinMailer < ApplicationMailer
   def successful_checkin(checkin)
     @checkin = checkin
     @email = checkin.user.email
-    mail(to: @email, subject: "#{checkin.reservation.confirmation_number} - Flight ##{checkin.flight.flight_number} - Successful Checkin")
+    mail(to: @email, subject: "##{checkin.reservation.confirmation_number} - Flight ##{checkin.flight.flight_number} - Successful Checkin")
   end
 end
