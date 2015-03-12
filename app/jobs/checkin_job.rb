@@ -26,6 +26,8 @@ class CheckinJob < ActiveJob::Base
     passenger_checkins(checkin_response, checkin_record).each do |flight_attributes|
       PassengerCheckin.create(flight_attributes)
     end
+
+    CheckinMailer.successful_checkin(checkin_record).deliver_later
   end
 
   private

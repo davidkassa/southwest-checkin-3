@@ -1,5 +1,7 @@
 class Checkin < ActiveRecord::Base
   belongs_to :flight
+  has_one :user, through: :flight
+  has_one :reservation, through: :flight
   has_many :passenger_checkins, dependent: :destroy
 
   validates :flight,
@@ -7,6 +9,9 @@ class Checkin < ActiveRecord::Base
             presence: true
 
   before_destroy :remove_checkin_job
+
+  scope :completed, -> { where.not(completed_at: nil) }
+  scope :not_completed, -> { where(completed_at: nil) }
 
   def completed?
     completed_at.present?

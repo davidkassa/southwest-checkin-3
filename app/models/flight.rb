@@ -4,6 +4,7 @@ class Flight < ActiveRecord::Base
   belongs_to :reservation, inverse_of: :flights
   has_many :passenger_checkins, dependent: :destroy
   has_one :checkin, dependent: :destroy
+  has_one :user, through: :reservation
 
   validates :departure_time,
             :arrival_time,
