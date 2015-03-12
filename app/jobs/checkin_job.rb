@@ -27,7 +27,9 @@ class CheckinJob < ActiveJob::Base
       PassengerCheckin.create(flight_attributes)
     end
 
-    CheckinMailer.successful_checkin(checkin_record).deliver_later
+    if email = checkin_record.user.present?
+      CheckinMailer.successful_checkin(checkin_record, email).deliver_later
+    end
   end
 
   private
