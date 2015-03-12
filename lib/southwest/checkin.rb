@@ -3,13 +3,13 @@ require_relative './checkin_response'
 
 module Southwest
   class Checkin < Request
-    def self.checkin(last_name:, first_name:, record_locator:)
+    def self.checkin(last_name:, first_name:, record_locator:, email_boarding_pass: true)
       new(last_name: last_name,
           first_name: first_name,
-          record_locator: record_locator).checkin
+          record_locator: record_locator).checkin(email_boarding_pass: email_boarding_pass)
     end
 
-    def checkin
+    def checkin(email_boarding_pass: true)
       create_session
 
       flight_checkin_new_response = Response.new(flight_checkin_new)
@@ -32,7 +32,12 @@ module Southwest
       end
 
       breathe
-      view_boarding_passes_response = Response.new(view_boarding_passes)
+      if email_boarding_pass
+        email_address = email_address_from_boarding_pass(get_all_boarding_passes_response)
+      else
+        email_address = nil
+      end
+      view_boarding_passes_response = Response.new(view_boarding_passes(email_address))
 
       CheckinResponse.new(flight_checkin_new: flight_checkin_new_response,
                           get_all_boarding_passes: get_all_boarding_passes_response,
@@ -77,12 +82,18 @@ module Southwest
       }))
     end
 
-    def view_boarding_passes
+    def view_boarding_passes(email_address = nil)
       validate_session!
-      make_request(base_params.merge({
-        serviceID: 'viewboardingpass',
-        optionPrint: 'true'
-      }))
+      params = { serviceID: 'viewboardingpass' }
+
+      if email_address
+        params[:optionEmail] = 'true'
+        params[:emailAddress] = email_address
+      else
+        params[:optionPrint] = 'true'
+      end
+
+      make_request(base_params.merge(params))
     end
 
     def missing_flight_information?(response)
@@ -95,6 +106,11 @@ module Southwest
 
     def is_cancelled_reservation?(response)
       response.body["errmsg"] =~ /cancelled/i
+    end
+
+    def email_address_from_boarding_pass(response)
+      email = response.body['mbp_emailAddress']
+      email.present? ? email : nil
     end
 
     # These endpoints return JSON with a custom response
