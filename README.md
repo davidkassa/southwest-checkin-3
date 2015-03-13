@@ -22,6 +22,50 @@ If you are interested in the old version, see the 1.0 tag.
 - Full test suite
 
 
+## Installation
+
+1. While not strictly required, it is recommended to install [`rbenv`](https://github.com/sstephenson/rbenv) and [`ruby-build`](https://github.com/sstephenson/ruby-build) to manager ruby versions in development.
+
+2. Required dependencies
+
+    - Postgres
+    - Redis
+
+3. After installing the aforementioned dependencies, install the ruby dependencies:
+
+    ```shell
+    bundle install
+    ```
+
+4. Create and seed the database:
+
+    ```shell
+    rake db:create db:migrate db:seed
+    ```
+
+5. Adding some basic test data for development:
+
+    ```shell
+    rake dev:prime
+    ```
+
+6. Copy `.env.example` to `.env`. The defaults should work in development.
+
+    ```shell
+    cp .env.example .env
+    ```
+7. Run the tests:
+
+    ```shell
+    rspec
+    ```
+
+8. Run the development server:
+
+    ```
+    rails s
+    ```
+
 ## Contributing
 
 1. Fork it
