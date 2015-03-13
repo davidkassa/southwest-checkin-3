@@ -29,8 +29,7 @@ gem 'devise', '~> 3.4' # Authentication
 gem 'sidekiq' # Background job processing queue
 gem 'sinatra', :require => nil # Required for sidekiq web UI
 
-gem 'mandrill-api'
-gem 'roadie-rails'
+gem 'roadie-rails' # Inline styles for emails
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
