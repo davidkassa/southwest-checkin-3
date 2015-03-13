@@ -19,8 +19,8 @@ Rails.application.configure do
   }
 
   config.action_mailer.default_options  = {
-    from: ENV['MAIL_DEFAULT_FROM_EMAIL'],
-    reply_to: ENV['MAIL_DEFAULT_REPLY_TO']
+    from: ENV['MAILER_DEFAULT_FROM_EMAIL'],
+    reply_to: ENV['MAILER_DEFAULT_REPLY_TO']
   }
 
   config.action_mailer.delivery_method = :letter_opener

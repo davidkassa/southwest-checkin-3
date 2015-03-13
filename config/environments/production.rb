@@ -66,13 +66,13 @@ Rails.application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
   config.action_mailer.default_url_options = {
-    host: ENV['MAIL_DEFAULT_HOST'],
-    protocol: ENV['MAIL_DEFAULT_PROTOCOL'] || 'https'
+    host: ENV['MAILER_DEFAULT_HOST'],
+    protocol: ENV['MAILER_DEFAULT_PROTOCOL'] || 'https'
   }
 
   config.action_mailer.default_options  = {
-    from: ENV['MAIL_DEFAULT_FROM_EMAIL'],
-    reply_to: ENV['MAIL_DEFAULT_REPLY_TO']
+    from: ENV['MAILER_DEFAULT_FROM_EMAIL'],
+    reply_to: ENV['MAILER_DEFAULT_REPLY_TO']
   }
 
   config.action_mailer.delivery_method = :smtp
