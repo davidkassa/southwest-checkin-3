@@ -15,10 +15,9 @@ Rails.application.routes.draw do
 
   get 'privacy', to: 'static#privacy'
 
-  Sidekiq::Web.use Rack::Auth::Basic do |username, password|
-    username == ENV["SIDEKIQ_USERNAME"] && password == ENV["SIDEKIQ_PASSWORD"]
-  end if Rails.env.production?
-  mount Sidekiq::Web, at: "/sidekiq"
+  authenticate :user, lambda { |u| u.admin? } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 
   # You can have the root of your site routed with "root"
   root 'home#index'
