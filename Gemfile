@@ -47,6 +47,9 @@ gem 'dotenv-rails'
 # Skylight for performance monitoring
 gem 'skylight'
 
+# Airbrake/Errbit for error monitoring
+gem 'airbrake'
+
 group :development, :test do
   gem 'rspec-rails', '~> 3.0'
   gem 'awesome_print'

@@ -37,6 +37,9 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     addressable (2.3.6)
+    airbrake (4.1.0)
+      builder
+      multi_json
     arel (6.0.0)
     autoprefixer-rails (5.0.0.1)
       execjs
@@ -287,6 +290,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  airbrake
   autoprefixer-rails
   awesome_print
   byebug
