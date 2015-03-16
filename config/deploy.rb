@@ -77,9 +77,18 @@ task :deploy => :environment do
     to :launch do
       invoke :'puma:phased_restart'
       invoke :'sidekiq:restart'
+      invoke :'airbrake:deploy'
     end
   end
 end
+
+namespace :airbrake do
+  desc "Notify airbrake of a deploy"
+  task :deploy => :environment do
+    queue %[rake airbrake:deploy TO=#{rails_env} REVISION=#{commit} REPO=#{repository} USER=#{user}]
+  end
+end
+
 
 # For help in making your deploy script, see the Mina documentation:
 #
