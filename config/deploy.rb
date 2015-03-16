@@ -85,7 +85,7 @@ end
 namespace :airbrake do
   desc "Notify airbrake of a deploy"
   task :deploy => :environment do
-    queue %[rake airbrake:deploy TO=#{rails_env} REVISION=#{commit} REPO=#{repository} USER=#{user}]
+    queue! %[#{bundle_bin} exec rake airbrake:deploy TO=#{rails_env} REVISION=#{commit} REPO=#{repository} USER=#{user}]
   end
 end
 
