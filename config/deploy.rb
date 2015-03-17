@@ -30,6 +30,8 @@ set :user, ENV['DEPLOY_USER']    # Username in the server to SSH to.
 set :port, ENV['DEPLOY_PORT']     # SSH port number.
 set :forward_agent, true     # SSH forward_agent.
 
+set :notify_airbrake, ENV['AIRBRAKE_DEPLOY_NOTIFICATION'] == 'true'
+
 # This task is the environment that is loaded for most commands, such as
 # `mina deploy` or `mina rake`.
 task :environment do
@@ -77,7 +79,7 @@ task :deploy => :environment do
     to :launch do
       invoke :'puma:phased_restart'
       invoke :'sidekiq:restart'
-      invoke :'airbrake:deploy'
+      invoke :'airbrake:deploy' if notify_airbrake
     end
   end
 end
@@ -85,7 +87,8 @@ end
 namespace :airbrake do
   desc "Notify airbrake of a deploy"
   task :deploy => :environment do
-    queue! %[#{bundle_bin} exec rake airbrake:deploy TO=#{rails_env} REVISION=#{commit} REPO=#{repository} USER=#{user}]
+    queue %[echo "-----> Notifying airbrake"]
+    queue %[rake airbrake:deploy TO=#{rails_env} REVISION=#{commit} REPO=#{repository} USER=#{user}]
   end
 end
 
