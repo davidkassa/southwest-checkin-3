@@ -53,6 +53,26 @@ RSpec.describe CheckinJob, :type => :job do
         expect { CheckinJob.perform_later(flight) }.to change(PassengerCheckin, :count).by(1)
       end
     end
+
+    context 'the reservation has a user' do
+      let(:user) { User.create(email: 'fuu.bar@baz.com', password: 'password') }
+
+      before do
+        reservation.user_id = user.id
+        reservation.save!
+      end
+
+      it "sends a checkin email to the reservation's user" do
+        perform do
+          CheckinJob.perform_later(flight)
+          email = ActionMailer::Base.deliveries.first
+          expect(email.to).to eql(['fuu.bar@baz.com'])
+          expect(email.subject).to eql("#ABC123 - Flight #1001 - Successful Checkin")
+          expect(email.from).to eql('test@localhost:3000')
+          expect(email.reply_to).to eql('test@localhost:3000')
+        end
+      end
+    end
   end
 
   context 'checkin multiple passengers sfo bwi 1 stop' do
