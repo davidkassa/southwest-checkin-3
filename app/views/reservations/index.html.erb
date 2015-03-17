@@ -5,7 +5,7 @@
         <th>Confirmation number</th>
         <th>Date</th>
         <th>Traveling to</th>
-        <th>Flights</th>
+        <th>Passengers</th>
         <th colspan="2"></th>
       </tr>
     </thead>
@@ -17,16 +17,10 @@
           <td><%= flight_date reservation.time %></td>
           <td><%= reservation.arrival_city_name %></td>
           <td>
-            <% if reservation.departure_flights.any? %>
-              <%= reservation.departure_flights.first.departure_airport.iata %>
-              <span class="Icon-plane-arrow Icon--padded"></span>
-              <%= reservation.departure_flights.last.arrival_airport.iata %>
-            <% end %>
-            <% if reservation.return_flights.any? %>
-              <span class='u-text-padded'>·</span>
-              <%= reservation.return_flights.first.departure_airport.iata %>
-              <span class="Icon-plane-arrow Icon--padded"></span>
-              <%= reservation.return_flights.last.arrival_airport.iata %>
+            <% if reservation.passengers.one? %>
+              <%= reservation.passengers.first.full_name %>
+            <% else %>
+              <%= reservation.passengers.first.full_name %> + <%= reservation.passengers.count - 1 %>
             <% end %>
           </td>
           <td><%= link_to 'Remove', reservation, method: :delete, data: { confirm: 'Are you sure?' } %></td>
