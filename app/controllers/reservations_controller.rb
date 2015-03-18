@@ -52,7 +52,7 @@ class ReservationsController < ApplicationController
     if current_user.admin? && show_all?
       Reservation.order(created_at: :desc).all
     else
-      @user.reservations.all
+      @user.reservations.ordered_by_departure_time.all
     end
   end
 
