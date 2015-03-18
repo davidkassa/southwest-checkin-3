@@ -50,9 +50,9 @@ class ReservationsController < ApplicationController
 
   def reservations
     if current_user.admin? && show_all?
-      Reservation.ordered_by_departure_time.page(params[:page])
+      Reservation.page(params[:page])
     else
-      @user.reservations.ordered_by_departure_time.page(params[:page])
+      @user.reservations.page(params[:page])
     end
   end
 
