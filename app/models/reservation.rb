@@ -21,6 +21,8 @@ class Reservation < ActiveRecord::Base
             :payload,
             presence: true
 
+  scope :ordered_by_departure_time, -> { includes(:flights).order("flights.departure_time") }
+
   def departure_flights
     flights.departure.order(:departure_time)
   end
