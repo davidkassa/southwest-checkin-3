@@ -18,7 +18,7 @@ class Flight < ActiveRecord::Base
             :flight_type,
             presence: true
 
-  enum flight_type: { departure: 0, 'return': 1 }
+  enum flight_type: { departure: 0, return: 1 }
 
   def local_departure_time
     Time.use_zone(departure_airport.timezone) do
