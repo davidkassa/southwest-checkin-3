@@ -103,9 +103,19 @@ RSpec.describe Southwest::Reservation do
   describe 'bad reservation information' do
     let(:cassette) { 'bad reservation information' }
 
-    it 'returns something?' do
+    it 'returns an error that the reservation does not exist' do
       VCR.use_cassette cassette do
         expect(subject.error).to match(/We were unable to retrieve your reservation from our database/)
+      end
+    end
+  end
+
+  describe 'international flight' do
+    let(:cassette) { 'international flight Punta Cana DO' }
+
+    it "returns 'isInternationalPNR' indicating it is international" do
+      VCR.use_cassette cassette do
+        expect(subject.body["isInternationalPNR"]).to eql('true')
       end
     end
   end
