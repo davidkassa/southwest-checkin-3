@@ -25,7 +25,7 @@ class FlightTimeParser
   end
 
   def city
-    /^\d{1,2}:\d{2}\ [APap][Mm]\ (?<city>.*)\ \([[:alpha:]]*\)/.match(city_string)[:city]
+    /\d{1,2}:\d{2}\ [APap][Mm]\ (?<city>.*)\ \([[:alpha:]]*\)/.match(city_string)[:city].try(:strip)
   end
 
   def airport

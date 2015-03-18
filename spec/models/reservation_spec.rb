@@ -176,5 +176,12 @@ RSpec.describe Reservation, type: :model do
         end
       end
     end
+
+    context 'viewAirReservation with next day flight' do
+      let(:cassette) { 'viewAirReservation with next day flight' }
+      subject { Reservation.create(valid_attributes) }
+
+      it_behaves_like 'with valid attributes'
+    end
   end
 end
