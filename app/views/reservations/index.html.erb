@@ -14,7 +14,7 @@
       <% @reservations.each do |reservation| %>
         <tr>
           <td><%= link_to reservation.confirmation_number, reservation %></td>
-          <td><%= flight_date reservation.time %></td>
+          <td><%= flight_date(reservation.time) if reservation.time %></td>
           <td><%= reservation.arrival_city_name %></td>
           <td class='Table-no-mobile'>
             <% if reservation.passengers.one? %>
