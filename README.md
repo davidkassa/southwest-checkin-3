@@ -4,7 +4,7 @@
 
 Version 2.0 of this project is a complete rewrite of the service. The brittle HTML parsing and form submissions are a thing of the past. A much better approach is being taken to automate checkins. And, importantly, the new version has a robust test suite. It is even written in a new language (Ruby) and framework (Rails).
 
-If you are interested in the old version, see the [1.0 tag](https://github.com/aortbals/southwest-checkin/tree/1.0).
+If you are interested in the old version, see the [1.0 branch](https://github.com/aortbals/southwest-checkin/tree/1.0).
 
 ## Features
 
