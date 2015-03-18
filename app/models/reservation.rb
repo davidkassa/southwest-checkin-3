@@ -32,7 +32,7 @@ class Reservation < ActiveRecord::Base
   end
 
   def time
-    departure_flights.first.departure_time
+    departure_flights.any? ? departure_flights.first.departure_time : nil
   end
 
   private
