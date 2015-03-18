@@ -3,14 +3,22 @@ $Reservation-bg-color: darken($logo-blue, 10%);
 .Reservations,
 .Reservation {
   margin: 0 auto;
-  padding: 10px 10px 10px 10px;
+  padding: 10px 0;
 
   @include tablet-portrait-and-up {
-    padding-top: 60px;
+    padding: 60px 10px 10px;
 
     & > * {
       text-align: left;
     }
+  }
+}
+
+.Reservations-actions {
+  text-align: center;
+
+  @include tablet-portrait-and-up {
+    text-align: left;
   }
 }
 
@@ -117,7 +125,11 @@ $Reservation-bg-color: darken($logo-blue, 10%);
 
 .Reservations {
   max-width: 800px;
-  width: 90%;
+  width: 100%;
+
+  @include tablet-portrait-and-up {
+    width: 90%;
+  }
 }
 
 .ReservationCard-badge {

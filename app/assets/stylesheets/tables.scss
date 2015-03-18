@@ -1,8 +1,9 @@
 .Table {
+  @extend %smallest-font-size;
   width: 100%;
-  border: $Form-border-width solid $Form-border-color;
-  border-radius: 6px;
   border-collapse: separate;
+  border-top: $Form-border-width solid $Form-border-color;
+  border-bottom: $Form-border-width solid $Form-border-color;
 
   th {
     @extend %header;
@@ -18,5 +19,16 @@
   th:first-child,
   td:first-child {
     padding-left: 15px;
+  }
+
+  @include tablet-portrait-and-up {
+    border-radius: 6px;
+    border: $Form-border-width solid $Form-border-color;
+  }
+}
+
+.Table-no-mobile {
+  @include below-tablet-portrait {
+    display: none;
   }
 }

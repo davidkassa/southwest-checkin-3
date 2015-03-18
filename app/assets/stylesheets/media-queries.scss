@@ -83,6 +83,12 @@
     }
 }
 
+@mixin below-tablet-portrait {
+    @media only screen and (max-width : $mq-tablet-portrait - 1) {
+        @content;
+    }
+}
+
 // Everything below and including the portrait width of the tablet
 @mixin tablet-portrait-and-below {
     @media only screen and (max-width : $mq-tablet-portrait) {
