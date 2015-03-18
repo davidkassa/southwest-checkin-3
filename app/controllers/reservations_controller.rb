@@ -11,7 +11,7 @@ class ReservationsController < ApplicationController
   respond_to :html
 
   def index
-    @reservations = @user.reservations.all
+    @reservations = reservations
     respond_with(@reservations)
   end
 
@@ -47,6 +47,18 @@ class ReservationsController < ApplicationController
   end
 
   private
+
+  def reservations
+    if current_user.admin? && show_all?
+      Reservation.order(created_at: :desc).all
+    else
+      @user.reservations.ordered_by_departure_time.all
+    end
+  end
+
+  def show_all?
+    params[:all] == 'true'
+  end
 
   def authenticate_or_redirect_to_signup!
     if user_signed_in?

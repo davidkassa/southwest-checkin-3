@@ -11,7 +11,7 @@
     </thead>
 
     <tbody>
-      <% @reservations.ordered_by_departure_time.each do |reservation| %>
+      <% @reservations.each do |reservation| %>
         <tr>
           <td><%= link_to reservation.confirmation_number, reservation %></td>
           <td><%= flight_date reservation.time %></td>
