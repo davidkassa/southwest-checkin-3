@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="ReservationCard-flight-groups ReservationCard-indention-bottom">
-      <% @reservation.flights.any? %>
+      <% if @reservation.flights.any? %>
         <% if @reservation.departure_flights.any? %>
           <div class="ReservationCard-flights">
             <div class="ReservationCard-flight-group-title">Departure</div>
@@ -116,13 +116,12 @@
             <% end %>
           </div>
         <% end %>
+      <% elsif @reservation.international? %>
+        <p class='ReservationCard-message'>
+          Unfortunately, do to uncontrolled limitations of the checkin process, international flights are not yet supported.
+        </p>
       <% else %>
-        <% if @reservation.international? %>
-          <p class='ReservationCard-message'>
-            Unfortunately, do to uncontrolled limitations of the checkin process, international flights are not yet supported.
-          </p>
-        <% else %>
-          No flights.
+        No flights.
       <% end %>
     </div>
   </div>
