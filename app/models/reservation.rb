@@ -49,8 +49,12 @@ class Reservation < ActiveRecord::Base
       return false
     end
 
+    if retrieved_reservation.international?
+      errors[:base] << "Unfortunately, do to uncontrolled limitations of the checkin process, international flights are not yet supported."
+    end
+
     self.payload = retrieved_reservation.to_hash
-    self.arrival_city_name = retrieved_reservation.body["upComingInfo"][0]["arrivalCityName"]
+    self.arrival_city_name = retrieved_reservation.arrival_city_name
   end
 
   def create_passengers
@@ -84,11 +88,11 @@ class Reservation < ActiveRecord::Base
   end
 
   def invalidate_reservation(response)
-    if response.error.match /entered correctly/
+    if response.entered_incorrectly?
       errors.add(:confirmation_number, 'verify your confirmation number is entered correctly')
       errors.add(:first_name, 'verify your first name is entered correctly')
       errors.add(:last_name, 'verify your last name is entered correctly')
-    elsif response.error.match /cancelled/
+    elsif response.cancelled?
       errors[:base] << "Your reservation has been cancelled"
     else
       errors[:base] << response.error

@@ -5,6 +5,7 @@ require_relative './southwest/errors'
 require_relative './southwest/request'
 require_relative './southwest/reservation'
 require_relative './southwest/response'
+require_relative './southwest/reservation_response'
 
 module Southwest
 end

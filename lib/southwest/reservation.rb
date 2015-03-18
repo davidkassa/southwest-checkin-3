@@ -21,7 +21,7 @@ module Southwest
         creditCardDepartureDate: todays_date_formatted
       }))
 
-      Response.new(typhoeus_response)
+      ReservationResponse.new(typhoeus_response)
     end
 
     private

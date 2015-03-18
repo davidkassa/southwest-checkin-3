@@ -16,6 +16,12 @@ RSpec.describe Reservation, type: :model do
   }
 
   describe 'creating a reservation' do
+    it 'sets the arrival_city_name before validation' do
+      recorded do
+        expect(Reservation.create(valid_attributes).arrival_city_name).to eql('Denver, CO')
+      end
+    end
+
     describe 'with invalid attributes' do
       subject { Reservation.create }
       let(:invalid_attributes) {
@@ -60,9 +66,15 @@ RSpec.describe Reservation, type: :model do
       end
     end
 
-    it 'sets the arrival_city_name before validation' do
-      recorded do
-        expect(Reservation.create(valid_attributes).arrival_city_name).to eql('Denver, CO')
+    context 'international flight' do
+      let(:cassette) { 'international flight Punta Cana DO' }
+      subject { Reservation.create(valid_attributes) }
+
+      it "does not allow international flights (until they are supported)" do
+        VCR.use_cassette(cassette) do
+          expect(subject.valid?).to eql(false)
+          expect(subject.errors[:base].first).to match /international flights are not yet supported/
+        end
       end
     end
 
