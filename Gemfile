@@ -50,6 +50,9 @@ gem 'skylight'
 # Airbrake/Errbit for error monitoring
 gem 'airbrake'
 
+# Pagination
+gem 'kaminari'
+
 group :development, :test do
   gem 'rspec-rails', '~> 3.0'
   gem 'awesome_print'

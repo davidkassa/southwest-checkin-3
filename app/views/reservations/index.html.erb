@@ -37,6 +37,7 @@
   <br>
 
   <div class="Reservations-actions">
+    <%= paginate @reservations %>
     <%= link_to 'Add a Reservation', new_reservation_path, class: 'GhostButtonLink' %>
   </div>
 </div>

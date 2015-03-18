@@ -15,8 +15,7 @@ $Reservation-bg-color: darken($logo-blue, 10%);
 }
 
 .Reservations-actions {
-  text-align: center;
-
+  padding: 0 10px;
   @include tablet-portrait-and-up {
     text-align: left;
   }
