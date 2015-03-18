@@ -1,0 +1,35 @@
+<% content_for :header_title do %>
+  #<%= @reservation.confirmation_number %> - <%= render 'shared/reservation_flights_header' %> - <%= ENV['SITE_NAME'] %>
+<% end %>
+
+<% content_for :footer do %>
+  <span class="block">
+    <span>
+      <%= link_to 'Your Reservations', reservations_url, style: "font-weight:bold;text-decoration:none;", lang: "en" %>
+      <span class="hide">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+      <%= link_to 'Manage Your Account', profile_url, style: "font-weight:bold;text-decoration:none;", lang: "en" %>
+    </span>
+  </span>
+<% end %>
+
+<h1 class='smaller'>#<%= @reservation.confirmation_number %> - <%= render 'shared/reservation_flights_header' %></h1>
+<p>
+  Reservation <%= link_to "##{@reservation.confirmation_number}", reservation_url(@reservation) %> has been successfully added.
+</p>
+<p>
+  The following passengers will be automatically checked in for each departure and return flight on the reservation:
+</p>
+<p>
+  <ul>
+  <% @reservation.passengers.each do |passenger| %>
+    <li><%= passenger.full_name %></li>
+  <% end %>
+  </ul>
+</p>
+<p>
+  View your reservation details or manage your reservation at any time by <%= link_to "using this link", reservation_url(@reservation) %>.
+</p>
+<p>
+  Cheers,<br>
+  <%= link_to ENV['SITE_NAME'], ENV['SITE_URL'] %>
+</p>

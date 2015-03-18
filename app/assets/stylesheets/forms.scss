@@ -1,0 +1,218 @@
+// Place all the styles related to the Reservations controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.Form,
+form {
+  @extend %smaller-font-size;
+  margin: 0 auto;
+  padding-top: 45px;
+
+  @include tablet-portrait-and-up {
+    padding-top: 60px;
+  }
+
+  .field {
+    height: $Form-height-mobile;
+    line-height: $Form-height-mobile;
+
+    @include tablet-portrait-and-up {
+      height: $Form-height-desktop;
+      line-height: $Form-height-desktop;
+    }
+
+    label, input {
+      float: left;
+      -webkit-tap-highlight-color: rgba(0,0,0,0);
+    }
+
+    label {
+      @extend %medium;
+      text-align: left;
+      padding-right: 10px;
+      width: 38%;
+      white-space: nowrap;
+      overflow: hidden;
+
+      @include tablet-portrait-and-up {
+        width: 35%;
+      }
+    }
+
+    .field_with_errors input {
+      line-height: $Form-height-mobile - 1px;
+
+      @include tablet-portrait-and-up {
+        line-height: $Form-height-desktop - 1px;
+      }
+    }
+
+    input {
+      border: 0;
+      padding: 0;
+      height: 100%;
+      width: 62%;
+
+      &:focus {
+        outline: none;
+      }
+
+      @include tablet-portrait-and-up {
+        width: 65%;
+      }
+    }
+
+    input[type="checkbox"],
+    input[type="checkbox"].long-label {
+      margin: 10px $Form-margin;
+      width: auto;
+      height: auto;
+      clear: both;
+
+      @include tablet-landscape-and-up {
+        margin: 23px $Form-margin;
+      }
+    }
+
+    &.long-label {
+      input {
+        width: 55%;
+      }
+
+      label {
+        width: 45%;
+      }
+    }
+
+    // Make sure Rails-generated linebreaks are disabled
+    br {
+      display: none;
+    }
+  }
+
+  .actions {
+    margin-top: 20px;
+    text-align: center;
+
+    input[type="submit"],
+    button[type="submit"] {
+      @extend %BlueSubmitButton;
+    }
+  }
+}
+
+form,
+.Form,
+.FormLinks {
+  @include tablet-portrait-and-up {
+    width: 60%;
+    max-width: 600px;
+  }
+}
+
+.FieldGroup {
+  border-top: $Form-border-width solid $Form-border-color;
+  border-bottom: $Form-border-width solid $Form-border-color;
+
+  @include tablet-portrait-and-up {
+    border: $Form-border-width solid $Form-border-color;
+    border-radius: 6px;
+  }
+
+  .field {
+    margin-left: $Form-margin;
+    border-bottom: $Form-border-width solid $Form-border-color;
+
+    @include tablet-portrait-and-up {
+      margin: (-$Form-border-width);
+      padding: $Form-focus-border-width ($Form-margin + $Form-focus-border-width) ($Form-focus-border-width - 1px) ($Form-margin + $Form-focus-border-width);
+      height: $Form-height-desktop + $Form-focus-border-width*2 + $Form-border-width*2;
+      line-height: $Form-height-desktop + $Form-focus-border-width*2;
+    }
+
+    &:last-child {
+      border-bottom: 0;
+    }
+
+    &.field--focus {
+      @include tablet-portrait-and-up {
+        border: $Form-focus-border-width solid $curious-blue-light;
+        padding: 0 $Form-margin 0 $Form-margin;
+
+        &:first-child {
+          border-radius: $Form-border-radius-desktop $Form-border-radius-desktop 0 0;
+        }
+
+        &:last-child {
+          border-radius: 0 0 $Form-border-radius-desktop $Form-border-radius-desktop;
+        }
+
+        &:first-child:last-child {
+          border-radius: $Form-border-radius-desktop;
+        }
+      }
+    }
+  }
+}
+
+.FieldGroupTitle {
+  @extend %header;
+}
+
+.FieldGroupTitle {
+  margin-left: $Form-margin;
+  margin-bottom: 5px;
+
+  @include tablet-portrait-and-up {
+    margin: $Form-margin*2 0 $Form-margin $Form-margin;
+  }
+}
+
+.FieldGroupNote {
+  @extend %smallest-font-size;
+  margin: $Form-margin/2 0 $Form-margin $Form-margin;
+}
+
+.FormLink {
+  @extend %smallest-font-size;
+  margin-left: $Form-margin;
+}
+
+.FormLinks {
+  margin: $Form-margin auto;
+}
+
+#error_explanation {
+  margin: 0 $Form-margin;
+
+  h2 {
+    @extend %smaller-font-size;
+  }
+
+  ul {
+    @extend %smallest-font-size;
+  }
+}
+
+.ConfirmationNumberField {
+  text-transform: uppercase;
+
+  &:placeholder {
+    text-transform: none;
+  }
+  &::placeholder {
+    text-transform: none;
+  }
+  &:-moz-placeholder {
+    text-transform: none;
+  }
+  &::-moz-placeholder {
+    text-transform: none;
+  }
+  &:-ms-input-placeholder {
+    text-transform: none;
+  }
+  &::-webkit-input-placeholder {
+    text-transform: none;
+  }
+}

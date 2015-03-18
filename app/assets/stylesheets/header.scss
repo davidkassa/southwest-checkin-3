@@ -1,0 +1,93 @@
+.Header {
+  position: absolute;
+  z-index: $Header-z-index;
+  top: 0;
+  background: $madison;
+  width: 100%;
+  height: $Header-height-mobile;
+  line-height: $Header-height-mobile;
+  padding-left: $Header-padding-mobile;
+  font-size: $font-size-mobile-smaller;
+
+  @include tablet-landscape-and-up {
+    font-size: $font-size-desktop-smaller;
+    height: $Header-height-desktop;
+    line-height: $Header-height-desktop;
+    padding-left: $Header-padding-desktop;
+  }
+}
+
+.Header.Header--static {
+  text-align: center;
+}
+
+.Header,
+.Header-action,
+.Header-action > a {
+  color: $athens-gray;
+  text-decoration: none;
+}
+
+.Body {
+  position: relative;
+  margin-top: $Header-height-mobile;
+
+  @include tablet-landscape-and-up {
+    margin-top: $Header-height-desktop;
+  }
+}
+
+.Header-logo-img {
+  margin-top: ($Header-height-mobile - $Header-logo-height-mobile) / 2;
+  height: $Header-logo-height-phone;
+
+  @include tablet-portrait-and-up {
+    height: $Header-logo-height-mobile;
+  }
+
+  @include tablet-landscape-and-up {
+    margin-top: ($Header-height-desktop - $Header-logo-height-desktop) / 2;
+    height: $Header-logo-height-desktop;
+  }
+}
+
+.Header-actions {
+  position: absolute;
+  right: $Header-padding-mobile;
+
+  @include tablet-landscape-and-up {
+    right: $Header-padding-desktop;
+  }
+}
+
+.Header-action {
+  display: inline-block;
+  margin-left: 10px;
+
+  @include tablet-landscape-and-up {
+    margin-left: 15px;
+  }
+
+  & > a:hover {
+    color: white;
+  }
+}
+
+.Header-dropdown .Dropdown-menu {
+  right: -10px;
+  top: $Header-height-mobile - 10px;
+
+  @include tablet-portrait-and-up {
+    top: $Header-height-desktop - 15px;
+    right: -15px;
+  }
+
+  .Dropdown-menu-arrow {
+    margin-left: 25px;
+  }
+}
+
+.Header-icon-gear {
+  position: relative;
+  top: 4px;
+}

@@ -1,0 +1,84 @@
+.Hero {
+  position: relative;
+  text-align: center;
+  color: $light-text-color;
+  background-color: $Hero-bg;
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-size: cover;
+  background-blend-mode: soft-light;
+  padding: $Hero-padding-mobile 20px $Hero-padding-mobile;
+  background-image: image-url('hero-bg-500.jpg');
+  @include image-1000 { background-image: image-url('hero-bg-1000.jpg'); }
+  @include image-2000 { background-image: image-url('hero-bg-2000.jpg'); }
+
+  @include tablet-landscape-and-up {
+    padding: $Hero-padding-desktop 20px $Hero-padding-desktop;
+  }
+
+  @include iphone4s-and-below {
+    padding: $Hero-padding-iphone4s 20px $Hero-padding-iphone4s;
+  }
+}
+
+.Hero-header {
+  font-family: 'Cooper Hewitt Thin';
+  font-size: $Hero-heading-font-size-mobile;
+  margin-bottom: $Hero-element-margin-mobile;
+  text-shadow: 1px 1px 2px rgba(0,0,0,.2);
+
+  @include tablet-landscape-and-up {
+    font-size: $Hero-heading-font-size-desktop;
+    margin-bottom: $Hero-element-margin-desktop;
+  }
+
+  @include iphone4s-and-below {
+    margin-bottom: $Hero-element-margin-iphone4s;
+  }
+}
+
+.Hero-sub {
+  font-family: 'Cooper Hewitt Light';
+  color: darken($light-text-color, 15%);
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+.Hero-add-reservation {
+  margin-top: $Hero-element-margin-mobile;
+
+  @include tablet-landscape-and-up {
+    margin-top: $Hero-element-margin-desktop;
+  }
+
+  @include iphone4s-and-below {
+    margin-top: $Hero-element-margin-iphone4s;
+  }
+}
+
+.Hero-login {
+  margin-left: 10px;
+}
+
+.Hero-content {
+  position: relative;
+  z-index: $Hero-z-index;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.Hero:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(to bottom, rgba(44, 62, 80, 1), rgba(44, 62, 80, 0.3) 20%, rgba(44, 62, 80, 0.3) 80%, rgba(44, 62, 80, 1) 100%);
+}

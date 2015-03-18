@@ -1,0 +1,20 @@
+<div class="Hero">
+  <div class="Hero-content">
+    <div class="Hero-header">
+      Check in Automatically.
+    </div>
+
+    <div class="Hero-sub">
+      <p>
+        Never forget to check in again. Add a reservation to get checked in exactly 24 hours before your Southwest flight.
+      </p>
+    </div>
+
+    <div class="Hero-add-reservation">
+      <%= link_to 'Add a Reservation', new_reservation_path, class: 'HeroButtonLink' %>
+      <% if !user_signed_in? %>
+        <%= link_to 'Login', new_user_session_path, class: 'HeroLink Hero-Login' %>
+      <% end %>
+    </div>
+  </div>
+</div>

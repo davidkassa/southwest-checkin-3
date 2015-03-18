@@ -1,0 +1,31 @@
+.notice,
+.alert {
+  @extend %smallest-font-size;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: $Notice-z-index;
+  color: white;
+  max-height: 400px;
+  overflow: hidden;
+  transition: all 0.5s ease;
+  box-shadow: inset 0 $notice-shadow-top $notice-shadow-top (-$notice-shadow-top) rgba(0,0,0,0.8),
+              inset 0 (-$notice-shadow-bottom) $notice-shadow-bottom (-$notice-shadow-bottom) rgba(0,0,0,0.2)
+}
+
+.notice-inner {
+  padding: 10px 10px 10px;
+
+  @include tablet-portrait-and-up {
+    padding: 15px 15px 10px;
+  }
+}
+
+.notice {
+  background-color: $curious-blue-light;
+}
+
+.alert {
+  background-color: $carmine-pink;
+}

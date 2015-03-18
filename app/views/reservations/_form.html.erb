@@ -1,0 +1,56 @@
+<%= form_for(@reservation) do |f| %>
+  <% if @reservation.errors.any? %>
+    <div id="error_explanation">
+      <h2>There was a problem retrieving your reservation. Please check the following fields to make sure they are correct:</h2>
+
+      <ul>
+      <% @reservation.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="FieldGroupTitle">Add a Reservation</div>
+  <div class="FieldGroup js-FieldGroup">
+    <div class="field">
+      <%= f.label 'Confirmation #' %>
+      <%= f.text_field :confirmation_number, maxlength: 6, autofocus: true, placeholder: 'Confirmation #', class: 'ConfirmationNumberField' %>
+    </div>
+    <div class="field">
+      <%= f.label 'First Name' %>
+      <%= f.text_field :first_name, placeholder: 'First Name' %>
+    </div>
+    <div class="field">
+      <%= f.label 'Last Name' %>
+      <%= f.text_field :last_name, placeholder: 'Last Name' %>
+    </div>
+  </div>
+
+  <!-- div class="FieldGroupTitle">Account</div>
+  <div class="FieldGroup js-FieldGroup">
+    <%= f.fields_for :user do |ff| %>
+      <div class="field">
+        <%= ff.label :email %>
+        <%= ff.email_field :email %>
+      </div>
+
+      <div class="field">
+        <%= ff.label :password %>
+        <% if @minimum_password_length %>
+        <em>(<%= @minimum_password_length %> characters minimum)</em>
+        <% end %><br />
+        <%= ff.password_field :password, autocomplete: "off" %>
+      </div>
+
+      <div class="field">
+        <%= ff.label :password_confirmation %>
+        <%= ff.password_field :password_confirmation, autocomplete: "off" %>
+      </div>
+    <% end %>
+  </div -->
+
+  <div class="actions">
+    <%= f.submit 'Add Reservation', class: 'BlueSubmitButton' %>
+  </div>
+<% end %>

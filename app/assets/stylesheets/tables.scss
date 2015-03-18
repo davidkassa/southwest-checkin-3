@@ -1,0 +1,22 @@
+.Table {
+  width: 100%;
+  border: $Form-border-width solid $Form-border-color;
+  border-radius: 6px;
+  border-collapse: separate;
+
+  th {
+    @extend %header;
+    text-align: left;
+    border-bottom: $Form-border-width solid $Form-border-color;
+  }
+
+  th,
+  td {
+    padding: 15px 0;
+  }
+
+  th:first-child,
+  td:first-child {
+    padding-left: 15px;
+  }
+}

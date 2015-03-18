@@ -1,0 +1,79 @@
+@mixin icon-size($mobile, $desktop) {
+  height: $mobile;
+  min-width: $mobile;
+
+  @include tablet-landscape-and-up {
+    height: $desktop;
+    min-width: $desktop;
+  }
+}
+
+[class^="Icon-"] {
+  display: inline-block;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  @include icon-size($font-size-mobile, $font-size-desktop)
+}
+
+.Icon-plane-arrow {
+  background-image: image-url('plane-arrow-555.svg');
+  height: 13px;
+  min-width: 28px;
+
+  &.Icon--large {
+    height: 17px;
+    min-width: 36px;
+  }
+
+  &.light {
+    background-image: image-url('plane-arrow-ECF0F1.svg');
+  }
+}
+
+.Icon-gear {
+  background-image: image-url('gear-FFF.svg');
+}
+
+.Icon-checkmark {
+  background-image: image-url('checkmark-45BF55.svg');
+}
+
+.Icon-clock {
+  background-image: image-url('clock-E7D97B.svg');
+}
+
+.Icon--large {
+  @include icon-size($font-size-mobile-large, $font-size-desktop-large)
+}
+
+.Icon--smaller {
+  @include icon-size($font-size-mobile-smaller, $font-size-desktop-smaller)
+}
+
+.Icon--smallest {
+  @include icon-size($font-size-mobile-smallest, $font-size-desktop-smallest)
+}
+
+.Icon--tiny {
+  @include icon-size($font-size-mobile-tiny, $font-size-desktop-tiny)
+}
+
+.Icon--large {
+  @include icon-size($font-size-mobile-large, $font-size-desktop-large)
+}
+
+.Icon--largest {
+  @include icon-size($font-size-mobile-largest, $font-size-desktop-largest)
+}
+
+.Icon--padded {
+  @extend %u-text-padded;
+}
+
+.Icon--padded-right {
+  @extend %u-text-padded-right;
+}
+
+.Icon--padded-left {
+  @extend %u-text-padded-left;
+}

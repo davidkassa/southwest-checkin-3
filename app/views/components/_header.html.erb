@@ -1,0 +1,34 @@
+<header class="Header">
+  <div class="Header-actions">
+    <div class="Header-action">
+      <%= link_to 'Add a Reservation', new_reservation_path, class: 'GhostButtonLink GhostButtonLink--dark' %>
+    </div>
+    <% if user_signed_in? %>
+      <div class="Header-action Header-my-reservations">
+        <%= link_to 'My Reservations', reservations_path %>
+      </div>
+      <div class="Header-action Header-dropdown">
+        <% content_for :dropdown_toggle do %>
+          <span class="Icon-gear Icon--large Header-icon-gear"></span>
+        <% end %>
+        <% content_for :dropdown_menu do %>
+          <ul class='Header-dropdown-list'>
+            <li><%= link_to 'My Reservations', reservations_path %></li>
+            <li><%= link_to 'My Account', profile_path %></li>
+            <li><%= link_to 'Logout', destroy_user_session_path, method: :delete, class: 'Header-login' %></li>
+          </ul>
+        <% end %>
+        <%= render 'components/dropdown' %>
+      </div>
+    <% else %>
+      <div class="Header-action">
+        <%= link_to 'Login', new_user_session_path, class: 'Header-login' %>
+      </div>
+    <% end %>
+  </div>
+  <div class="Header-logo">
+    <a href="/">
+      <%= image_tag 'logo.svg', class: 'Header-logo-img' %>
+    </a>
+  </div>
+</header>

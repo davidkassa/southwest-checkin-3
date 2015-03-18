@@ -1,0 +1,168 @@
+$Reservation-bg-color: darken($logo-blue, 10%);
+
+.Reservations,
+.Reservation {
+  margin: 0 auto;
+  padding: 10px 10px 10px 10px;
+
+  @include tablet-portrait-and-up {
+    padding-top: 60px;
+
+    & > * {
+      text-align: left;
+    }
+  }
+}
+
+.Reservation {
+  text-align: center;
+}
+
+.ReservationCard {
+  color: $light-text-color;
+  display: inline-block;
+  margin: 0 auto;
+  padding: 10px;
+  background-color: $Reservation-bg-color;
+  border-radius: 10px;
+
+  @include tablet-portrait-and-up {
+    padding: 20px;
+  }
+}
+
+.ReservationCard-label,
+.ReservationCard-flight-group-title {
+  color: $wild-rice;
+}
+
+.ReservationCard-label {
+  @extend %smallest-font-size;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.ReservationCard-confirmation-number-group {
+}
+
+.ReservationCard-confirmation-number {
+  @extend %largest-font-size;
+}
+
+.ReservationCard-confirmation-number,
+.ReservationCard-confirmation-number-label {
+  text-align: left;
+}
+
+.ReservationCard-header {
+  padding: 10px 10px 0 10px;
+
+  @include tablet-portrait-and-up {
+    padding: 0;
+  }
+}
+
+.ReservationCard-indention-top {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #134B90;
+
+  @include tablet-portrait-and-up {
+    padding-bottom: 15px;
+  }
+}
+
+.ReservationCard-indention-bottom {
+  padding-top: 15px;
+  border-top: 1px solid #297DE5;
+}
+
+.ReservationCard-flight-title {
+  @extend %large-font-size;
+  margin-bottom: 3px;
+}
+
+.ReservationCard-flight {
+  margin-bottom: 20px;
+}
+
+.ReservationCard-passengers {
+  float: right;
+  text-align: right;
+}
+
+.ReservationCard-flight-checkins,
+.ReservationCard-flight-details {
+  @extend %smallest-font-size;
+}
+
+.ReservationCard-flight-details-group {
+  display: inline-block;
+  margin: 0 10px;
+  text-align: center;
+
+  @include tablet-portrait-and-up {
+    margin-left: 0;
+    margin-right: 20px;
+  }
+}
+
+.ReservationCard-flight-checkins {
+  @extend %medium;
+  color: $success-green;
+}
+
+.ReservationCard-flight-checkin {
+  margin: 3px 0;
+}
+
+.Reservations {
+  max-width: 800px;
+  width: 90%;
+}
+
+.ReservationCard-badge {
+  background-color: $success-green;
+  padding: 4px 4px 1px;
+  line-height: 1;
+  border-radius: 4px;
+  color: $light-text-color;
+}
+
+.Header-my-reservations {
+  display: none;
+
+  @include tablet-portrait-and-up {
+    display: inline-block;
+  }
+}
+
+.ReservationCard-flight-group-title {
+  @extend %large-font-size;
+  text-align: center;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.ReservationCard-flights {
+  display: inline-block;
+  vertical-align: top;
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  @include tablet-portrait-and-up {
+    margin-right: 30px;
+  }
+}
+
+.ReservationCard-footer {
+  @extend %smaller-font-size;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.ReservationCard-scheduled,
+.ReservationCard-flight-checkins {
+  margin-top: 5px;
+}

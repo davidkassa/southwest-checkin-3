@@ -1,0 +1,182 @@
+BWI:
+  name: Baltimore Washington Intl
+  city: Baltimore
+  country: United States
+  iata: BWI
+  icao: KBWI
+  latitude: '39.175361'
+  longitude: "-76.668333"
+  airport_id: '3849'
+  altitude: '146'
+  timezone_offset: "-5.0"
+  dst: A
+  timezone: America/New_York
+
+MDW:
+  name: Chicago Midway Intl
+  city: Chicago
+  country: United States
+  iata: MDW
+  icao: KMDW
+  latitude: '41.785972'
+  longitude: "-87.752417"
+  airport_id: '3747'
+  altitude: '620'
+  timezone_offset: "-6.0"
+  dst: A
+  timezone: America/Chicago
+
+BNA:
+  name: Nashville Intl
+  city: Nashville
+  country: United States
+  iata: BNA
+  icao: KBNA
+  latitude: '36.124472'
+  longitude: "-86.678194"
+  airport_id: '3690'
+  altitude: '599'
+  timezone_offset: "-6.0"
+  dst: A
+  timezone: America/Chicago
+
+MSY:
+  name: Louis Armstrong New Orleans Intl
+  city: New Orleans
+  country: United States
+  iata: MSY
+  icao: KMSY
+  latitude: '29.993389'
+  longitude: "-90.258028"
+  airport_id: '3861'
+  altitude: '4'
+  timezone_offset: "-6.0"
+  dst: A
+  timezone: America/Chicago
+
+AUS:
+  name: Austin Bergstrom Intl
+  city: Austin
+  country: United States
+  iata: AUS
+  icao: KAUS
+  latitude: '30.194528'
+  longitude: "-97.669889"
+  airport_id: '3673'
+  altitude: '542'
+  timezone_offset: "-6.0"
+  dst: A
+  timezone: America/Chicago
+
+ABQ:
+  name: Albuquerque International Sunport
+  city: Albuquerque
+  country: United States
+  iata: ABQ
+  icao: KABQ
+  latitude: '35.040222'
+  longitude: "-106.609194"
+  airport_id: '4019'
+  altitude: '5355'
+  timezone_offset: "-7.0"
+  dst: A
+  timezone: America/Denver
+
+DEN:
+  name: Denver Intl
+  city: Denver
+  country: United States
+  iata: DEN
+  icao: KDEN
+  latitude: '39.861656'
+  longitude: "-104.673178"
+  airport_id: '3751'
+  altitude: '5431'
+  timezone_offset: "-7.0"
+  dst: A
+  timezone: America/Denver
+
+DCA:
+  name: Ronald Reagan Washington Natl
+  city: Washington
+  country: United States
+  iata: DCA
+  icao: KDCA
+  latitude: '38.852083'
+  longitude: "-77.037722"
+  airport_id: '3520'
+  altitude: '15'
+  timezone_offset: "-5.0"
+  dst: A
+  timezone: America/New_York
+
+SFO:
+  name: San Francisco Intl
+  city: San Francisco
+  country: United States
+  iata: SFO
+  icao: KSFO
+  latitude: '37.618972'
+  longitude: "-122.374889"
+  airport_id: '3469'
+  altitude: '13'
+  timezone_offset: "-8.0"
+  dst: A
+  timezone: America/Los_Angeles
+
+PIT:
+  name: Pittsburgh Intl
+  city: Pittsburgh
+  country: United States
+  iata: PIT
+  icao: KPIT
+  latitude: '40.491467'
+  longitude: "-80.232872"
+  airport_id: '3570'
+  altitude: '1204'
+  timezone_offset: "-5.0"
+  dst: A
+  timezone: America/New_York
+
+MCO:
+  name: Orlando Intl
+  city: Orlando
+  country: United States
+  iata: MCO
+  icao: KMCO
+  latitude: '28.429394'
+  longitude: "-81.308994"
+  airport_id: '3878'
+  altitude: '96'
+  timezone_offset: "-5.0"
+  dst: A
+  timezone: America/New_York
+
+BOS:
+  name: General Edward Lawrence Logan Intl
+  city: Boston
+  country: United States
+  iata: BOS
+  icao: KBOS
+  latitude: '42.364347'
+  longitude: "-71.005181"
+  airport_id: '3448'
+  altitude: '19'
+  timezone_offset: "-5.0"
+  dst: A
+  timezone: America/New_York
+
+MCI:
+  name: Kansas City Intl
+  city: Kansas City
+  country: United States
+  iata: MCI
+  icao: KMCI
+  latitude: '39.297606'
+  longitude: "-94.713905"
+  airport_id: '3458'
+  altitude: '1026'
+  timezone_offset: "-6.0"
+  dst: A
+  timezone: America/Chicago
+

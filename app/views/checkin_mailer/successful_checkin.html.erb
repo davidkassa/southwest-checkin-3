@@ -1,0 +1,54 @@
+<% content_for :header_title do %>
+  #<%= @checkin.reservation.confirmation_number %> - Flight #<%= @checkin.flight.flight_number %> - Successful Checkin
+<% end %>
+
+<% content_for :footer do %>
+  <span class="block">
+    <span>
+      <%= link_to 'Your Reservations', reservations_url, style: "font-weight:bold;text-decoration:none;", lang: "en" %>
+      <span class="hide">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+      <%= link_to 'Manage Your Account', profile_url, style: "font-weight:bold;text-decoration:none;", lang: "en" %>
+    </span>
+  </span>
+<% end %>
+
+<h1 class='smaller'>#<%= @checkin.reservation.confirmation_number %> - Flight #<%= @checkin.flight.flight_number %></h1>
+<p>
+  Great news! You've been successfully <%= link_to "checked in to flight ##{@checkin.flight.flight_number}", reservation_url(@checkin.reservation) %>.
+</p>
+<h3>Flight #<%= @checkin.flight.flight_number %> Boarding Positions:</h3>
+<p>
+  <table class="contents">
+  <% @checkin.passenger_checkins.each do |passenger_checkin| %>
+    <tr>
+      <td>
+        <div class='passenger-boarding-information'>
+          <span class="boarding-number"><%= passenger_checkin.boarding_group %><%= passenger_checkin.boarding_position %></span> - <span class="boarding-passenger-name"><%= passenger_checkin.passenger.full_name %></span>
+        </div>
+      </td>
+    </tr>
+  <% end %>
+  </table>
+</p>
+<% if @checkin.reservation.checkins.not_completed.any? %>
+  <h3>Remaining automatic checkins:</h3>
+  <p>
+    <table class="contents">
+    <% @checkin.reservation.checkins.not_completed.each do |checkin| %>
+      <tr>
+        <td>
+          <div class='remaining-flights'>Flight #<%= checkin.flight.flight_number %> - Automatic checkin at <%= flight_time_basic checkin.local_scheduled_at %> <%= flight_date checkin.local_scheduled_at %></div>
+
+        </td>
+      </tr>
+    <% end %>
+    </table>
+  </p>
+<% end %>
+<p>
+  View your checkin details or manage your reservation at any time by <%= link_to "using this link", reservation_url(@checkin.reservation) %>.
+</p>
+<p>
+  Cheers,<br>
+  <%= link_to ENV['SITE_NAME'], ENV['SITE_URL'] %>
+</p>

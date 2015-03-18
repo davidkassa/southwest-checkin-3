@@ -1,0 +1,126 @@
+@font-face {
+  font-family: 'Cooper Hewitt Light';
+  src: font-url('cooper_hewitt/CooperHewitt-Light.eot'); /* IE9 Compat Modes */
+  src: font-url('cooper_hewitt/CooperHewitt-Light.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       font-url('cooper_hewitt/CooperHewitt-Light.woff') format('woff'), /* Pretty Modern Browsers */
+       font-url('cooper_hewitt/CooperHewitt-Light.svg#svgFontName') format('svg'); /* Legacy iOS */
+}
+
+@font-face {
+  font-family: 'Cooper Hewitt Book';
+  src: font-url('cooper_hewitt/CooperHewitt-Book.eot'); /* IE9 Compat Modes */
+  src: font-url('cooper_hewitt/CooperHewitt-Book.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       font-url('cooper_hewitt/CooperHewitt-Book.woff') format('woff'), /* Pretty Modern Browsers */
+       font-url('cooper_hewitt/CooperHewitt-Book.svg#svgFontName') format('svg'); /* Legacy iOS */
+}
+
+@font-face {
+  font-family: 'Cooper Hewitt Medium';
+  src: font-url('cooper_hewitt/CooperHewitt-Medium.eot'); /* IE9 Compat Modes */
+  src: font-url('cooper_hewitt/CooperHewitt-Medium.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       font-url('cooper_hewitt/CooperHewitt-Medium.woff') format('woff'), /* Pretty Modern Browsers */
+       font-url('cooper_hewitt/CooperHewitt-Medium.svg#svgFontName') format('svg'); /* Legacy iOS */
+}
+
+@font-face {
+  font-family: 'Cooper Hewitt Thin';
+  src: font-url('cooper_hewitt/CooperHewitt-Thin.eot'); /* IE9 Compat Modes */
+  src: font-url('cooper_hewitt/CooperHewitt-Thin.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       font-url('cooper_hewitt/CooperHewitt-Thin.woff') format('woff'), /* Pretty Modern Browsers */
+       font-url('cooper_hewitt/CooperHewitt-Thin.svg#svgFontName') format('svg'); /* Legacy iOS */
+}
+
+@font-face {
+  font-family: 'Cooper Hewitt Semibold';
+  src: font-url('cooper_hewitt/CooperHewitt-Semibold.eot'); /* IE9 Compat Modes */
+  src: font-url('cooper_hewitt/CooperHewitt-Semibold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       font-url('cooper_hewitt/CooperHewitt-Semibold.woff') format('woff'), /* Pretty Modern Browsers */
+       font-url('cooper_hewitt/CooperHewitt-Semibold.svg#svgFontName') format('svg'); /* Legacy iOS */
+}
+
+@mixin font-size($mobile, $desktop) {
+  font-size: $mobile;
+
+  @include tablet-landscape-and-up {
+    font-size: $desktop;
+  }
+}
+
+%default-font-size {
+  @include font-size($font-size-mobile, $font-size-desktop)
+}
+
+%smaller-font-size {
+  @include font-size($font-size-mobile-smaller, $font-size-desktop-smaller)
+}
+
+%smallest-font-size {
+  @include font-size($font-size-mobile-smallest, $font-size-desktop-smallest)
+}
+
+%tiny-font-size {
+  @include font-size($font-size-mobile-tiny, $font-size-desktop-tiny)
+}
+
+%large-font-size {
+  @include font-size($font-size-mobile-large, $font-size-desktop-large)
+}
+
+%largest-font-size {
+  @include font-size($font-size-mobile-largest, $font-size-desktop-largest)
+}
+
+%default-font {
+  @extend %default-font-size;
+  font-family: 'Cooper Hewitt Light';
+  font-weight: 400;
+
+  @include tablet-landscape-and-up {
+    font-family: 'Cooper Hewitt Book';
+  }
+}
+
+body {
+  @extend %default-font;
+  color: $text-color;
+}
+
+a {
+  color: $curious-blue-light;
+  transition: all 0.2s;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+%medium {
+  font-family: 'Cooper Hewitt Book';
+
+  @include tablet-landscape-and-up {
+    font-family: 'Cooper Hewitt Medium';
+  }
+}
+
+%bold,
+.bold {
+  font-family: 'Cooper Hewitt Semibold';
+}
+
+%light {
+  font-family: 'Cooper Hewitt Light';
+}
+
+%header {
+  @extend %smallest-font-size;
+  @extend %medium;
+  color: $muted-text-color-mobile;
+  text-transform: uppercase;
+  font-size: 13px;
+
+  @include tablet-portrait-and-up {
+    font-family: 'Cooper Hewitt Book';
+    color: $text-color;
+  }
+}

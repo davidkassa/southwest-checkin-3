@@ -1,0 +1,118 @@
+/* Colors
+---------------*/
+
+$logo-blue: #1E7FF7;
+$madison: #2C3E50;
+$athens-gray: #ECF0F1;
+$carmine-pink: #E74C3C;
+$curious-blue: #2980B9;
+$curious-blue-light: #3498DB;
+$alert-red: #D40D12;
+$success-green: #45BF55;
+$wild-rice: rgb(231, 217, 123);
+
+
+/* Header
+---------------*/
+
+$Header-height-mobile: 60px;
+$Header-logo-height-mobile: 32px;
+$Header-logo-height-phone: 24px;
+$Header-padding-mobile: 15px;
+
+$Header-height-desktop: 80px;
+$Header-logo-height-desktop: 50px;
+$Header-padding-desktop: 30px;
+
+/* Footer
+---------------*/
+
+$Footer-height: 100px;
+
+
+/* Hero
+---------------*/
+
+$Hero-bg: $madison;
+
+$Hero-heading-font-size-mobile: 46px;
+$Hero-element-margin-mobile: 40px;
+$Hero-padding-mobile: 50px;
+
+$Hero-heading-font-size-desktop: 54px;
+$Hero-element-margin-desktop: 50px;
+$Hero-padding-desktop: 100px;
+
+$Hero-element-margin-iphone4s: 20px;
+$Hero-padding-iphone4s: 25px;
+
+
+/* Font & Icon sizes
+---------------*/
+
+$font-size-desktop: 16px;
+$font-size-mobile: 16px;
+$font-size-desktop-smaller: 14px;
+$font-size-mobile-smaller: 14px;
+$font-size-desktop-smallest: 13px;
+$font-size-mobile-smallest: 13px;
+$font-size-desktop-tiny: 11px;
+$font-size-mobile-tiny: 11px;
+$font-size-desktop-large: 18px;
+$font-size-mobile-large: 18px;
+$font-size-desktop-largest: 28px;
+$font-size-mobile-largest: 28px;
+
+
+/* Typography
+---------------*/
+
+$text-color: #555;
+$muted-text-color-mobile: lighten($text-color, 30%);
+$muted-text-color-desktop: lighten($text-color, 20%);
+$light-text-color: $athens-gray;
+
+
+/* Forms
+---------------*/
+
+$Form-height-mobile: 40px;
+$Form-height-desktop: 64px;
+$Form-border-color: darken($athens-gray, 10%);
+$Form-margin: 15px;
+$Form-border-width: 1px;
+$Form-focus-border-width: 2px;
+$Form-border-radius-desktop: 5px;
+
+
+/* Notice
+---------------*/
+
+$notice-shadow-top: 7px;
+$notice-shadow-bottom: 3px;
+
+
+/* Dropdown
+---------------*/
+
+$Dropdown-bg-color: #FFF;
+$Dropdown-inverted-bg-color: $madison;
+
+
+/* Z-index
+---------------*/
+
+$Hero-z-index: 1;
+$Notice-z-index: 3;
+$Header-z-index: 4;
+$Dropdown-z-index: 4;
+
+
+/* Breakpoints
+---------------*/
+
+$mq-mobile-portrait   : 320px !default;
+$mq-mobile-landscape  : 568px !default;
+$mq-tablet-portrait   : 768px !default;
+$mq-tablet-landscape  : 1024px !default;
+$mq-desktop           : 1382px !default;

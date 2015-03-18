@@ -1,0 +1,42 @@
+.Footer {
+  @extend %smallest-font-size;
+  text-align: center;
+  height: $Footer-height;
+  padding-top: 30px;
+}
+
+.Footer.Footer--dark {
+  background-color: $madison;
+
+  &, a {
+    color: darken($light-text-color, 10%);
+  }
+
+  .Footer-notice {
+    color: darken($light-text-color, 20%);
+  }
+}
+
+.DotList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  & > li {
+    display: inline-block;
+
+    &:after {
+      @extend %u-text-padded;
+      content: ' · ';
+    }
+
+    &:last-child:after {
+      content: '';
+    }
+  }
+}
+
+.Footer-notice {
+  @extend %tiny-font-size;
+  margin-top: 10px;
+}

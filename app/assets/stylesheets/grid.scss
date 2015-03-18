@@ -1,0 +1,15 @@
+
+.Columns.Columns--three {
+  width: 100%;
+  font-size: 0;
+
+  .Column {
+    @extend %default-font;
+
+    @include tablet-landscape-and-up {
+      display: inline-block;
+      margin: 0;
+      width: 33.3%;
+    }
+  }
+}

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= ENV['SITE_NAME'] %></title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+  <%= favicon_link_tag "favicon.ico", type: "image/x-icon" %>
+</head>
+<body>
+  <%= render 'shared/google_tag_manager' %>
+  <%= render 'components/header' %>
+
+  <section class="Body">
+    <% if notice %>
+      <div class="notice js-notice"><div class="notice-inner"><%= notice %></div></div>
+    <% end %>
+    <% if alert %>
+      <div class="alert js-notice"><div class="notice-inner"><%= alert %></div></div>
+    <% end %>
+
+    <%= yield %>
+  </section>
+</body>
+</html>

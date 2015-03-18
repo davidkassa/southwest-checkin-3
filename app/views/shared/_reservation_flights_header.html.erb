@@ -1,0 +1,9 @@
+<% if @reservation.departure_flights.any? %>
+  <%= @reservation.departure_flights.first.departure_airport.iata %> ->
+  <%= @reservation.departure_flights.last.arrival_airport.iata %>
+<% end %>
+<% if @reservation.return_flights.any? %>
+  <span class='u-text-padded'>·</span>
+  <%= @reservation.return_flights.first.departure_airport.iata %> ->
+  <%= @reservation.return_flights.last.arrival_airport.iata %>
+<% end %>

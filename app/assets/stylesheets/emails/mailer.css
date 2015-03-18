@@ -1,0 +1,269 @@
+/* Media queries for email clients that support them
+-----------------------------------------------------*/
+
+@media only screen and (min-width: 0) {
+  .wrapper {
+    text-rendering: optimizeLegibility;
+  }
+}
+@media only screen and (max-width: 620px) {
+  [class=wrapper] {
+    min-width: 318px !important;
+    width: 100% !important;
+  }
+  [class=wrapper] .one-col,
+  [class=wrapper] .two-col,
+  [class=wrapper] .three-col {
+    width: 318px !important;
+  }
+  [class=wrapper] .column,
+  [class=wrapper] .gutter {
+    display: block;
+    float: left;
+    width: 318px !important;
+  }
+  [class=wrapper] .padded {
+    padding-left: 32px !important;
+    padding-right: 32px !important;
+  }
+  [class=wrapper] .block {
+    display: block !important;
+  }
+  [class=wrapper] .hide {
+    display: none !important;
+  }
+  [class=wrapper] .image {
+    margin-bottom: 24px !important;
+  }
+  [class=wrapper] .image img {
+    height: auto !important;
+    width: 100% !important;
+  }
+}
+
+
+@media only screen and (max-width: 651px) {
+  .gmail {
+    display: none !important;
+  }
+}
+@media only screen and (max-width: 620px) {
+  [class=wrapper] .one-col .column:last-child table:nth-last-child(2) td h1:last-child,
+  [class=wrapper] .two-col .column:last-child table:nth-last-child(2) td h1:last-child,
+  [class=wrapper] .three-col .column:last-child table:nth-last-child(2) td h1:last-child,
+  [class=wrapper] .one-col-feature .column:last-child table:nth-last-child(2) td h1:last-child,
+  [class=wrapper] .one-col .column:last-child table:nth-last-child(2) td h2:last-child,
+  [class=wrapper] .two-col .column:last-child table:nth-last-child(2) td h2:last-child,
+  [class=wrapper] .three-col .column:last-child table:nth-last-child(2) td h2:last-child,
+  [class=wrapper] .one-col-feature .column:last-child table:nth-last-child(2) td h2:last-child,
+  [class=wrapper] .one-col .column:last-child table:nth-last-child(2) td h3:last-child,
+  [class=wrapper] .two-col .column:last-child table:nth-last-child(2) td h3:last-child,
+  [class=wrapper] .three-col .column:last-child table:nth-last-child(2) td h3:last-child,
+  [class=wrapper] .one-col-feature .column:last-child table:nth-last-child(2) td h3:last-child,
+  [class=wrapper] .one-col .column:last-child table:nth-last-child(2) td p:last-child,
+  [class=wrapper] .two-col .column:last-child table:nth-last-child(2) td p:last-child,
+  [class=wrapper] .three-col .column:last-child table:nth-last-child(2) td p:last-child,
+  [class=wrapper] .one-col-feature .column:last-child table:nth-last-child(2) td p:last-child,
+  [class=wrapper] .one-col .column:last-child table:nth-last-child(2) td ol:last-child,
+  [class=wrapper] .two-col .column:last-child table:nth-last-child(2) td ol:last-child,
+  [class=wrapper] .three-col .column:last-child table:nth-last-child(2) td ol:last-child,
+  [class=wrapper] .one-col-feature .column:last-child table:nth-last-child(2) td ol:last-child,
+  [class=wrapper] .one-col .column:last-child table:nth-last-child(2) td ul:last-child,
+  [class=wrapper] .two-col .column:last-child table:nth-last-child(2) td ul:last-child,
+  [class=wrapper] .three-col .column:last-child table:nth-last-child(2) td ul:last-child,
+  [class=wrapper] .one-col-feature .column:last-child table:nth-last-child(2) td ul:last-child {
+    Margin-bottom: 24px !important;
+  }
+  [class=wrapper] .address,
+  [class=wrapper] .subscription {
+    display: block;
+    float: left;
+    width: 318px !important;
+    text-align: center !important;
+  }
+  [class=wrapper] .address {
+    padding-bottom: 0 !important;
+  }
+  [class=wrapper] .subscription {
+    padding-top: 0 !important;
+  }
+  [class=wrapper] h1 {
+    font-size: 36px !important;
+    line-height: 42px !important;
+    Margin-bottom: 18px !important;
+  }
+  [class=wrapper] h1.smaller {
+    font-size: 36px !important;
+    line-height: 42px !important;
+    Margin-bottom: 18px !important;
+  }
+  [class=wrapper] h2 {
+    font-size: 26px !important;
+    line-height: 32px !important;
+    Margin-bottom: 20px !important;
+  }
+  [class=wrapper] h3 {
+    font-size: 18px !important;
+    line-height: 22px !important;
+    Margin-bottom: 16px !important;
+  }
+  [class=wrapper] p,
+  [class=wrapper] ol,
+  [class=wrapper] ul {
+    font-size: 16px !important;
+    line-height: 24px !important;
+    Margin-bottom: 24px !important;
+  }
+  [class=wrapper] ol,
+  [class=wrapper] ul {
+    Margin-left: 18px !important;
+  }
+  [class=wrapper] li {
+    padding-left: 2px !important;
+  }
+  [class=wrapper] blockquote {
+    padding-left: 16px !important;
+  }
+  [class=wrapper] .btn {
+    margin-bottom: 24px !important;
+  }
+  [class=wrapper] .btn a {
+    display: block !important;
+    font-size: 13px !important;
+    font-weight: bold !important;
+    line-height: 15px !important;
+    padding: 10px 30px !important;
+  }
+  [class=wrapper] .column-bottom {
+    font-size: 8px !important;
+    line-height: 8px !important;
+  }
+  [class=wrapper] .first .column-bottom,
+  [class=wrapper] .three-col .second .column-bottom {
+    display: none;
+  }
+  [class=wrapper] .second .column-top,
+  [class=wrapper] .third .column-top {
+    display: none;
+  }
+  [class=wrapper] .image-frame {
+    padding: 4px !important;
+  }
+  [class=wrapper] .header .logo {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+  [class=wrapper] .header .logo div {
+    font-size: 26px !important;
+    line-height: 32px !important;
+  }
+  [class=wrapper] .header .logo div img {
+    display: inline-block !important;
+    max-width: 280px !important;
+    height: auto !important;
+  }
+  [class=wrapper] table.border,
+  [class=wrapper] .header,
+  [class=wrapper] .webversion,
+  [class=wrapper] .footer {
+    width: 320px !important;
+  }
+  [class=wrapper] .preheader .webversion,
+  [class=wrapper] .header .logo a {
+    text-align: center !important;
+  }
+  [class=wrapper] .preheader table,
+  [class=wrapper] .border td {
+    width: 318px !important;
+  }
+  [class=wrapper] .border td.border {
+    width: 1px !important;
+  }
+  [class=wrapper] .image .border td {
+    width: auto !important;
+  }
+  [class=wrapper] .title {
+    display: none;
+  }
+  [class=wrapper] .footer .padded {
+    text-align: center !important;
+  }
+  [class=wrapper] .footer .subscription .padded {
+    padding-top: 20px !important;
+  }
+  [class=wrapper] .footer .social-link {
+    display: block !important;
+  }
+  [class=wrapper] .footer .social-link table {
+    margin: 0 auto 10px !important;
+  }
+  [class=wrapper] .footer .divider {
+    display: none !important;
+  }
+  [class=wrapper] .one-col-feature .btn {
+    margin-bottom: 28px !important;
+  }
+  [class=wrapper] .one-col-feature .image {
+    margin-bottom: 28px !important;
+  }
+  [class=wrapper] .one-col-feature .divider .inner {
+    padding-bottom: 28px !important;
+  }
+  [class=wrapper] .one-col-feature h1 {
+    font-size: 42px !important;
+    line-height: 48px !important;
+    margin-bottom: 20px !important;
+  }
+  [class=wrapper] .one-col-feature h2 {
+    font-size: 32px !important;
+    line-height: 36px !important;
+    margin-bottom: 18px !important;
+  }
+  [class=wrapper] .one-col-feature h3 {
+    font-size: 26px !important;
+    line-height: 32px !important;
+    margin-bottom: 20px !important;
+  }
+  [class=wrapper] .one-col-feature p,
+  [class=wrapper] .one-col-feature ol,
+  [class=wrapper] .one-col-feature ul {
+    font-size: 20px !important;
+    line-height: 28px !important;
+    margin-bottom: 28px !important;
+  }
+  [class=wrapper] .one-col-feature blockquote {
+    font-size: 18px !important;
+    line-height: 26px !important;
+    margin-bottom: 28px !important;
+    padding-bottom: 26px !important;
+    padding-left: 0 !important;
+    padding-top: 26px !important;
+  }
+  [class=wrapper] .one-col-feature blockquote p,
+  [class=wrapper] .one-col-feature blockquote ol,
+  [class=wrapper] .one-col-feature blockquote ul {
+    font-size: 26px !important;
+    line-height: 32px !important;
+  }
+  [class=wrapper] .one-col-feature blockquote p:last-child,
+  [class=wrapper] .one-col-feature blockquote ol:last-child,
+  [class=wrapper] .one-col-feature blockquote ul:last-child {
+    margin-bottom: 0 !important;
+  }
+  [class=wrapper] .one-col-feature .column table:last-of-type h1:last-child,
+  [class=wrapper] .one-col-feature .column table:last-of-type h2:last-child,
+  [class=wrapper] .one-col-feature .column table:last-of-type h3:last-child {
+    margin-bottom: 28px !important;
+  }
+}
+@media only screen and (max-width: 320px) {
+  [class=wrapper] td.border {
+    display: none;
+  }
+  [class=wrapper] table.border,
+  [class=wrapper] .header,
+  [class=wrapper] .webversion,
+  [class=wrapper] .footer {
+    width: 318px !important;
+  }
+}

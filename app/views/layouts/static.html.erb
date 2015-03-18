@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= ENV['SITE_NAME'] %></title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+  <%= favicon_link_tag "favicon.ico", type: "image/x-icon" %>
+</head>
+<body>
+  <%= render 'shared/google_tag_manager' %>
+  <header class="Header Header--static">
+    <div class="Header-logo">
+      <a href="/">
+        <%= image_tag 'logo.svg', class: 'Header-logo-img' %>
+      </a>
+    </div>
+  </header>
+  <section class="Body">
+    <%= yield %>
+  </section>
+</body>
+</html>
