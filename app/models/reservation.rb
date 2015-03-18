@@ -35,6 +35,10 @@ class Reservation < ActiveRecord::Base
     departure_flights.any? ? departure_flights.first.departure_time : nil
   end
 
+  def international?
+    payload['body'] ? payload['body']['isInternationalPNR'] == 'true' : false
+  end
+
   private
 
   def upcase_confirmation_number

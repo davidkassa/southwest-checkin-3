@@ -15,103 +15,114 @@
       </div>
     </div>
     <div class="ReservationCard-flight-groups ReservationCard-indention-bottom">
-      <div class="ReservationCard-flights">
-        <div class="ReservationCard-flight-group-title">Departure</div>
-        <% @reservation.departure_flights.each do |flight| %>
-          <div class="ReservationCard-flight">
-            <div class="ReservationCard-flight-title">
-              <%= flight.departure_airport.iata %>
-              <span class="Icon-plane-arrow Icon--large Icon--padded light"></span>
-              <%= flight.arrival_airport.iata %> <span class='u-text-padded'>·</span> <%= flight_date flight.local_departure_time %>
-            </div>
-            <div class="ReservationCard-flight-details">
-              <div class="ReservationCard-flight-details-group">
-                <div class="ReservationCard-label">Flight No</div>
-                <div class="ReservationCard-flight-number">
-                  <%= flight.flight_number %>
+      <% @reservation.flights.any? %>
+        <% if @reservation.departure_flights.any? %>
+          <div class="ReservationCard-flights">
+            <div class="ReservationCard-flight-group-title">Departure</div>
+            <% @reservation.departure_flights.each do |flight| %>
+              <div class="ReservationCard-flight">
+                <div class="ReservationCard-flight-title">
+                  <%= flight.departure_airport.iata %>
+                  <span class="Icon-plane-arrow Icon--large Icon--padded light"></span>
+                  <%= flight.arrival_airport.iata %> <span class='u-text-padded'>·</span> <%= flight_date flight.local_departure_time %>
                 </div>
-              </div>
-              <div class="ReservationCard-flight-details-group">
-                <div class="ReservationCard-label">Departs</div>
-                <div class="ReservationCard-flight-times-depart">
-                  <%= flight_time flight.local_departure_time %>
-                </div>
-              </div>
-              <div class="ReservationCard-flight-details-group">
-                <div class="ReservationCard-label">Arrives</div>
-                <div class="ReservationCard-flight-times-arrive">
-                  <%= flight_time flight.local_arrival_time %>
-                </div>
-              </div>
-              <% if flight.passenger_checkins.any? %>
-                <div class="ReservationCard-flight-checkins">
-                  <% flight.passenger_checkins.each do |passenger_checkin| %>
-                    <div class="ReservationCard-flight-checkin">
-                      <span class="Icon-checkmark Icon--tiny Icon--padded-right"></span>
-                      <span class="ReservationCard-badge u-text-padded-right"><%= passenger_checkin.boarding_group %><%= passenger_checkin.boarding_position %></span>
-                      <%= passenger_checkin.passenger.full_name %>
+                <div class="ReservationCard-flight-details">
+                  <div class="ReservationCard-flight-details-group">
+                    <div class="ReservationCard-label">Flight No</div>
+                    <div class="ReservationCard-flight-number">
+                      <%= flight.flight_number %>
+                    </div>
+                  </div>
+                  <div class="ReservationCard-flight-details-group">
+                    <div class="ReservationCard-label">Departs</div>
+                    <div class="ReservationCard-flight-times-depart">
+                      <%= flight_time flight.local_departure_time %>
+                    </div>
+                  </div>
+                  <div class="ReservationCard-flight-details-group">
+                    <div class="ReservationCard-label">Arrives</div>
+                    <div class="ReservationCard-flight-times-arrive">
+                      <%= flight_time flight.local_arrival_time %>
+                    </div>
+                  </div>
+                  <% if flight.passenger_checkins.any? %>
+                    <div class="ReservationCard-flight-checkins">
+                      <% flight.passenger_checkins.each do |passenger_checkin| %>
+                        <div class="ReservationCard-flight-checkin">
+                          <span class="Icon-checkmark Icon--tiny Icon--padded-right"></span>
+                          <span class="ReservationCard-badge u-text-padded-right"><%= passenger_checkin.boarding_group %><%= passenger_checkin.boarding_position %></span>
+                          <%= passenger_checkin.passenger.full_name %>
+                        </div>
+                      <% end %>
+                    </div>
+                  <% end %>
+                  <% if flight.scheduled? %>
+                    <div class="ReservationCard-scheduled">
+                        <span class='Icon-clock Icon--smallest'></span> Automatic checkin at <%= flight_time_basic flight.checkin.local_scheduled_at %> <%= flight_date flight.checkin.local_scheduled_at %>
                     </div>
                   <% end %>
                 </div>
-              <% end %>
-              <% if flight.scheduled? %>
-                <div class="ReservationCard-scheduled">
-                    <span class='Icon-clock Icon--smallest'></span> Automatic checkin at <%= flight_time_basic flight.checkin.local_scheduled_at %> <%= flight_date flight.checkin.local_scheduled_at %>
-                </div>
-              <% end %>
-            </div>
+              </div>
+            <% end %>
           </div>
         <% end %>
-      </div>
-      <% if @reservation.return_flights.any? %>
-        <div class="ReservationCard-flights">
-          <div class="ReservationCard-flight-group-title">Return</div>
-          <% @reservation.return_flights.each do |flight| %>
-            <div class="ReservationCard-flight">
-              <div class="ReservationCard-flight-title">
-                <%= flight.departure_airport.iata %>
-                <span class="Icon-plane-arrow Icon--large Icon--padded light"></span>
-                <%= flight.arrival_airport.iata %> <span class='u-text-padded'>·</span> <%= flight_date flight.local_departure_time %>
+        <% if @reservation.return_flights.any? %>
+          <div class="ReservationCard-flights">
+            <div class="ReservationCard-flight-group-title">Return</div>
+            <% @reservation.return_flights.each do |flight| %>
+              <div class="ReservationCard-flight">
+                <div class="ReservationCard-flight-title">
+                  <%= flight.departure_airport.iata %>
+                  <span class="Icon-plane-arrow Icon--large Icon--padded light"></span>
+                  <%= flight.arrival_airport.iata %> <span class='u-text-padded'>·</span> <%= flight_date flight.local_departure_time %>
+                </div>
+                <div class="ReservationCard-flight-details">
+                  <div class="ReservationCard-flight-details-group">
+                    <div class="ReservationCard-label">Flight No</div>
+                    <div class="ReservationCard-flight-number">
+                      <%= flight.flight_number %>
+                    </div>
+                  </div>
+                  <div class="ReservationCard-flight-details-group">
+                    <div class="ReservationCard-label">Departs</div>
+                    <div class="ReservationCard-flight-times-depart">
+                      <%= flight_time flight.local_departure_time %>
+                    </div>
+                  </div>
+                  <div class="ReservationCard-flight-details-group">
+                    <div class="ReservationCard-label">Arrives</div>
+                    <div class="ReservationCard-flight-times-arrive">
+                      <%= flight_time flight.local_arrival_time %>
+                    </div>
+                  </div>
+                  <% if flight.passenger_checkins.any? %>
+                    <div class="ReservationCard-flight-checkins">
+                      <% flight.passenger_checkins.each do |passenger_checkin| %>
+                        <div class="ReservationCard-flight-checkin">
+                          <span class="Icon-checkmark Icon--tiny Icon--padded-right"></span>
+                          <span class="ReservationCard-badge u-text-padded-right"><%= passenger_checkin.boarding_group %><%= passenger_checkin.boarding_position %></span>
+                          <%= passenger_checkin.passenger.full_name %>
+                        </div>
+                      <% end %>
+                    </div>
+                  <% end %>
+                  <% if flight.scheduled? %>
+                    <div class="ReservationCard-scheduled">
+                        <span class='Icon-clock Icon--smallest'></span> Automatic checkin at <%= flight_time_basic flight.checkin.local_scheduled_at %> <%= flight_date flight.checkin.local_scheduled_at %>
+                    </div>
+                  <% end %>
+                </div>
               </div>
-              <div class="ReservationCard-flight-details">
-                <div class="ReservationCard-flight-details-group">
-                  <div class="ReservationCard-label">Flight No</div>
-                  <div class="ReservationCard-flight-number">
-                    <%= flight.flight_number %>
-                  </div>
-                </div>
-                <div class="ReservationCard-flight-details-group">
-                  <div class="ReservationCard-label">Departs</div>
-                  <div class="ReservationCard-flight-times-depart">
-                    <%= flight_time flight.local_departure_time %>
-                  </div>
-                </div>
-                <div class="ReservationCard-flight-details-group">
-                  <div class="ReservationCard-label">Arrives</div>
-                  <div class="ReservationCard-flight-times-arrive">
-                    <%= flight_time flight.local_arrival_time %>
-                  </div>
-                </div>
-                <% if flight.passenger_checkins.any? %>
-                  <div class="ReservationCard-flight-checkins">
-                    <% flight.passenger_checkins.each do |passenger_checkin| %>
-                      <div class="ReservationCard-flight-checkin">
-                        <span class="Icon-checkmark Icon--tiny Icon--padded-right"></span>
-                        <span class="ReservationCard-badge u-text-padded-right"><%= passenger_checkin.boarding_group %><%= passenger_checkin.boarding_position %></span>
-                        <%= passenger_checkin.passenger.full_name %>
-                      </div>
-                    <% end %>
-                  </div>
-                <% end %>
-                <% if flight.scheduled? %>
-                  <div class="ReservationCard-scheduled">
-                      <span class='Icon-clock Icon--smallest'></span> Automatic checkin at <%= flight_time_basic flight.checkin.local_scheduled_at %> <%= flight_date flight.checkin.local_scheduled_at %>
-                  </div>
-                <% end %>
-              </div>
-            </div>
-          <% end %>
-        </div>
+            <% end %>
+          </div>
+        <% end %>
+      <% else %>
+        <% if @reservation.international? %>
+          <p class='ReservationCard-message'>
+            Unfortunately, do to uncontrolled limitations of the checkin process, international flights are not yet supported.
+          </p>
+        <% else %>
+          No flights.
       <% end %>
     </div>
   </div>
