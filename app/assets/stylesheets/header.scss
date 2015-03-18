@@ -73,6 +73,22 @@
   }
 }
 
+.Header-action--only-desktop {
+  display: none;
+
+  @include tablet-portrait-and-up {
+    display: inline-block;
+  }
+}
+
+.Header-action--only-iphone6 {
+  display: none;
+
+  @include iphone6-and-up {
+    display: inline-block;
+  }
+}
+
 .Header-dropdown .Dropdown-menu {
   right: -10px;
   top: $Header-height-mobile - 10px;

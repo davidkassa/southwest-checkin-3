@@ -128,14 +128,6 @@ $Reservation-bg-color: darken($logo-blue, 10%);
   color: $light-text-color;
 }
 
-.Header-my-reservations {
-  display: none;
-
-  @include tablet-portrait-and-up {
-    display: inline-block;
-  }
-}
-
 .ReservationCard-flight-group-title {
   @extend %large-font-size;
   text-align: center;

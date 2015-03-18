@@ -4,7 +4,7 @@
       <%= link_to 'Add a Reservation', new_reservation_path, class: 'GhostButtonLink GhostButtonLink--dark' %>
     </div>
     <% if user_signed_in? %>
-      <div class="Header-action Header-my-reservations">
+      <div class="Header-action Header-action--only-desktop">
         <%= link_to 'My Reservations', reservations_path %>
       </div>
       <div class="Header-action Header-dropdown">
@@ -21,6 +21,9 @@
         <%= render 'components/dropdown' %>
       </div>
     <% else %>
+      <div class="Header-action Header-action--only-iphone6">
+        <%= link_to 'Register', new_user_registration_path, class: 'Header-login' %>
+      </div>
       <div class="Header-action">
         <%= link_to 'Login', new_user_session_path, class: 'Header-login' %>
       </div>
