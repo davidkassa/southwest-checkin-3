@@ -196,4 +196,38 @@ RSpec.describe Reservation, type: :model do
       it_behaves_like 'with valid attributes'
     end
   end
+
+  describe 'destroying a reservation that has been checked in' do
+    let(:reservation_cassette) { 'viewAirReservation multiple passengers sfo bwi 1 stop' }
+    let(:checkin_cassette) { 'checkin multiple passengers sfo bwi 1 stop' }
+    let(:reservation) {
+      Reservation.create({
+        confirmation_number: "ABC123",
+        first_name: "Fuu",
+        last_name: "Bar"
+      })
+    }
+    let(:flight) { reservation.flights.where(position: 1).first }
+
+    # Flight checkins are not scheduled unless they are in the future
+    let(:before_all_departure_times) { Time.zone.parse('1 Jan 2015') }
+
+    before do
+      VCR.use_cassette reservation_cassette do
+        Timecop.freeze(before_all_departure_times) do
+          reservation
+        end
+      end
+
+      VCR.use_cassette checkin_cassette do
+        perform_enqueued_jobs do
+          CheckinJob.perform_later(flight)
+        end
+      end
+    end
+
+    it 'creates 4 flight checkins' do
+      expect { reservation.destroy }.to_not raise_error
+    end
+  end
 end
