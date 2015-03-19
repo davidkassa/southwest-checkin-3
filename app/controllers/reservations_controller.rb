@@ -88,6 +88,10 @@ class ReservationsController < ApplicationController
   end
 
   def current_user_only!
+    if !current_user.admin? && params[:id] && Reservation.find(params[:id]).user_id != current_user.id
+      raise ActionController::RoutingError.new('Not Found')
+    end
+
     super(params[:user_id])
   end
 end
