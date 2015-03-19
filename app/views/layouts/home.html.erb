@@ -28,6 +28,9 @@
     <ul class='DotList'>
       <li><a href="/privacy">Privacy Policy</a></li>
       <li><a href="https://github.com/aortbals/southwest-checkin">Open Source</a></li>
+      <% if ENV['DIGITAL_OCEAN_REFERRAL'] %>
+        <li><%= link_to 'Hosted on Digital Ocean', ENV['DIGITAL_OCEAN_REFERRAL'] %></li>
+      <% end %>
     </ul>
     <div class="Footer-notice">
       Copyright © 2015 chkmein.co, All rights reserved.
