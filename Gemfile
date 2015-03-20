@@ -53,6 +53,9 @@ gem 'airbrake'
 # Pagination
 gem 'kaminari'
 
+# Logging in production
+gem 'syslogger', '~> 1.6.0'
+
 group :development, :test do
   gem 'rspec-rails', '~> 3.0'
   gem 'awesome_print'
