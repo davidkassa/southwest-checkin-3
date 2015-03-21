@@ -22,6 +22,10 @@ module Southwest
       true
     end
 
+    def incorrect_passenger?
+      error =~ /passenger name entered does not match/
+    end
+
     def cancelled_reservation?
       flight_checkin_new && !!(flight_checkin_new.body["errmsg"] =~ /cancelled/i)
     end

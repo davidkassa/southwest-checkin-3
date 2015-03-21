@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150220053507) do
+ActiveRecord::Schema.define(version: 20150321171249) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(version: 20150220053507) do
     t.string   "job_id"
     t.datetime "completed_at"
     t.integer  "flight_id",    null: false
+    t.text     "error"
   end
 
   add_index "checkins", ["flight_id"], name: "index_checkins_on_flight_id", using: :btree

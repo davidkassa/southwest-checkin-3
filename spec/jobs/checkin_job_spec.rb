@@ -134,4 +134,25 @@ RSpec.describe CheckinJob, :type => :job do
       end
     end
   end
+
+  context 'incorrect passenger information' do
+    let(:reservation_cassette) { 'viewAirReservation single MDW MCI' }
+    let(:checkin_cassette) { 'checkin non matching confirmation' }
+
+    include_context 'setup existing reservation'
+
+    it 'should not raise an error' do
+      perform do
+        expect { CheckinJob.perform_later(flight) }.not_to raise_error
+      end
+    end
+
+    it 'should add the error to the record and mark it completed' do
+      perform do
+        CheckinJob.perform_later(flight)
+        expect(reservation.checkins.first.error).to match /passenger name entered does not match/
+        expect(reservation.checkins.first.completed_at).not_to be nil
+      end
+    end
+  end
 end
