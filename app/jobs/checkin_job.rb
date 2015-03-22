@@ -11,7 +11,6 @@ class CheckinJob < ActiveJob::Base
     checkin_record = Checkin.find_or_initialize_by(flight: flight)
 
     checkin_record.update!({
-      completed_at: Time.zone.now,
       payload: {
         flight_checkin_new: checkin_response.flight_checkin_new,
         get_all_boarding_passes: checkin_response.get_all_boarding_passes,
@@ -21,7 +20,7 @@ class CheckinJob < ActiveJob::Base
 
     if checkin_response.error?
       if checkin_response.incorrect_passenger?
-        checkin_record.update(error: checkin_response.error)
+        checkin_record.update(error: checkin_response.error, completed_at: Time.zone.now)
         return
       else
         raise SouthwestCheckin::FailedCheckin, "The checkin for reservation '#{flight.reservation.id}' and flight '#{flight.id}' failed. Checkin record '#{checkin_record.id}' contains the payload.\n\nError:\n\t#{checkin_response.error}\n\n"
@@ -35,6 +34,9 @@ class CheckinJob < ActiveJob::Base
     if checkin_record.user.present?
       CheckinMailer.successful_checkin(checkin_record, checkin_record.user.email).deliver_later
     end
+
+    # Finally, mark the checkin completed
+    checkin_record.update!(completed_at: Time.zone.now)
   end
 
   private

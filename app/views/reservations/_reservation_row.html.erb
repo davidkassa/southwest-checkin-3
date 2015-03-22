@@ -1,0 +1,20 @@
+<tr>
+  <td><%= link_to reservation.confirmation_number, reservation %></td>
+  <td><%= flight_date(reservation.time) if reservation.time %></td>
+  <td><%= reservation.arrival_city_name %></td>
+  <td class='Table-no-mobile'>
+    <% if reservation.passengers.one? %>
+      <%= reservation.passengers.first.full_name %>
+    <% else %>
+      <%= reservation.passengers.first.full_name %> + <%= reservation.passengers.count - 1 %>
+    <% end %>
+  </td>
+  <td class="Reservations-checkins <%= reservation.checkins_completed? ? 'Reservations-checkins--success' : '' %>">
+    <% if reservation.checkins_completed? %>
+      <span class="Icon-checkmark Icon--tiny Icon--padded-right"></span>
+    <% end %>
+    <span class=<%= reservation.checkins.completed.count > 0 ? 'Reservations-checkins--success' : '' %>>
+      <%= reservation.checkins.completed.count %>
+    </span> / <%= reservation.checkins.count %>
+  </td>
+</tr>

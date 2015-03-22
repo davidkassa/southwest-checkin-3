@@ -6,25 +6,13 @@
         <th>Date</th>
         <th>Traveling to</th>
         <th class='Table-no-mobile'>Passengers</th>
-        <th class='Table-no-mobile' colspan="2"></th>
+        <th>Checkins</th>
       </tr>
     </thead>
 
     <tbody>
       <% @reservations.each do |reservation| %>
-        <tr>
-          <td><%= link_to reservation.confirmation_number, reservation %></td>
-          <td><%= flight_date(reservation.time) if reservation.time %></td>
-          <td><%= reservation.arrival_city_name %></td>
-          <td class='Table-no-mobile'>
-            <% if reservation.passengers.one? %>
-              <%= reservation.passengers.first.full_name %>
-            <% else %>
-              <%= reservation.passengers.first.full_name %> + <%= reservation.passengers.count - 1 %>
-            <% end %>
-          </td>
-          <td class='Table-no-mobile'><%= link_to 'Remove', reservation, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-        </tr>
+        <%= render 'reservations/reservation_row', reservation: reservation %>
       <% end %>
       <% if @reservations.empty? %>
         <tr>

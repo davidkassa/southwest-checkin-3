@@ -118,9 +118,18 @@ $Reservation-bg-color: darken($logo-blue, 10%);
   }
 }
 
-.ReservationCard-flight-checkins {
+.ReservationCard-flight-checkins,
+.Reservations-checkins--success {
   @extend %medium;
   color: $success-green;
+}
+
+td.Reservations-checkins {
+  padding-left: 18px;
+
+  &.Reservations-checkins--success {
+    padding-left: 0;
+  }
 }
 
 .ReservationCard-flight-checkin {

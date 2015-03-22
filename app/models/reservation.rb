@@ -39,6 +39,10 @@ class Reservation < ActiveRecord::Base
     payload['body'] ? payload['body']['isInternationalPNR'] == 'true' : false
   end
 
+  def checkins_completed?
+    checkins.count == checkins.completed.count
+  end
+
   private
 
   def upcase_confirmation_number
