@@ -19,7 +19,7 @@ class CheckinJob < ActiveJob::Base
     })
 
     if checkin_response.error?
-      if checkin_response.incorrect_passenger?
+      if checkin_response.incorrect_passenger? || checkin_response.cancelled_reservation?
         checkin_record.update(error: checkin_response.error, completed_at: Time.zone.now)
         return
       else
