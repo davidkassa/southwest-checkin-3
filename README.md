@@ -24,10 +24,11 @@ If you are interested in the old version, see the [1.0 branch](https://github.co
 
 ## Local Installation
 
-1. While not strictly required, it is recommended to install [`rbenv`](https://github.com/sstephenson/rbenv) and [`ruby-build`](https://github.com/sstephenson/ruby-build) to manager ruby versions in development.
+1. While not strictly required, it is recommended to install [`rbenv`](https://github.com/sstephenson/rbenv) and [`ruby-build`](https://github.com/sstephenson/ruby-build) to manage ruby versions in development. Ruby 2.2 or greater is required.
 
 2. Required dependencies
 
+    - Ruby 2.2 or greater
     - Postgres
     - Redis
 
