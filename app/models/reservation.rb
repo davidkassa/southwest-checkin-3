@@ -17,7 +17,6 @@ class Reservation < ActiveRecord::Base
   validates :confirmation_number,
             :first_name,
             :last_name,
-            :arrival_city_name,
             :payload,
             presence: true
 
