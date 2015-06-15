@@ -1,0 +1,46 @@
+{
+  "name": "Southwest Checkin",
+  "description": "This app automatically checks you into a southwest airlines flight.",
+  "keywords": [
+    "southwest airlines",
+    "checkin",
+    "rails"
+  ],
+  "website": "https://github.com/aortbals/southwest-checkin",
+  "repository": "https://github.com/aortbals/southwest-checkin",
+  "success_url": "/",
+  "scripts": {
+    "postdeploy": "bundle exec rake db:migrate db:seed"
+  },
+  "env": {
+    "RAILS_ENV": "production",
+    "RACK_ENV": "production",
+    "RAILS_SERVE_STATIC_FILES": "true",
+    "MAILER_ADDRESS": "smtp.mandrillapp.com",
+    "MAILER_DOMAIN": "heroku.com",
+    "REDIS_PROVIDER": "REDISCLOUD_URL",
+    "SITE_URL": {
+      "description": "The url of the site."
+    },
+    "SITE_NAME": {
+      "description": "The name of the site in emails.",
+      "value": "Southwest Checkin"
+    },
+    "SECRET_KEY_BASE": {
+      "description": "A secret key for verifying the integrity of signed cookies.",
+      "generator": "secret"
+    },
+    "MAILER_DEFAULT_FROM_EMAIL" : {
+      "description": "The default address emails are sent from."
+    },
+    "MAILER_DEFAULT_REPLY_TO" : {
+      "description": "The default email reply to.",
+      "required": false
+    }
+  },
+  "addons": [
+    "rediscloud:30",
+    "heroku-postgresql",
+    "mandrill:starter"
+  ]
+}

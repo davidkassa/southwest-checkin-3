@@ -62,28 +62,28 @@ Rails.application.configure do
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = ENV['ASSET_HOST']
-  config.action_mailer.asset_host = ENV['ASSET_HOST']
+  config.action_mailer.asset_host = ENV['ASSET_HOST'] || ENV['SITE_URL']
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
 
   config.action_mailer.default_url_options = {
-    host: ENV['MAILER_DEFAULT_HOST'],
+    host: ENV['SITE_URL'] || ENV['MAILER_DEFAULT_HOST'],
     protocol: ENV['MAILER_DEFAULT_PROTOCOL'] || 'https'
   }
 
   config.action_mailer.default_options  = {
     from: ENV['MAILER_DEFAULT_FROM_EMAIL'],
-    reply_to: ENV['MAILER_DEFAULT_REPLY_TO']
+    reply_to: ENV['MAILER_DEFAULT_REPLY_TO'] || ENV['MAILER_DEFAULT_FROM_EMAIL']
   }
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     address:              ENV['MAILER_ADDRESS'],
     domain:               ENV['MAILER_DOMAIN'],
-    user_name:            ENV['MAILER_USERNAME'],
-    password:             ENV['MAILER_PASSWORD'],
+    user_name:            ENV['MAILER_USERNAME'] || ENV['MANDRILL_USERNAME'],
+    password:             ENV['MAILER_PASSWORD'] || ENV['MANDRILL_APIKEY'],
     port:                 587,
     authentication:       'plain',
     enable_starttls_auto: true }
