@@ -6,7 +6,7 @@ namespace :sidekiq do
     # sidekiq is already running, don't need to run
     if Sidekiq::ProcessSet.new.size == 0
       ss = Sidekiq::ScheduledSet.new
-      if ss.first.at < Time.now
+      if ss.first.try { |job| job.at < Time.now }
         exec "bundle exec sidekiq"
       end
     end
