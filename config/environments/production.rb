@@ -88,7 +88,7 @@ Rails.application.configure do
   #  authentication:       :plain,
   #  enable_starttls_auto: true }
 config.action_mailer.delivery_method = :mailgun
-config.action_mailer.mailgun_settings = {domain: 'mg.pw10n.pw'}
+#config.action_mailer.mailgun_settings = {domain: 'mg.pw10n.pw'}
 
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
