@@ -78,16 +78,16 @@ Rails.application.configure do
     reply_to: ENV['MAILER_DEFAULT_REPLY_TO'] || ENV['MAILER_DEFAULT_FROM_EMAIL']
   }
 
-  #config.action_mailer.delivery_method = :smtp
-  #config.action_mailer.smtp_settings = {
-  #  address:              ENV['MAILGUN_SMTP_SERVER'],
-  #  domain:               ENV['MAILER_DOMAIN'],
-  #  user_name:            ENV['MAILGUN_SMTP_LOGIN'],
-  #  password:             ENV['MAILGUN_SMTP_PASSWORD'],
-  #  port:                 ENV['MAILGUN_SMTP_PORT'],
-  #  authentication:       :plain,
-  #  enable_starttls_auto: true }
-config.action_mailer.delivery_method = :mailgun
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address:              ENV['MAILGUN_SMTP_SERVER'],
+    domain:               ENV['MAILER_DOMAIN'],
+    user_name:            ENV['MAILGUN_SMTP_LOGIN'],
+    password:             ENV['MAILGUN_SMTP_PASSWORD'],
+    port:                 ENV['MAILGUN_SMTP_PORT'],
+    authentication:       :plain,
+    enable_starttls_auto: true }
+#config.action_mailer.delivery_method = :mailgun
 #config.action_mailer.mailgun_settings = {domain: 'mg.pw10n.pw'}
 
 
