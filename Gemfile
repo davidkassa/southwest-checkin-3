@@ -41,6 +41,7 @@ gem 'puma'
 gem 'mina'
 gem 'mina-puma', :require => false
 gem 'mina-sidekiq', :require => false
+gem 'mina-scp', :require => false
 
 gem 'dotenv-rails'
 

@@ -4,6 +4,7 @@ require 'mina/git'
 require 'mina/rbenv'
 require 'mina/puma'
 require 'mina_sidekiq/tasks'
+require 'mina/scp'
 require 'dotenv'
 Dotenv.load
 
@@ -62,6 +63,13 @@ task :setup => :environment do
 
   queue! %[mkdir -p "#{deploy_to}/#{shared_path}/pids"]
   queue! %[chmod g+rx,u+rwx "#{deploy_to}/#{shared_path}/pids"]
+end
+
+namespace :config do
+  desc "Upload .env config"
+  task upload: :environment do
+    scp_upload '.env', "#{deploy_to}/#{shared_path}/.env"
+  end
 end
 
 desc "Deploys the current version to the server."
