@@ -16,7 +16,6 @@
     "RAILS_ENV": "production",
     "RACK_ENV": "production",
     "RAILS_SERVE_STATIC_FILES": "true",
-    "MAILER_ADDRESS": "smtp.mandrillapp.com",
     "MAILER_DOMAIN": "heroku.com",
     "REDIS_PROVIDER": "REDISCLOUD_URL",
     "SITE_URL": {
@@ -41,6 +40,6 @@
   "addons": [
     "rediscloud:30",
     "heroku-postgresql",
-    "mandrill:starter"
+    "mailgun:starter"
   ]
 }
