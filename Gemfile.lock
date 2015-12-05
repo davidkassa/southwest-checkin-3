@@ -137,6 +137,7 @@ GEM
       rake
     mina-puma (0.2.0)
       mina
+    mina-scp (0.1.2)
     mina-sidekiq (0.3.1)
       mina
     mini_portile (0.6.2)
@@ -308,6 +309,7 @@ DEPENDENCIES
   letter_opener
   mina
   mina-puma
+  mina-scp
   mina-sidekiq
   pg
   pry
@@ -333,4 +335,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   1.10.3
+   1.10.6

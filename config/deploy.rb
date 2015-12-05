@@ -4,6 +4,7 @@ require 'mina/git'
 require 'mina/rbenv'
 require 'mina/puma'
 require 'mina_sidekiq/tasks'
+require 'mina/scp'
 require 'dotenv'
 Dotenv.load
 
@@ -31,13 +32,14 @@ set :port, ENV['DEPLOY_PORT']     # SSH port number.
 set :forward_agent, true     # SSH forward_agent.
 
 set :notify_airbrake, ENV['AIRBRAKE_DEPLOY_NOTIFICATION'] == 'true'
+set :use_rbenv, ENV['DEPLOY_USE_RBENV'] == 'true'
 
 # This task is the environment that is loaded for most commands, such as
 # `mina deploy` or `mina rake`.
 task :environment do
   # If you're using rbenv, use this to load the rbenv environment.
   # Be sure to commit your .ruby-version or .rbenv-version to your repository.
-  invoke :'rbenv:load'
+  invoke :'rbenv:load' if use_rbenv
 
   # For those using RVM, use this to load an RVM version@gemset.
   # invoke :'rvm:use[ruby-1.9.3-p125@default]'
@@ -61,6 +63,13 @@ task :setup => :environment do
 
   queue! %[mkdir -p "#{deploy_to}/#{shared_path}/pids"]
   queue! %[chmod g+rx,u+rwx "#{deploy_to}/#{shared_path}/pids"]
+end
+
+namespace :config do
+  desc "Upload .env config"
+  task upload: :environment do
+    scp_upload '.env', "#{deploy_to}/#{shared_path}/.env"
+  end
 end
 
 desc "Deploys the current version to the server."
