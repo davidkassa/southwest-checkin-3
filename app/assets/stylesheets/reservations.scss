@@ -28,7 +28,7 @@ $Reservation-bg-color: darken($logo-blue, 10%);
 .ReservationCard {
   color: $light-text-color;
   display: inline-block;
-  margin: 0 auto;
+  margin: 0 10px;
   padding: 10px;
   background-color: $Reservation-bg-color;
   border-radius: 10px;
