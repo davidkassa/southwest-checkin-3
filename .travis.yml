@@ -1,3 +1,7 @@
 language: ruby
 rvm:
   - "2.2.4"
+addons:
+  postgresql: "9.4"
+before_script:
+  - rake db:test:prepare
