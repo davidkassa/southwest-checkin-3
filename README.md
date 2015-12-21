@@ -1,4 +1,6 @@
-Southwest Checkin 2.0
+# Southwest Checkin 2.0
+
+[![Build Status](https://travis-ci.org/aortbals/southwest-checkin.svg?branch=master)](https://travis-ci.org/aortbals/southwest-checkin)
 
 Automatically checks in passengers for their Southwest Flight.
 
