@@ -80,6 +80,7 @@ group :test do
   gem 'webmock'
   gem 'shoulda-matchers', require: false
   gem 'timecop'
+  gem 'coveralls', require: false
 end
 
 group :developement do
