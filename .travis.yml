@@ -4,9 +4,7 @@ rvm:
 addons:
   postgresql: "9.4"
 env:
-  - COVERAGE=true
-  - SITE_NAME=Southwest Checkin
-  - SITE_URL=http://localhost:3000
+  - COVERAGE=true SITE_NAME=Southwest Checkin SITE_URL=http://localhost:3000
 script:
   - rake
 before_script:
