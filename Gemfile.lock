@@ -137,6 +137,10 @@ GEM
       celluloid (>= 0.15.2)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
+    lograge (0.3.5)
+      actionpack (>= 3)
+      activesupport (>= 3)
+      railties (>= 3)
     loofah (2.0.1)
       nokogiri (>= 1.5.9)
     lumberjack (1.0.9)
@@ -335,6 +339,7 @@ DEPENDENCIES
   jquery-rails
   kaminari
   letter_opener
+  lograge (~> 0.3.1)
   mina
   mina-puma
   mina-scp
