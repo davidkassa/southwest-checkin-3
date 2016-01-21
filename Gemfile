@@ -48,8 +48,8 @@ gem 'dotenv-rails'
 # Skylight for performance monitoring
 gem 'skylight'
 
-# Airbrake/Errbit for error monitoring
-gem 'airbrake'
+# New Relic application monitoring
+gem 'newrelic_rpm'
 
 # Pagination
 gem 'kaminari'
