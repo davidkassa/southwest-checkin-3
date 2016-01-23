@@ -28,6 +28,7 @@ gem 'devise', '~> 3.4' # Authentication
 
 gem 'sidekiq' # Background job processing queue
 gem 'sinatra', :require => nil # Required for sidekiq web UI
+gem 'sidekiq-failures' # Track sidekiq failures
 
 gem 'roadie-rails' # Inline styles for emails
 
