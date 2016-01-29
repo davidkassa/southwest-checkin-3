@@ -148,6 +148,9 @@ GEM
     mina (0.3.2)
       open4 (~> 1.3.4)
       rake
+    mina-newrelic (0.0.3)
+      mina (>= 0.3.0)
+      newrelic_rpm (>= 3.6.0)
     mina-puma (0.2.0)
       mina
     mina-scp (0.1.2)
@@ -340,6 +343,7 @@ DEPENDENCIES
   letter_opener
   lograge (~> 0.3.1)
   mina
+  mina-newrelic
   mina-puma
   mina-scp
   mina-sidekiq

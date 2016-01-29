@@ -5,6 +5,7 @@ require 'mina/rbenv'
 require 'mina/puma'
 require 'mina_sidekiq/tasks'
 require 'mina/scp'
+require 'mina/newrelic'
 require 'dotenv'
 Dotenv.load
 
@@ -87,6 +88,7 @@ task :deploy => :environment do
     to :launch do
       invoke :'puma:phased_restart'
       invoke :'sidekiq:restart'
+      invoke :'newrelic:notice_deployment'
     end
   end
 end
