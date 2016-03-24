@@ -57,6 +57,7 @@ class ReservationsController < ApplicationController
   def show_all?
     params[:all] == 'true'
   end
+  helper_method :show_all?
 
   def authenticate_or_redirect_to_signup!
     if user_signed_in?

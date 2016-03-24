@@ -17,4 +17,7 @@
       <%= reservation.checkins.completed.count %>
     </span> / <%= reservation.checkins.count %>
   </td>
+  <% if current_user.admin? && show_all? %>
+    <td><%= reservation.user.email %></td>
+  <% end %>
 </tr>
