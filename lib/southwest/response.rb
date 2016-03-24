@@ -26,11 +26,11 @@ module Southwest
     end
 
     def error?
-      !error.nil? && !error.empty?
+      code >= 400
     end
 
-    def error
-      body["errmsg"]
+    def error_message
+      error? and body['message']
     end
 
     private

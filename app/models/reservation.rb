@@ -35,7 +35,7 @@ class Reservation < ActiveRecord::Base
   end
 
   def international?
-    payload['body'] ? payload['body']['isInternationalPNR'] == 'true' : false
+    payload['body'] && payload['body']['international']
   end
 
   def checkins_completed?
@@ -56,12 +56,11 @@ class Reservation < ActiveRecord::Base
       return false
     end
 
-    if retrieved_reservation.international?
+    if retrieved_reservation.body['international']
       errors[:base] << "Unfortunately, do to uncontrolled limitations of the checkin process, international flights are not yet supported."
     end
 
     self.payload = retrieved_reservation.to_hash
-    self.arrival_city_name = retrieved_reservation.arrival_city_name
   end
 
   def create_passengers
@@ -95,15 +94,7 @@ class Reservation < ActiveRecord::Base
   end
 
   def invalidate_reservation(response)
-    if response.entered_incorrectly?
-      errors.add(:confirmation_number, 'verify your confirmation number is entered correctly')
-      errors.add(:first_name, 'verify your first name is entered correctly')
-      errors.add(:last_name, 'verify your last name is entered correctly')
-    elsif response.cancelled?
-      errors[:base] << "Your reservation has been cancelled"
-    else
-      errors[:base] << response.error
-    end
+    errors[:base] << response.error_message
   end
 
   def send_new_reservation_email

@@ -5,10 +5,12 @@ module Southwest
     attr_reader :last_name
     attr_reader :first_name
     attr_reader :record_locator
-    attr_reader :cacheid
-    attr_reader :jsessionid
 
     def initialize(last_name:, first_name:, record_locator:)
+      unless last_name && first_name && record_locator
+        raise Southwest::RequestArgumentError, "last_name, first_name, record_locator are required"
+      end
+
       @last_name = last_name
       @first_name = first_name
       @record_locator = record_locator
@@ -16,71 +18,31 @@ module Southwest
 
     protected
 
-    def base_params
+    def make_request(path, params, content_type)
+      Typhoeus::Request.get("#{base_uri}#{path}", {
+        params: params, headers: headers(content_type)
+      })
+    end
+
+    def headers(content_type)
       {
-        appID: 'swa',
-        channel: 'rc',
-        appver: app_version,
-        platform: 'iPhone',
-        cacheid: ''
+        'User-Agent' => user_agent,
+        'Content-Type' => content_type,
+        'X-Api-Key' => api_key,
+        'Accept-Language' => 'en-US;q=1'
       }
     end
 
-    def make_request(params)
-      response = Typhoeus::Request.post(base_uri, body: params, headers: headers)
-      check_response!(response)
-      store_cookies(response)
-      response
-    end
-
-    def check_response!(response)
-      if response.code >= 400
-        raise Southwest::RequestError, "There was an error making the request. It returned a status of #{status(response)}. Response:\n#{response}"
-      end
-    end
-
-    def headers
-      headers = { 'User-Agent' => user_agent }
-      headers.merge!('Cookie' => cookie) if cookie
-      headers
-    end
-
-    def cookie
-      cookies = []
-      cookies << "JSESSIONID=#{jsessionid}" if jsessionid
-      cookies << "cacheid=#{cacheid}" if cacheid
-      cookies.any? ? cookies.join('; ') : nil
-    end
-
-    def store_cookies(response)
-      cookies = parse_cookies(response)
-      @jsessionid = cookies['JSESSIONID'].first if cookies['JSESSIONID'].any?
-      @cacheid = cookies['cacheid'].first if cookies['cacheid'].any?
-    end
-
-    def parse_cookies(response)
-      if response.headers['Set-Cookie'].respond_to? :join
-        cookie_string = response.headers['Set-Cookie'].join(';')
-      else
-        cookie_string = response.headers['Set-Cookie']
-      end
-      CGI::Cookie::parse(cookie_string)
-    end
-
     def base_uri
-      'https://mobile.southwest.com/middleware/MWServlet'
+      'https://api-extensions.southwest.com/v1/mobile'
     end
 
     def user_agent
-      "Southwest/#{app_version} CFNetwork/711.1.16 Darwin/14.0.0"
+      "Southwest/3.3.7 (iPhone; iOS 9.3; Scale/2.00)"
     end
 
-    def app_version
-      "2.10.1"
-    end
-
-    def validate_session!
-      raise Southwest::InvalidCredentialsError, "A session must be created by calling `flight_checkin_new` before a boarding passes can be retrieved." unless cacheid && jsessionid
+    def api_key
+      "l7xx8d8bfce4ee874269bedc02832674129b"
     end
   end
 end
