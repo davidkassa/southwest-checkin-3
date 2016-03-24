@@ -1,0 +1,192 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "/",
+  "type": "object",
+  "properties": {
+    "maxFailedCheckInAttemptsReached": {
+      "id": "maxFailedCheckInAttemptsReached",
+      "type": "boolean"
+    },
+    "passengerCheckInDocuments": {
+      "id": "passengerCheckInDocuments",
+      "type": "array",
+      "items": {
+        "id": "0",
+        "type": "object",
+        "properties": {
+          "passenger": {
+            "id": "passenger",
+            "type": "object",
+            "properties": {
+              "secureFlightFirstName": {
+                "id": "secureFlightFirstName",
+                "type": "string"
+              },
+              "secureFlightLastName": {
+                "id": "secureFlightLastName",
+                "type": "string"
+              },
+              "secureFlightMiddleName": {
+                "id": "secureFlightMiddleName",
+                "type": "string"
+              },
+              "secureFlightSuffix": {
+                "id": "secureFlightSuffix",
+                "type": "string"
+              },
+              "loyaltyAccountNumber": {
+                "id": "loyaltyAccountNumber",
+                "type": "string"
+              },
+              "tier": {
+                "id": "tier",
+                "type": "string"
+              },
+              "birthDate": {
+                "id": "birthDate",
+                "type": "string"
+              },
+              "specialConditions": {
+                "id": "specialConditions",
+                "type": "array",
+                "items": []
+              },
+              "firstName": {
+                "id": "firstName",
+                "type": "string"
+              },
+              "lastName": {
+                "id": "lastName",
+                "type": "string"
+              },
+              "redressNumber": {
+                "id": "redressNumber",
+                "type": "string"
+              },
+              "gender": {
+                "id": "gender",
+                "type": "string"
+              },
+              "passengerTypePrefix": {
+                "id": "passengerTypePrefix",
+                "type": "string"
+              }
+            }
+          },
+          "checkinDocuments": {
+            "id": "checkinDocuments",
+            "type": "array",
+            "items": {
+              "id": "0",
+              "type": "object",
+              "properties": {
+                "boardingGroupNumber": {
+                  "id": "boardingGroupNumber",
+                  "type": "string"
+                },
+                "boardingGroup": {
+                  "id": "boardingGroup",
+                  "type": "string"
+                },
+                "documentType": {
+                  "id": "documentType",
+                  "type": "string"
+                },
+                "departureDateTime": {
+                  "id": "departureDateTime",
+                  "type": "string"
+                },
+                "arrivalDateTime": {
+                  "id": "arrivalDateTime",
+                  "type": "string"
+                },
+                "origin": {
+                  "id": "origin",
+                  "type": "string"
+                },
+                "destination": {
+                  "id": "destination",
+                  "type": "string"
+                },
+                "secureFlightBarCode": {
+                  "id": "secureFlightBarCode",
+                  "type": "string"
+                },
+                "fareProductType": {
+                  "id": "fareProductType",
+                  "type": "string"
+                },
+                "gate": {
+                  "id": "gate",
+                  "type": "null"
+                },
+                "flightNumber": {
+                  "id": "flightNumber",
+                  "type": "string"
+                },
+                "hasPreCheck": {
+                  "id": "hasPreCheck",
+                  "type": "boolean"
+                },
+                "originName": {
+                  "id": "originName",
+                  "type": "string"
+                },
+                "destinationName": {
+                  "id": "destinationName",
+                  "type": "string"
+                },
+                "carrierInfo": {
+                  "id": "carrierInfo",
+                  "type": "object",
+                  "properties": {
+                    "carrierCode": {
+                      "id": "carrierCode",
+                      "type": "string"
+                    },
+                    "flightNumber": {
+                      "id": "flightNumber",
+                      "type": "string"
+                    }
+                  }
+                },
+                "drinkCouponBarCode": {
+                  "id": "drinkCouponBarCode",
+                  "type": "null"
+                },
+                "issued": {
+                  "id": "issued",
+                  "type": "boolean"
+                },
+                "nonRevenue": {
+                  "id": "nonRevenue",
+                  "type": "boolean"
+                },
+                "reprint": {
+                  "id": "reprint",
+                  "type": "boolean"
+                },
+                "seat": {
+                  "id": "seat",
+                  "type": "null"
+                },
+                "durationMinutes": {
+                  "id": "durationMinutes",
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "mobileBoardingPassEligible": {
+            "id": "mobileBoardingPassEligible",
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "maxFailedCheckInAttemptsReached",
+    "passengerCheckInDocuments"
+  ]
+}

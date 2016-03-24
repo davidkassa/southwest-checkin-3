@@ -84,6 +84,7 @@ group :test do
   gem 'shoulda-matchers', require: false
   gem 'timecop'
   gem 'coveralls', require: false
+  gem 'json-schema-rspec'
 end
 
 group :developement do
