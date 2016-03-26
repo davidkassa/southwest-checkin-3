@@ -1,108 +1,56 @@
 require 'rails_helper'
 
+require 'rails_helper'
+
 RSpec.describe FlightsParser do
-  fixtures :reservations, :airports
+  fixtures :airports
 
-  shared_examples_for 'FlightParser' do
-    describe '#flights' do
-      describe 'each flight' do
-        let(:expected_keys) {
-          [
-            :departure_time,
-            :arrival_time,
-            :departure_city,
-            :arrival_city,
-            :departure_airport,
-            :arrival_airport,
-            :flight_type,
-            :position,
-            :payload
-          ]
-        }
+  let(:last_name) { 'Bar' }
+  let(:first_name) { 'Fuu' }
+  let(:record_locator) { 'ABC123' }
+  let(:cassette) { 'record locator view multi LAX 2016-03-18' }
+  let(:response) {
+    Southwest::Reservation.retrieve_reservation(
+      last_name: last_name,
+      first_name: first_name,
+      record_locator: record_locator)
+  }
 
-        it 'returns a value for all attributes' do
-          subject.flights.each do |flight|
-            expected_keys.each do |key|
-              expect(flight[key]).to_not be_nil
-            end
-          end
-        end
-      end
+  subject {
+    VCR.use_cassette cassette do
+      FlightsParser.new(response.body)
     end
+  }
+
+  it 'extracts two flights' do
+    expect(subject.flights.count).to eql(2)
   end
 
-  context 'New Orleans Reservation' do
-    subject { FlightsParser.new(reservations(:new_orleans).payload["body"]) }
-
-    it_behaves_like 'FlightParser'
-
-    it 'returns departure and return flights' do
-      expect(subject.flights.count).to eql(3)
-    end
-
-    describe '#departure_flights' do
-      it 'returns a single departure flight' do
-        expect(subject.departure_flights.count).to eql(1)
-      end
-    end
-
-    describe '#return_flights' do
-      it 'returns two return flights' do
-        expect(subject.return_flights.count).to eql(2)
-      end
-    end
+  it 'flight 1 is correct' do
+    flight = subject.flights.first
+    expect(flight[:departure_time]).to eql("2016-03-24T17:05:00.000-05:00")
+    expect(flight[:arrival_time]).to eql("2016-03-24T18:40:00.000-07:00")
+    expect(flight[:departure_city]).to eql("Kansas City Intl")
+    expect(flight[:arrival_city]).to eql("Los Angeles Intl")
+    expect(flight[:payload]).to_not be_nil
+    expect(flight[:departure_airport].iata).to eql("MCI")
+    expect(flight[:arrival_airport].iata).to eql("LAX")
+    expect(flight[:flight_type]).to eql('departure')
+    expect(flight[:position]).to eql(1)
+    expect(flight[:flight_number]).to eql('1001')
   end
 
-  context 'Denver Reservation' do
-    subject { FlightsParser.new(reservations(:denver).payload["body"]) }
-
-    it_behaves_like 'FlightParser'
-
-    describe '#flights' do
-      it 'returns departure and return flights' do
-        expect(subject.flights.count).to eql(2)
-      end
-    end
-
-    describe 'first flight' do
-      let(:first) { subject.flights.first }
-
-      it 'corresponds to a 2h15m flight' do
-        expect(first[:arrival_time].to_i - first[:departure_time].to_i).to eql((2.hour + 15.minutes).to_i)
-      end
-
-      it 'has the correct `:flight_type` enum' do
-        expect(first[:flight_type]).to eql(0)
-      end
-
-      it 'has the correct UTC departure time' do
-        expect(first[:departure_time]).to eql(Time.zone.parse('2015-01-17 02:10:00').to_datetime)
-      end
-
-      it 'has the correct UTC arrival time' do
-        expect(first[:arrival_time]).to eql(Time.zone.parse('2015-01-17 04:25:00').to_datetime)
-      end
-    end
-
-    describe 'second flight' do
-      let(:second) { subject.flights.second }
-
-      it 'has the correct UTC departure time' do
-        expect(second[:departure_time]).to eql(Time.zone.parse('2015-01-17 05:05:00').to_datetime)
-      end
-
-      it 'has the correct UTC arrival time' do
-        expect(second[:arrival_time]).to eql(Time.zone.parse('2015-01-17 06:25:00').to_datetime)
-      end
-    end
-  end
-
-  context 'a flight spanning two days' do
-    it 'returns the next day for the arrival time' do
-      json = reservations(:new_orleans).payload["body"]
-      json["upComingInfo"][0]["Return2"]["arrivalCity"] = "01:00 AM Baltimore/Washington, MD (BWI)"
-
-      expect(FlightsParser.new(json).return_flights.last[:arrival_time]).to eql(DateTime.parse("18 Mar 2015 05:00:00 +0000"))
-    end
+  it 'flight 2 is correct' do
+    flight = subject.flights.second
+    expect(flight[:departure_time]).to eql("2016-03-28T05:35:00.000-07:00")
+    expect(flight[:arrival_time]).to eql("2016-03-28T10:50:00.000-05:00")
+    expect(flight[:departure_city]).to eql("Los Angeles Intl")
+    expect(flight[:arrival_city]).to eql("Kansas City Intl")
+    expect(flight[:payload]).to_not be_nil
+    expect(flight[:departure_airport].iata).to eql("LAX")
+    expect(flight[:arrival_airport].iata).to eql("MCI")
+    expect(flight[:flight_type]).to eql('return')
+    expect(flight[:position]).to eql(1)
+    expect(flight[:flight_number]).to eql('1002')
   end
 end

@@ -56,6 +56,10 @@ Rails.application.configure do
 
   require 'syslogger'
   config.logger = ActiveSupport::TaggedLogging.new(Syslogger.new("southwest-checkin", Syslog::LOG_PID, Syslog::LOG_LOCAL7))
+  config.lograge.enabled = true
+  config.lograge.formatter = Lograge::Formatters::Json.new
+
+  Sidekiq::Logging.logger = ActiveSupport::TaggedLogging.new(Syslogger.new("sidekiq", Syslog::LOG_PID, Syslog::LOG_LOCAL7))
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store

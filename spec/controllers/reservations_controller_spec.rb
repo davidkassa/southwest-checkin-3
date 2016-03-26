@@ -28,7 +28,7 @@ RSpec.describe ReservationsController, :type => :controller do
   describe "POST create" do
     describe "with valid params" do
       it "creates a new Reservation" do
-        VCR.use_cassette 'viewAirReservation' do
+        VCR.use_cassette 'record locator view multi LAX 2016-03-18' do
           expect {
             post :create, {:reservation => valid_attributes}, valid_session
           }.to change(Reservation, :count).by(1)
@@ -36,7 +36,7 @@ RSpec.describe ReservationsController, :type => :controller do
       end
 
       it "it is the current user's reservation" do
-        VCR.use_cassette 'viewAirReservation' do
+        VCR.use_cassette 'record locator view multi LAX 2016-03-18' do
           expect {
             post :create, {:reservation => valid_attributes}, valid_session
           }.to change(Reservation, :count).by(1)
@@ -44,7 +44,7 @@ RSpec.describe ReservationsController, :type => :controller do
       end
 
       it 'creates two new flights' do
-        VCR.use_cassette 'viewAirReservation' do
+        VCR.use_cassette 'record locator view multi LAX 2016-03-18' do
           expect {
             post :create, {:reservation => valid_attributes}, valid_session
           }.to change(user.reservations, :count).by(1)
@@ -52,7 +52,7 @@ RSpec.describe ReservationsController, :type => :controller do
       end
 
       it 'creates one passenger' do
-        VCR.use_cassette 'viewAirReservation' do
+        VCR.use_cassette 'record locator view multi LAX 2016-03-18' do
           expect {
             post :create, {:reservation => valid_attributes}, valid_session
           }.to change(Passenger, :count).by(1)
@@ -62,31 +62,16 @@ RSpec.describe ReservationsController, :type => :controller do
 
     describe "with invalid params" do
       it "assigns a newly created but unsaved reservation as @reservation" do
-        VCR.use_cassette 'viewAirReservation' do
+        VCR.use_cassette 'record locator view multi LAX 2016-03-18' do
           post :create, {:reservation => invalid_attributes}, valid_session
           expect(assigns(:reservation)).to be_a_new(Reservation)
         end
       end
 
       it "re-renders the 'new' template" do
-        VCR.use_cassette 'viewAirReservation' do
+        VCR.use_cassette 'record locator view multi LAX 2016-03-18' do
           post :create, {:reservation => invalid_attributes}, valid_session
-          expect(response).to render_template("new")
-        end
-      end
-    end
-
-    describe 'Southwest::RequestError' do
-      before do
-        allow_any_instance_of(Southwest::Reservation).to receive(:check_response!) {
-          raise Southwest::RequestError
-        }
-      end
-
-      it 'notifies the user that there was an error communicating with Southwest' do
-        VCR.use_cassette 'viewAirReservation' do
-          post :create, {:reservation => valid_attributes}, valid_session
-          expect(flash[:notice]).to match(/There was an error communicating with Southwest/)
+          expect(flash[:notice]).to eql('Confirmation number, first name, and last name are required.')
         end
       end
     end

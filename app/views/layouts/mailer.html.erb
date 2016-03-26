@@ -667,7 +667,17 @@
       </table>
       <table class="header centered">
         <tr><td class="border">&nbsp;</td></tr>
-        <tr><td class="logo"><div align="center" id="emb-email-header" class="logo-center"><%= link_to image_tag('logo-dark-400.png', alt: 'chkmein.co', width: "200", height: "72", style: "max-width: 300px"), ENV['SITE_URL'] %></div></td></tr>
+        <tr>
+          <td class="logo">
+            <div align="center" id="emb-email-header" class="logo-center">
+              <a href="">
+                <%= link_to ENV['SITE_URL'], alt: ENV['SITE_NAME'] do %>
+                  <%= image_tag 'logo-dark-400.png', alt: 'chkmein.co', width: "200", height: "72", style: "max-width: 300px" %>
+                <% end %>
+              </a>
+            </div>
+          </td>
+        </tr>
       </table>
 
           <table width="602" class="border" style="Margin-left:auto;Margin-right:auto;">

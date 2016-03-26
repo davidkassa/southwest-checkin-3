@@ -8,9 +8,9 @@ RSpec.describe Checkin, :type => :model do
   it { should have_many :passenger_checkins }
 
   context 'viewAirReservation' do
-    let(:cassette) { 'viewAirReservation' }
+    let(:cassette) { 'record locator view multi LAX 2016-03-18' }
     let(:reservation) {
-      Reservation.create(confirmation_number: "abc123",
+      Reservation.create(confirmation_number: "ABC123",
                          first_name: "Fuu",
                          last_name: "Bar")
     }

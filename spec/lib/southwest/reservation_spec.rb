@@ -15,107 +15,52 @@ RSpec.describe Southwest::Reservation do
   }
 
   shared_examples_for 'successful reservation retrieval' do
-    let(:expected_keys) {
-      ["isCompanion", "cnclFirstName", "confirmationNumber", "cnclLastName", "passengerName0", "TripName", "isFlNotifAvailable", "cnclConfirmNo", "arrivalCityName"]
-    }
-
-    let(:expected_depart_flight_keys) {
-      ["departCity", "arrivalCity", "departFlightNo"]
-    }
-
-    let(:expected_return_flight_keys) {
-      ["departCity", "arrivalCity", "returnFlightNo"]
-    }
-
-    it 'returns upComingInfo' do
+    it 'matches the JSON schema for a record locator view' do
       VCR.use_cassette cassette do
-        expect(subject.body['upComingInfo']).to_not eql(nil)
-      end
-    end
-
-    it 'contains the correct keys detailing the passenger' do
-      VCR.use_cassette cassette do
-        subject.body['upComingInfo'].each do |person|
-          expect(person).to include(*expected_keys)
-        end
-      end
-    end
-
-    it 'contains the correct information for each departure flight' do
-      VCR.use_cassette cassette do
-        subject.body['upComingInfo'].each do |person|
-          person.select { |k,v| k =~ /Depart/ }.each do |key, flight|
-            expect(flight).to include(*expected_depart_flight_keys)
-          end
-        end
-      end
-    end
-
-    it 'contains the correct information for each return flight' do
-      VCR.use_cassette 'viewAirReservation multi' do
-        subject.body['upComingInfo'].each do |person|
-          person.select { |k,v| k =~ /Return/ }.each do |key, flight|
-            expect(flight).to include(*expected_return_flight_keys)
-          end
-        end
+        expect(subject.body).to match_json_schema(:record_locator_view)
       end
     end
   end
 
-  describe "'Austin, TX - Denver, CO' reservation" do
-    it_behaves_like 'successful reservation retrieval' do
-      let(:cassette) { 'viewAirReservation' }
+  describe "valid reservations" do
+    describe 'domestic, round trip, multi-passenger, passenger #1' do
+      it_behaves_like 'successful reservation retrieval' do
+        let(:cassette) { 'record locator view multi LAX 2016-03-18' }
+      end
     end
-  end
 
-  describe "1 stop return flight" do
-    it_behaves_like 'successful reservation retrieval' do
-      let(:cassette) { 'viewAirReservation multi' }
+    describe 'domestic, round trip, multi-passenger, passenger #2' do
+
+      it_behaves_like 'successful reservation retrieval' do
+        let(:cassette) { 'record locator view multi LAX 2016-03-18 passenger 2' }
+        let(:last_name) { 'Smith' }
+        let(:first_name) { 'John' }
+        let(:record_locator) { 'DEF123' }
+      end
+    end
+
+    describe 'domestic, round trip, single-passenger' do
+      it_behaves_like 'successful reservation retrieval' do
+        let(:cassette) { 'record locator view BOS 2016-03-18' }
+      end
     end
   end
 
   describe 'cancelled reservation' do
-    it 'returns a cancelled error message' do
+    skip 'returns a cancelled error message' do
       VCR.use_cassette 'viewAirReservation cancelled' do
         expect(subject.error).to eql("Your reservation has been cancelled  (SW107028)")
       end
     end
   end
 
-  describe 'Multiple passengers reservation - SFO to BWI' do
-    let(:cassette) { 'viewAirReservation multiple passengers sfo bwi 1 stop' }
+  describe 'invalid reservation' do
+    let(:cassette) { 'record locator view invalid 2016-03-18' }
 
-    it_behaves_like 'successful reservation retrieval'
-  end
-
-  describe 'checkin 5 - multiple passengers on a reservation' do
-    let(:cassette) { 'viewAirReservation multiple passengers mco pit nonstop' }
-
-    it_behaves_like 'successful reservation retrieval'
-  end
-
-  describe 'single passenger reservation' do
-    let(:cassette) { 'viewAirReservation single MDW MCI' }
-
-    it_behaves_like 'successful reservation retrieval'
-  end
-
-  describe 'bad reservation information' do
-    let(:cassette) { 'bad reservation information' }
-
-    it 'returns an error that the reservation does not exist' do
+    it 'returns a 404 and has a missing reservation message' do
       VCR.use_cassette cassette do
-        expect(subject.error).to match(/We were unable to retrieve your reservation from our database/)
-      end
-    end
-  end
-
-  describe 'international flight' do
-    let(:cassette) { 'international flight Punta Cana DO' }
-
-    it "returns 'isInternationalPNR' indicating it is international" do
-      VCR.use_cassette cassette do
-        expect(subject.body["isInternationalPNR"]).to eql('true')
+        expect(subject.code).to match(404)
+        expect(subject.error_message).to match('we can\'t find this reservation')
       end
     end
   end

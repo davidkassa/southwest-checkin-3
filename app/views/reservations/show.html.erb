@@ -21,13 +21,13 @@
             <div class="ReservationCard-flight-group-title">Departure</div>
             <% @reservation.departure_flights.each do |flight| %>
               <div class="ReservationCard-flight">
-                <div class="ReservationCard-flight-title">
+                <div class="ReservationCard-flight-title u-text-center">
                   <%= flight.departure_airport.iata %>
                   <span class="Icon-plane-arrow Icon--large Icon--padded light"></span>
                   <%= flight.arrival_airport.iata %> <span class='u-text-padded'>·</span> <%= flight_date flight.local_departure_time %>
                 </div>
                 <div class="ReservationCard-flight-details">
-                  <div class="ReservationCard-flight-details-group">
+                  <div class="ReservationCard-flight-details-group u-text-left">
                     <div class="ReservationCard-label">Flight No</div>
                     <div class="ReservationCard-flight-number">
                       <%= flight.flight_number %>
@@ -39,7 +39,7 @@
                       <%= flight_time flight.local_departure_time %>
                     </div>
                   </div>
-                  <div class="ReservationCard-flight-details-group">
+                  <div class="ReservationCard-flight-details-group ReservationCard-flight-details-group--last u-text-right">
                     <div class="ReservationCard-label">Arrives</div>
                     <div class="ReservationCard-flight-times-arrive">
                       <%= flight_time flight.local_arrival_time %>
@@ -71,13 +71,13 @@
             <div class="ReservationCard-flight-group-title">Return</div>
             <% @reservation.return_flights.each do |flight| %>
               <div class="ReservationCard-flight">
-                <div class="ReservationCard-flight-title">
+                <div class="ReservationCard-flight-title u-text-center">
                   <%= flight.departure_airport.iata %>
                   <span class="Icon-plane-arrow Icon--large Icon--padded light"></span>
                   <%= flight.arrival_airport.iata %> <span class='u-text-padded'>·</span> <%= flight_date flight.local_departure_time %>
                 </div>
                 <div class="ReservationCard-flight-details">
-                  <div class="ReservationCard-flight-details-group">
+                  <div class="ReservationCard-flight-details-group u-text-left">
                     <div class="ReservationCard-label">Flight No</div>
                     <div class="ReservationCard-flight-number">
                       <%= flight.flight_number %>
@@ -89,7 +89,7 @@
                       <%= flight_time flight.local_departure_time %>
                     </div>
                   </div>
-                  <div class="ReservationCard-flight-details-group">
+                  <div class="ReservationCard-flight-details-group ReservationCard-flight-details-group--last u-text-right">
                     <div class="ReservationCard-label">Arrives</div>
                     <div class="ReservationCard-flight-times-arrive">
                       <%= flight_time flight.local_arrival_time %>
