@@ -9,8 +9,8 @@ module Southwest
     def retrieve_reservation
       typhoeus_response = make_request("/reservations/record-locator/#{record_locator}", {
         action: 'VIEW',
-        'first-name': first_name,
-        'last-name': last_name
+        'first-name' => first_name,
+        'last-name' => last_name
       }, content_type)
 
       Response.new(typhoeus_response)
