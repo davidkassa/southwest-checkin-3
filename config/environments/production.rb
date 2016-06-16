@@ -46,7 +46,7 @@ Rails.application.configure do
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
-  config.log_level = :info
+  config.log_level = :debug
 
   # Prepend all log lines with the following tags.
   # config.log_tags = [ :subdomain, :uuid ]
@@ -54,12 +54,12 @@ Rails.application.configure do
   # Use a different logger for distributed setups.
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
 
-  require 'syslogger'
-  config.logger = ActiveSupport::TaggedLogging.new(Syslogger.new("southwest-checkin", Syslog::LOG_PID, Syslog::LOG_LOCAL7))
-  config.lograge.enabled = true
-  config.lograge.formatter = Lograge::Formatters::Json.new
+  # require 'syslogger'
+  # config.logger = ActiveSupport::TaggedLogging.new(Syslogger.new("southwest-checkin", Syslog::LOG_PID, Syslog::LOG_LOCAL7))
+  # config.lograge.enabled = true
+  # config.lograge.formatter = Lograge::Formatters::Json.new
 
-  Sidekiq::Logging.logger = ActiveSupport::TaggedLogging.new(Syslogger.new("sidekiq", Syslog::LOG_PID, Syslog::LOG_LOCAL7))
+  # Sidekiq::Logging.logger = ActiveSupport::TaggedLogging.new(Syslogger.new("sidekiq", Syslog::LOG_PID, Syslog::LOG_LOCAL7))
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
