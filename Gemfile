@@ -57,9 +57,9 @@ gem 'newrelic_rpm'
 # Pagination
 gem 'kaminari'
 
-# Logging in production
-gem 'syslogger', '~> 1.6.0'
-gem 'lograge', '~> 0.3.1'
+# syslog logging with lograge
+# gem 'syslogger', '~> 1.6.0'
+# gem 'lograge', '~> 0.3.1'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.0'

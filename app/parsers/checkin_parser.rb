@@ -27,8 +27,8 @@ class CheckinParser
       passengers.first
     else
       passengers.where(
-        first_name: doc['passenger']['secureFlightFirstName'],
-        last_name: doc['passenger']['secureFlightLastName']).first
+        first_name: passenger_checkin_document['passenger']['secureFlightFirstName'],
+        last_name: passenger_checkin_document['passenger']['secureFlightLastName']).first
     end
   end
 

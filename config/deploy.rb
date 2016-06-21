@@ -65,6 +65,11 @@ task :setup => :environment do
   queue! %[chmod g+rx,u+rwx "#{deploy_to}/#{shared_path}/pids"]
 end
 
+task :restart => :environment do
+  queue %[sudo service puma-manager restart]
+  queue %[sudo service workers restart]
+end
+
 namespace :config do
   desc "Upload .env config"
   task upload: :environment do
@@ -77,7 +82,7 @@ task :deploy => :environment do
   deploy do
     # Put things that will set up an empty directory into a fully set-up
     # instance of your project.
-    invoke :'sidekiq:quiet'
+    invoke :'sidekiq:quiet' unless ENV['DEPLOY_USE_UPSTART']
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
     invoke :'bundle:install'
@@ -86,8 +91,12 @@ task :deploy => :environment do
     invoke :'deploy:cleanup'
 
     to :launch do
-      invoke :'puma:phased_restart'
-      invoke :'sidekiq:restart'
+      if ENV['DEPLOY_USE_UPSTART']
+        invoke :'restart'
+      else
+        invoke :'puma:phased_restart'
+        invoke :'sidekiq:restart'
+      end
       invoke :'newrelic:notice_deployment'
     end
   end
