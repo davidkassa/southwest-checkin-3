@@ -73,7 +73,7 @@
                 "properties": {
                   "earlyBirdProductId": {
                     "id": "earlyBirdProductId",
-                    "type": "string"
+                    "type": ["string", "null"]
                   },
                   "status": {
                     "id": "status",
@@ -244,7 +244,7 @@
       "properties": {
         "retrieveForCancel": {
           "id": "retrieveForCancel",
-          "type": "object",
+          "type": ["object", "null"],
           "properties": {
             "href": {
               "id": "href",
@@ -258,7 +258,7 @@
         },
         "retrieveForChange": {
           "id": "retrieveForChange",
-          "type": "object",
+          "type": ["object", "null"],
           "properties": {
             "href": {
               "id": "href",
@@ -272,7 +272,7 @@
         },
         "retrieveForBuyEarlyBird": {
           "id": "retrieveForBuyEarlyBird",
-          "type": "object",
+          "type": ["object", "null"],
           "properties": {
             "href": {
               "id": "href",
@@ -295,7 +295,6 @@
     "recordLocator",
     "passengers",
     "itinerary",
-    "receiptEmail",
     "currencyType",
     "international",
     "warnings",
