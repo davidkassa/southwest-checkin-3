@@ -44,6 +44,12 @@ RSpec.describe Southwest::Reservation do
         let(:cassette) { 'record locator view BOS 2016-03-18' }
       end
     end
+
+    describe 'international trip' do
+      it_behaves_like 'successful reservation retrieval' do
+        let(:cassette) { 'international 2016-07-08' }
+      end
+    end
   end
 
   describe 'cancelled reservation' do

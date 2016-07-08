@@ -56,10 +56,6 @@ class Reservation < ActiveRecord::Base
       return false
     end
 
-    if retrieved_reservation.body['international']
-      errors[:base] << "Unfortunately, do to uncontrolled limitations of the checkin process, international flights are not yet supported."
-    end
-
     self.payload = retrieved_reservation.to_hash
   end
 
