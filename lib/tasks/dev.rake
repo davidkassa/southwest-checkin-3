@@ -11,7 +11,7 @@ def create_reservation(cassette, user)
       confirmation_number: "ABC123",
       first_name: "Fuu",
       last_name: "Bar"
-    }).first_or_create
+    }).first_or_create!
   end
 end
 
@@ -25,14 +25,14 @@ def checkin_reservation(cassette, reservation)
 end
 
 def checkin_flight(flight)
-    Rails.application.config.active_job.queue_adapter = :inline
-    checkin = Checkin.find_or_initialize_by(flight: flight)
-    checkin.scheduled_at = Time.zone.now
-    checkin.save!
+  Rails.application.config.active_job.queue_adapter = :inline
+  checkin = Checkin.find_or_initialize_by(flight: flight)
+  checkin.scheduled_at = Time.zone.now
+  checkin.save!
 
-    job = CheckinJob.perform_later(flight)
+  job = CheckinJob.perform_later(flight)
 
-    checkin.update({ job_id: job.job_id })
+  checkin.update({ job_id: job.job_id })
 end
 
 namespace :dev do
@@ -41,8 +41,8 @@ namespace :dev do
     require 'vcr'
     require_relative '../../spec/helpers/vcr_helper'
 
-    reservation_cassette = 'viewAirReservation multiple passengers sfo bwi 1 stop'
-    checkin_cassette = 'checkin multiple passengers sfo bwi 1 stop'
+    reservation_cassette = 'record_locator_view_multi_LAX_2016-03-18'
+    checkin_cassette = 'record_locator_checkin_LAX_2016-03-18'
 
     fuu = create_user
     reservation = create_reservation(reservation_cassette, fuu)

@@ -1,4 +1,9 @@
 <div class="Reservation">
+  <% if @reservation.payload['body']['international'] %>
+    <div class="Reservation-notice">
+      International flights require passport information for check in. If passport information is not attached to your Southwest account reservation, a manual check in will be required.
+    </div>
+  <% end %>
   <div class="ReservationCard">
     <div class="ReservationCard-header ReservationCard-indention-top">
       <div class="ReservationCard-passengers">
