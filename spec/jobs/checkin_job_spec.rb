@@ -105,4 +105,19 @@ RSpec.describe CheckinJob, :type => :job do
       end
     end
   end
+
+  context 'international flight' do
+    let(:reservation_cassette) { 'international 2016-07-08' }
+    let(:checkin_cassette) { 'international multi passenger 2016-07-09' }
+
+    include_context 'setup existing reservation'
+
+    it 'checks in' do
+      perform do
+        CheckinJob.perform_later(flight)
+        expect(flight.checkin.payload).to_not be_nil
+        expect(flight.checkin.completed_at).to_not be_nil
+      end
+    end
+  end
 end

@@ -11,7 +11,7 @@ class CheckinParser
     checkin_response.body['passengerCheckInDocuments'].map do |doc|
       first_doc = doc['checkinDocuments'][0]
       {
-        flight_number: first_doc['flightNumber'],
+        flight_number: flight_number(first_doc),
         boarding_group: first_doc['boardingGroup'],
         boarding_position: first_doc['boardingGroupNumber'],
         checkin: checkin_record,
@@ -33,6 +33,12 @@ class CheckinParser
   end
 
   def flight(checkin_document)
-    checkin_record.reservation.flights.where(flight_number: checkin_document['flightNumber']).first
+    checkin_record.reservation.flights.where(flight_number: flight_number(checkin_document)).first
+  end
+
+  private
+
+  def flight_number(checkin_document)
+    checkin_document['flightNumber'] || checkin_document['carrierInfo']['flightNumber']
   end
 end

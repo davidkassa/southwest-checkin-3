@@ -16,8 +16,20 @@ RSpec.describe Southwest::Checkin do
   }
 
   describe '.checkin' do
-    it 'matches the JSON schema for boarding passes' do
+    it 'standard flight' do
       VCR.use_cassette cassette do
+        expect(subject.checkin.body).to match_json_schema(:record_locator_boarding_passes)
+      end
+    end
+
+    it 'international multi passenger' do
+      VCR.use_cassette 'international multi passenger 2016-07-09' do
+        expect(subject.checkin.body).to match_json_schema(:record_locator_boarding_passes)
+      end
+    end
+
+    it 'international single passenger' do
+      VCR.use_cassette 'international single passenger 2016-07-09' do
         expect(subject.checkin.body).to match_json_schema(:record_locator_boarding_passes)
       end
     end
