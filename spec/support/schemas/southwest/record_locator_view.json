@@ -1,0 +1,305 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "/",
+  "type": "object",
+  "properties": {
+    "recordLocator": {
+      "id": "recordLocator",
+      "type": "string"
+    },
+    "passengers": {
+      "id": "passengers",
+      "type": "array",
+      "items": {
+        "id": "0",
+        "type": "object",
+        "properties": {
+          "secureFlightName": {
+            "id": "secureFlightName",
+            "type": "object",
+            "properties": {
+              "firstName": {
+                "id": "firstName",
+                "type": "string"
+              },
+              "lastName": {
+                "id": "lastName",
+                "type": "string"
+              },
+              "middleName": {
+                "id": "middleName",
+                "type": "string"
+              },
+              "suffix": {
+                "id": "suffix",
+                "type": "string"
+              }
+            }
+          },
+          "birthDate": {
+            "id": "birthDate",
+            "type": "string"
+          },
+          "gender": {
+            "id": "gender",
+            "type": "string"
+          },
+          "accountNumber": {
+            "id": "accountNumber",
+            "type": "string"
+          },
+          "redressNumber": {
+            "id": "redressNumber",
+            "type": "string"
+          },
+          "knownTravelerId": {
+            "id": "knownTravelerId",
+            "type": "string"
+          },
+          "tier": {
+            "id": "tier",
+            "type": "string"
+          },
+          "loyaltyAccountType": {
+            "id": "loyaltyAccountType",
+            "type": "string"
+          },
+          "earlyBirdEligibilities": {
+            "id": "earlyBirdEligibilities",
+            "type": "array",
+            "items": [
+              {
+                "type": "object",
+                "properties": {
+                  "earlyBirdProductId": {
+                    "id": "earlyBirdProductId",
+                    "type": "string"
+                  },
+                  "status": {
+                    "id": "status",
+                    "type": "string"
+                  },
+                  "priceCents": {
+                    "id": "priceCents",
+                    "type": "integer"
+                  },
+                  "originationDestinationId": {
+                    "id": "originationDestinationId",
+                    "type": "string"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "itinerary": {
+      "id": "itinerary",
+      "type": "object",
+      "properties": {
+        "originationDestinations": {
+          "id": "originationDestinations",
+          "type": "array",
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "segments": {
+                  "id": "segments",
+                  "type": "array",
+                  "items": {
+                    "id": "0",
+                    "type": "object",
+                    "properties": {
+                      "departureDateTime": {
+                        "id": "departureDateTime",
+                        "type": "string"
+                      },
+                      "arrivalDateTime": {
+                        "id": "arrivalDateTime",
+                        "type": "string"
+                      },
+                      "originationAirportCode": {
+                        "id": "originationAirportCode",
+                        "type": "string"
+                      },
+                      "destinationAirportCode": {
+                        "id": "destinationAirportCode",
+                        "type": "string"
+                      },
+                      "operatingCarrierInfo": {
+                        "id": "operatingCarrierInfo",
+                        "type": "object",
+                        "properties": {
+                          "carrierCode": {
+                            "id": "carrierCode",
+                            "type": "string"
+                          },
+                          "flightNumber": {
+                            "id": "flightNumber",
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "marketingCarrierInfo": {
+                        "id": "marketingCarrierInfo",
+                        "type": "object",
+                        "properties": {
+                          "carrierCode": {
+                            "id": "carrierCode",
+                            "type": "string"
+                          },
+                          "flightNumber": {
+                            "id": "flightNumber",
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "legs": {
+                        "id": "legs",
+                        "type": "array",
+                        "items": {
+                          "id": "0",
+                          "type": "object",
+                          "properties": {
+                            "originationAirportCode": {
+                              "id": "originationAirportCode",
+                              "type": "string"
+                            },
+                            "destinationAirportCode": {
+                              "id": "destinationAirportCode",
+                              "type": "string"
+                            }
+                          }
+                        }
+                      },
+                      "wifiAvailable": {
+                        "id": "wifiAvailable",
+                        "type": "null"
+                      }
+                    }
+                  }
+                },
+                "durationMinutes": {
+                  "id": "durationMinutes",
+                  "type": "integer"
+                },
+                "originationDestinationId": {
+                  "id": "originationDestinationId",
+                  "type": "string"
+                },
+                "checkinDocumentReason": {
+                  "id": "checkinDocumentReason",
+                  "type": "null"
+                },
+                "checkinDocumentType": {
+                  "id": "checkinDocumentType",
+                  "type": "null"
+                },
+                "fareType": {
+                  "id": "fareType",
+                  "type": "string"
+                },
+                "_links": {
+                  "id": "_links",
+                  "type": "object",
+                  "properties": {
+                    "deleteBoardingPass": {
+                      "id": "deleteBoardingPass",
+                      "type": "null"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "receiptEmail": {
+      "id": "receiptEmail",
+      "type": "string"
+    },
+    "currencyType": {
+      "id": "currencyType",
+      "type": "string"
+    },
+    "international": {
+      "id": "international",
+      "type": "boolean"
+    },
+    "warnings": {
+      "id": "warnings",
+      "type": "array",
+      "items": []
+    },
+    "unaccompaniedMinor": {
+      "id": "unaccompaniedMinor",
+      "type": "boolean"
+    },
+    "_links": {
+      "id": "_links",
+      "type": "object",
+      "properties": {
+        "retrieveForCancel": {
+          "id": "retrieveForCancel",
+          "type": "object",
+          "properties": {
+            "href": {
+              "id": "href",
+              "type": "string"
+            },
+            "method": {
+              "id": "method",
+              "type": "string"
+            }
+          }
+        },
+        "retrieveForChange": {
+          "id": "retrieveForChange",
+          "type": "object",
+          "properties": {
+            "href": {
+              "id": "href",
+              "type": "string"
+            },
+            "method": {
+              "id": "method",
+              "type": "string"
+            }
+          }
+        },
+        "retrieveForBuyEarlyBird": {
+          "id": "retrieveForBuyEarlyBird",
+          "type": "object",
+          "properties": {
+            "href": {
+              "id": "href",
+              "type": "string"
+            },
+            "method": {
+              "id": "method",
+              "type": "string"
+            }
+          }
+        },
+        "companionReservations": {
+          "id": "companionReservations",
+          "type": "null"
+        }
+      }
+    }
+  },
+  "required": [
+    "recordLocator",
+    "passengers",
+    "itinerary",
+    "receiptEmail",
+    "currencyType",
+    "international",
+    "warnings",
+    "unaccompaniedMinor",
+    "_links"
+  ]
+}

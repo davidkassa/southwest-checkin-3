@@ -1,12 +1,10 @@
-require_relative '../../lib/southwest/errors'
-
 class ReservationsController < ApplicationController
   before_action :authenticate_or_redirect_to_signup!, only: :new
   before_action :authenticate_user!, except: :new
   before_action :current_user_only!
   before_action :set_user, only: [:index, :create]
   before_action :set_reservation, only: [:show, :edit, :update, :destroy]
-  rescue_from Southwest::RequestError, with: :southwest_request_error, only: :create
+  rescue_from Southwest::RequestArgumentError, with: :southwest_argument_error, only: :create
 
   respond_to :html
 
@@ -50,15 +48,16 @@ class ReservationsController < ApplicationController
 
   def reservations
     if current_user.admin? && show_all?
-      Reservation.page(params[:page])
+      Reservation.includes(:flights).page(params[:page])
     else
-      @user.reservations.page(params[:page])
+      @user.reservations.includes(:flights).page(params[:page])
     end
   end
 
   def show_all?
     params[:all] == 'true'
   end
+  helper_method :show_all?
 
   def authenticate_or_redirect_to_signup!
     if user_signed_in?
@@ -68,6 +67,11 @@ class ReservationsController < ApplicationController
       flash[:from_reservations] = true
       redirect_to new_registration_path(User.new)
     end
+  end
+
+  def southwest_argument_error
+    flash[:notice] = 'Confirmation number, first name, and last name are required.'
+    respond_with(@reservation)
   end
 
   def southwest_request_error

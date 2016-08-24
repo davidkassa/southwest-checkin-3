@@ -18,7 +18,7 @@ RSpec.describe Southwest::Response do
     let(:invalid_json) { "asdfasdf\nasdfasdf\tasdf" }
 
     it 'returns a string body if JSON parsing fails' do
-      VCR.use_cassette 'viewAirReservation' do
+      VCR.use_cassette 'record locator view multi LAX 2016-03-18' do
         allow_any_instance_of(Typhoeus::Response).to receive(:body) { invalid_json }
         expect(response.body).to eql(invalid_json)
       end
@@ -27,7 +27,7 @@ RSpec.describe Southwest::Response do
 
   describe '#to_hash' do
     it 'returns the correct attributes' do
-      VCR.use_cassette 'viewAirReservation' do
+      VCR.use_cassette 'record locator view multi LAX 2016-03-18' do
         expect(response.to_hash).to include(
           :body, :headers, :code, :status_message)
       end

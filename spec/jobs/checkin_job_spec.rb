@@ -35,8 +35,9 @@ RSpec.describe CheckinJob, :type => :job do
   end
 
   context 'single passenger' do
-    let(:reservation_cassette) { 'viewAirReservation single MDW MCI' }
-    let(:checkin_cassette) { 'checkin single MDW MCI' }
+    let(:reservation_cassette) { 'record locator view multi LAX 2016-03-18' }
+    let(:checkin_cassette) { 'record locator checkin and email LAX 2016-03-18' }
+    let(:ordered_passenger_names) { passenger_checkins.includes(:passenger).map { |c| c.passenger.full_name } }
 
     include_context 'setup existing reservation'
 
@@ -48,9 +49,18 @@ RSpec.describe CheckinJob, :type => :job do
       end
     end
 
-    it 'creates 1 flight checkin' do
+    it 'creates 1 flight checkin per flight' do
       perform do
         expect { CheckinJob.perform_later(flight) }.to change(PassengerCheckin, :count).by(1)
+      end
+    end
+
+    it 'passenger_checkins have the correct passengers' do
+      perform do
+        CheckinJob.perform_later(flight)
+        expect(ordered_passenger_names).to eql([
+          'Fuu Bar',
+        ])
       end
     end
 
@@ -75,79 +85,19 @@ RSpec.describe CheckinJob, :type => :job do
     end
   end
 
-  context 'checkin multiple passengers sfo bwi 1 stop' do
-    let(:reservation_cassette) { 'viewAirReservation multiple passengers sfo bwi 1 stop' }
-    let(:checkin_cassette) { 'checkin multiple passengers sfo bwi 1 stop' }
-    let(:ordered_passenger_names) { passenger_checkins.includes(:passenger).map { |c| c.passenger.full_name } }
-
-    include_context 'setup existing reservation'
-
-    it 'updates the checkin' do
-      perform do
-        CheckinJob.perform_later(flight)
-        expect(flight.checkin.payload).to_not be_nil
-        expect(flight.checkin.completed_at).to_not be_nil
-      end
-    end
-
-    it 'creates 4 flight checkins' do
-      perform do
-        expect { CheckinJob.perform_later(flight) }.to change(PassengerCheckin, :count).by(4)
-      end
-    end
-
-    it 'passenger_checkins have the correct passengers' do
-      perform do
-        CheckinJob.perform_later(flight)
-        expect(ordered_passenger_names).to eql([
-          'Fuu Bar',
-          'Fuu Bar',
-          'John Smith',
-          'John Smith'
-        ])
-      end
-    end
-  end
-
-  context 'missing flight information' do
-    let(:reservation_cassette) { 'viewAirReservation single MDW MCI' }
-    let(:checkin_cassette) { 'checkin single MDW MCI missing flight information' }
-
-    include_context 'setup existing reservation'
-
-    it 'should raise SouthwestCheckin::FailedCheckin' do
-      perform do
-        expect { CheckinJob.perform_later(flight) }.to raise_error(SouthwestCheckin::FailedCheckin)
-      end
-    end
-  end
-
-  context 'missing boarding pass information' do
-    let(:reservation_cassette) { 'viewAirReservation single MDW MCI' }
-    let(:checkin_cassette) { 'checkin single MDW MCI missing boarding pass information' }
-
-    include_context 'setup existing reservation'
-
-    it 'should raise SouthwestCheckin::FailedCheckin' do
-      perform do
-        expect { CheckinJob.perform_later(flight) }.to raise_error(SouthwestCheckin::FailedCheckin)
-      end
-    end
-  end
-
   context 'incorrect passenger information' do
     let(:reservation_cassette) { 'viewAirReservation single MDW MCI' }
     let(:checkin_cassette) { 'checkin non matching confirmation' }
 
     include_context 'setup existing reservation'
 
-    it 'should not raise an error' do
+    skip 'should not raise an error' do
       perform do
         expect { CheckinJob.perform_later(flight) }.not_to raise_error
       end
     end
 
-    it 'should add the error to the record and mark it completed' do
+    skip 'should add the error to the record and mark it completed' do
       perform do
         CheckinJob.perform_later(flight)
         expect(reservation.checkins.first.error).to match /passenger name entered does not match/

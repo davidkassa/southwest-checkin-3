@@ -69,7 +69,7 @@ form {
       height: auto;
       clear: both;
 
-      @include tablet-landscape-and-up {
+      @include tablet-portrait-and-up {
         margin: 23px $Form-margin;
       }
     }

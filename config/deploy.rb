@@ -4,6 +4,8 @@ require 'mina/git'
 require 'mina/rbenv'
 require 'mina/puma'
 require 'mina_sidekiq/tasks'
+require 'mina/scp'
+require 'mina/newrelic'
 require 'dotenv'
 Dotenv.load
 
@@ -30,14 +32,14 @@ set :user, ENV['DEPLOY_USER']    # Username in the server to SSH to.
 set :port, ENV['DEPLOY_PORT']     # SSH port number.
 set :forward_agent, true     # SSH forward_agent.
 
-set :notify_airbrake, ENV['AIRBRAKE_DEPLOY_NOTIFICATION'] == 'true'
+set :use_rbenv, ENV['DEPLOY_USE_RBENV'] == 'true'
 
 # This task is the environment that is loaded for most commands, such as
 # `mina deploy` or `mina rake`.
 task :environment do
   # If you're using rbenv, use this to load the rbenv environment.
   # Be sure to commit your .ruby-version or .rbenv-version to your repository.
-  invoke :'rbenv:load'
+  invoke :'rbenv:load' if use_rbenv
 
   # For those using RVM, use this to load an RVM version@gemset.
   # invoke :'rvm:use[ruby-1.9.3-p125@default]'
@@ -63,12 +65,24 @@ task :setup => :environment do
   queue! %[chmod g+rx,u+rwx "#{deploy_to}/#{shared_path}/pids"]
 end
 
+task :restart => :environment do
+  queue %[sudo service puma-manager restart]
+  queue %[sudo service workers restart]
+end
+
+namespace :config do
+  desc "Upload .env config"
+  task upload: :environment do
+    scp_upload '.env', "#{deploy_to}/#{shared_path}/.env"
+  end
+end
+
 desc "Deploys the current version to the server."
 task :deploy => :environment do
   deploy do
     # Put things that will set up an empty directory into a fully set-up
     # instance of your project.
-    invoke :'sidekiq:quiet'
+    invoke :'sidekiq:quiet' unless ENV['DEPLOY_USE_UPSTART']
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
     invoke :'bundle:install'
@@ -77,21 +91,16 @@ task :deploy => :environment do
     invoke :'deploy:cleanup'
 
     to :launch do
-      invoke :'puma:phased_restart'
-      invoke :'sidekiq:restart'
-      invoke :'airbrake:deploy' if notify_airbrake
+      if ENV['DEPLOY_USE_UPSTART']
+        invoke :'restart'
+      else
+        invoke :'puma:phased_restart'
+        invoke :'sidekiq:restart'
+      end
+      invoke :'newrelic:notice_deployment'
     end
   end
 end
-
-namespace :airbrake do
-  desc "Notify airbrake of a deploy"
-  task :deploy => :environment do
-    queue %[echo "-----> Notifying airbrake"]
-    queue %[rake airbrake:deploy TO=#{rails_env} REVISION=#{commit} REPO=#{repository} USER=#{user}]
-  end
-end
-
 
 # For help in making your deploy script, see the Mina documentation:
 #

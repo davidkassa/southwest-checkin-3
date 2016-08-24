@@ -1,7 +1,7 @@
 <tr>
   <td><%= link_to reservation.confirmation_number, reservation %></td>
   <td><%= flight_date(reservation.time) if reservation.time %></td>
-  <td><%= reservation.arrival_city_name %></td>
+  <td><%= reservation.departure_flights.last.arrival_city %></td>
   <td class='Table-no-mobile'>
     <% if reservation.passengers.one? %>
       <%= reservation.passengers.first.full_name %>
@@ -17,4 +17,7 @@
       <%= reservation.checkins.completed.count %>
     </span> / <%= reservation.checkins.count %>
   </td>
+  <% if current_user.admin? && show_all? %>
+    <td><%= reservation.user.email %></td>
+  <% end %>
 </tr>
