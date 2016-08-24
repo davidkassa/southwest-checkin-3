@@ -54,6 +54,12 @@ $Dropdown-arrow-size: 8px;
   & a {
     color: $text-color;
   }
+
+  .Dropdown-sep {
+    border-top: 1px solid rgba(44, 62, 80, 0.13);
+    margin-top: 4px;
+    padding-top: 8px;
+  }
 }
 
 .Dropdown-menu-arrow {

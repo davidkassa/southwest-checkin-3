@@ -1,5 +1,3 @@
-require_relative './request'
-
 module Southwest
   class Reservation < Request
     def self.retrieve_reservation(last_name:, first_name:, record_locator:)
@@ -9,26 +7,19 @@ module Southwest
     end
 
     def retrieve_reservation
-      typhoeus_response = make_request(base_params.merge({
-        serviceID: 'viewAirReservation',
-        searchType:  'ConfirmationNumber',
-        submitButton: 'Continue',
-        creditCardLastName: '',
-        creditCardFirstName: '',
-        confirmationNumber:  record_locator,
-        confirmationNumberFirstName: first_name,
-        confirmationNumberLastName:  last_name,
-        creditCardDepartureDate: todays_date_formatted
-      }))
+      typhoeus_response = make_request("/reservations/record-locator/#{record_locator}", {
+        action: 'VIEW',
+        'first-name' => first_name,
+        'last-name' => last_name
+      }, content_type)
 
-      ReservationResponse.new(typhoeus_response)
+      Response.new(typhoeus_response)
     end
 
     private
 
-    # Example: '01/10/2015'
-    def todays_date_formatted
-      Time.now.strftime('%m/%d/%Y')
+    def content_type
+      "application/vnd.swacorp.com.mobile.reservations-v1.0+json"
     end
   end
 end

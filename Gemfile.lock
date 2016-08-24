@@ -37,9 +37,6 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     addressable (2.3.6)
-    airbrake (4.1.0)
-      builder
-      multi_json
     arel (6.0.0)
     autoprefixer-rails (5.0.0.1)
       execjs
@@ -64,6 +61,13 @@ GEM
     coffee-script-source (1.8.0)
     columnize (0.9.0)
     connection_pool (2.1.1)
+    coveralls (0.8.10)
+      json (~> 1.8)
+      rest-client (>= 1.6.8, < 2)
+      simplecov (~> 0.11.0)
+      term-ansicolor (~> 1.3)
+      thor (~> 0.19.1)
+      tins (~> 1.6.0)
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
     css_parser (1.3.6)
@@ -78,6 +82,9 @@ GEM
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
     diff-lcs (1.2.5)
+    docile (1.1.5)
+    domain_name (0.5.25)
+      unf (>= 0.0.5, < 1.0.0)
     dotenv (0.9.0)
     dotenv-rails (0.9.0)
       dotenv (= 0.9.0)
@@ -105,6 +112,8 @@ GEM
       rspec (>= 2.99.0, < 4.0)
     hike (1.2.3)
     hitimes (1.2.2)
+    http-cookie (1.0.2)
+      domain_name (~> 0.5)
     i18n (0.7.0)
     jbuilder (2.2.6)
       activesupport (>= 3.0.0, < 5)
@@ -113,7 +122,12 @@ GEM
       rails-dom-testing (~> 1.0)
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
-    json (1.8.1)
+    json (1.8.3)
+    json-schema (2.5.0)
+      addressable (~> 2.3)
+    json-schema-rspec (0.0.4)
+      json-schema (~> 2.5)
+      rspec
     kaminari (0.14.1)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -135,14 +149,20 @@ GEM
     mina (0.3.2)
       open4 (~> 1.3.4)
       rake
+    mina-newrelic (0.0.3)
+      mina (>= 0.3.0)
+      newrelic_rpm (>= 3.6.0)
     mina-puma (0.2.0)
       mina
+    mina-scp (0.1.2)
     mina-sidekiq (0.3.1)
       mina
     mini_portile (0.6.2)
-    minitest (5.5.0)
+    minitest (5.8.3)
     multi_json (1.10.1)
     nenv (0.1.1)
+    netrc (0.11.0)
+    newrelic_rpm (3.14.1.311)
     nokogiri (1.6.5)
       mini_portile (~> 0.6.0)
     notiffany (0.0.3)
@@ -155,9 +175,8 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
-    puma (2.11.1)
-      rack (>= 1.1, < 2.0)
-    rack (1.6.0)
+    puma (2.15.3)
+    rack (1.6.4)
     rack-protection (1.5.3)
       rack
     rack-test (0.6.2)
@@ -197,6 +216,10 @@ GEM
       redis (~> 3.0, >= 3.0.4)
     responders (2.0.2)
       railties (>= 4.2.0.alpha, < 5)
+    rest-client (1.8.0)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 3.0)
+      netrc (~> 0.7)
     roadie (3.0.3)
       css_parser (~> 1.3.4)
       nokogiri (~> 1.6.0)
@@ -243,11 +266,18 @@ GEM
       json
       redis (>= 3.0.6)
       redis-namespace (>= 1.3.1)
+    sidekiq-failures (0.4.5)
+      sidekiq (>= 2.16.0)
+    simplecov (0.11.1)
+      docile (~> 1.1.0)
+      json (~> 1.8)
+      simplecov-html (~> 0.10.0)
+    simplecov-html (0.10.0)
     sinatra (1.4.5)
       rack (~> 1.4)
       rack-protection (~> 1.4)
       tilt (~> 1.3, >= 1.3.4)
-    skylight (0.6.0)
+    skylight (0.10.2)
       activesupport (>= 3.0.0)
     slop (3.6.0)
     spring (1.2.0)
@@ -262,13 +292,15 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (>= 2.8, < 4.0)
-    syslogger (1.6.1)
+    term-ansicolor (1.3.2)
+      tins (~> 1.0)
     thor (0.19.1)
-    thread_safe (0.3.4)
+    thread_safe (0.3.5)
     tilt (1.4.1)
     timecop (0.7.1)
     timers (4.0.1)
       hitimes
+    tins (1.6.0)
     turbolinks (2.5.3)
       coffee-rails
     typhoeus (0.7.0)
@@ -278,6 +310,9 @@ GEM
     uglifier (2.6.1)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.1)
     vcr (2.9.3)
     warden (1.2.3)
       rack (>= 1.0)
@@ -294,21 +329,25 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  airbrake
   autoprefixer-rails
   awesome_print
   byebug
+  coveralls
   devise (~> 3.4)
   dotenv-rails
   guard
   guard-rspec
   jbuilder (~> 2.0)
   jquery-rails
+  json-schema-rspec
   kaminari
   letter_opener
   mina
+  mina-newrelic
   mina-puma
+  mina-scp
   mina-sidekiq
+  newrelic_rpm
   pg
   pry
   puma
@@ -319,11 +358,11 @@ DEPENDENCIES
   sdoc (~> 0.4.0)
   shoulda-matchers
   sidekiq
+  sidekiq-failures
   sinatra
   skylight
   spring
   spring-commands-rspec
-  syslogger (~> 1.6.0)
   timecop
   turbolinks
   typhoeus (~> 0.7)
@@ -333,4 +372,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   1.10.3
+   1.10.6

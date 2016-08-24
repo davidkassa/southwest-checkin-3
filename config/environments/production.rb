@@ -42,11 +42,11 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  config.force_ssl = true
+  config.force_ssl = false
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
-  config.log_level = :info
+  config.log_level = :debug
 
   # Prepend all log lines with the following tags.
   # config.log_tags = [ :subdomain, :uuid ]
@@ -54,8 +54,12 @@ Rails.application.configure do
   # Use a different logger for distributed setups.
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
 
-  require 'syslogger'
-  config.logger = ActiveSupport::TaggedLogging.new(Syslogger.new("southwest-checkin", Syslog::LOG_PID, Syslog::LOG_LOCAL7))
+  # require 'syslogger'
+  # config.logger = ActiveSupport::TaggedLogging.new(Syslogger.new("southwest-checkin", Syslog::LOG_PID, Syslog::LOG_LOCAL7))
+  # config.lograge.enabled = true
+  # config.lograge.formatter = Lograge::Formatters::Json.new
+
+  # Sidekiq::Logging.logger = ActiveSupport::TaggedLogging.new(Syslogger.new("sidekiq", Syslog::LOG_PID, Syslog::LOG_LOCAL7))
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
@@ -80,13 +84,16 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address:              ENV['MAILER_ADDRESS'],
+    address:              ENV['MAILGUN_SMTP_SERVER'],
     domain:               ENV['MAILER_DOMAIN'],
-    user_name:            ENV['MAILER_USERNAME'] || ENV['MANDRILL_USERNAME'],
-    password:             ENV['MAILER_PASSWORD'] || ENV['MANDRILL_APIKEY'],
-    port:                 587,
-    authentication:       'plain',
+    user_name:            ENV['MAILGUN_SMTP_LOGIN'],
+    password:             ENV['MAILGUN_SMTP_PASSWORD'],
+    port:                 ENV['MAILGUN_SMTP_PORT'],
+    authentication:       :plain,
     enable_starttls_auto: true }
+#config.action_mailer.delivery_method = :mailgun
+#config.action_mailer.mailgun_settings = {domain: 'mg.pw10n.pw'}
+
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).

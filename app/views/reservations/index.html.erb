@@ -7,6 +7,9 @@
         <th>Traveling to</th>
         <th class='Table-no-mobile'>Passengers</th>
         <th>Checkins</th>
+        <% if current_user.admin? && show_all? %>
+          <th>Account</th>
+        <% end %>
       </tr>
     </thead>
 
