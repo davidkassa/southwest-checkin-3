@@ -185,7 +185,7 @@ Make the script run on boot
 sed -i -e 's|"exit 0"|removed|g' /etc/rc.local
 sed -i -e 's|exit 0|/root/start.sh\nexit 0|g' /etc/rc.local
 ```
-Disable apache
+Disable apache (my version of debian had apache running on port 80 at boot)
 ```
 update-rc.d apache2 disable
 ```
