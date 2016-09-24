@@ -92,7 +92,7 @@ Install curl and wget
 apt-get install -y curl wget
 ```
 
-Install Postgres repo
+Install Postgres repo to apt
 
 ```
 echo 'deb http://apt.postgresql.org/pub/repos/apt/ wheezy-pgdg main' >> /etc/apt/sources.list.d/pgdg.list
@@ -100,7 +100,7 @@ wget https://www.postgresql.org/media/keys/ACCC4CF8.asc
 apt-key add ACCC4CF8.asc
 ```
 
-Install nodejs repo
+Install nodejs repo to apt
 ```
 curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 ```
