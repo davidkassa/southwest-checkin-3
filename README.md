@@ -134,6 +134,10 @@ sudo -u postgres psql -c 'ALTER USER root CREATEDB'
 # this fixes db encoding
 sed -i -e 's/*default/*default\n  template: template0/g' config/database.yml
 ```
+Populate the db
+```
+rake db:create db:migrate db:seed
+```
 Create a config file replace your website, email, and email server. It must accept mail on port 587 with tls.
 ```
 echo 'SITE_NAME=Southwest Checkin
@@ -155,11 +159,6 @@ DEPLOY_REPOSITORY=
 DEPLOY_USE_RBENV=true
 MAILER_DEFAULT_PROTOCOL=http
 MAILER_DEFAULT_HOST=mywebsite.com' > .env
-```
-
-Populate the db
-```
-rake db:create db:migrate db:seed
 ```
 Create a script to launch everything on boot
 ```
