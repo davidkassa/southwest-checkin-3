@@ -103,7 +103,6 @@ apt-key add ACCC4CF8.asc
 Install nodejs repo
 ```
 curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
-
 ```
 Install programs from apt
 ```
