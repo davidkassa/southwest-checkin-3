@@ -170,7 +170,7 @@ sleep 2
 echo Starting rails
 tmux new -s rails  -d
 tmux send-keys  -t rails "cd /root/southwest-checkin/app" C-m
-tmux send-keys  -t rails "rails s -b 0.0.0.0 -p 80 -e development" C-m
+tmux send-keys  -t rails "rails s -b 0.0.0.0 -p 80 -e production" C-m
 tmux new -s sidekiq -d
 sleep 2
 echo Starting sidekiq
