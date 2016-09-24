@@ -131,7 +131,7 @@ sudo -u postgres psql -c 'ALTER USER root CREATEDB'
 # this fixes db encoding
 sed -i -e 's/*default/*default\n  template: template0/g' config/database.yml
 ```
-Create a config file
+Create a config file replace your website, email, and email server. It must accept mail on port 587 with tls.
 ```
 echo 'SITE_NAME=Southwest Checkin
 SITE_URL=http://mywebsite.com
@@ -195,6 +195,17 @@ Disable ipv6 (causes issues with the mailer)
 echo 'net.ipv6.conf.all.disable_ipv6 = 1
 net.ipv6.conf.default.disable_ipv6 = 1
 net.ipv6.conf.lo.disable_ipv6 = 1' >> /etc/sysctl.conf
+```
+Reboot
+```
+reboot
+```
+Connect to your rails tmux (tmux attach -t rails)
+Scroll up ctrl+[ up arrow and look for the random secret key generated
+Copy and paste it ctrl+b d to disconnect and
+Add this to the end of .env
+```
+echo 'DEVISE_SECRET_KEY=MYRANDOMSTRING'>> /root/southwest-checkin/.env
 ```
 Reboot
 ```
