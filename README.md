@@ -160,7 +160,7 @@ DEPLOY_USE_RBENV=true
 MAILER_DEFAULT_PROTOCOL=http
 MAILER_DEFAULT_HOST=mywebsite.com' > .env
 ```
-Create a script to launch everything on boot
+Create a script to launch everything
 ```
 echo '#!/bin/sh
 service postgresql restart
