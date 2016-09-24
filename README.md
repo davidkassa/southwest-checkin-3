@@ -157,6 +157,11 @@ Set a basic site password
 ```
 sed -i -e 's/protected/protected\n  http_basic_authenticate_with name: "user", password: "password"' app/controllers/application_controller.rb
 ```
+Delete last two lines in config/database.yml that define and pass for production
+```
+nano config/database.yml
+rake db:create db:migrate db:seed
+```
 Populate the db
 ```
 rake db:create db:migrate db:seed
@@ -200,12 +205,15 @@ Reboot
 ```
 reboot
 ```
-Connect to your rails tmux (tmux attach -t rails)
-Scroll up ctrl+[ up arrow and look for the random secret key generated
-Copy and paste it ctrl+b d to disconnect and
-Add this to the end of .env
+Generate two secret keys
+```
+rake secret
+rake secret
+```
+Add these to your config
 ```
 echo 'DEVISE_SECRET_KEY=MYRANDOMSTRING'>> /root/southwest-checkin/.env
+echo 'SECRET_KEY_BASE=MYOTHERRANDOMSTRING'>> /root/southwest-checkin/.env
 ```
 Reboot
 ```
