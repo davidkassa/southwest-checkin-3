@@ -189,7 +189,7 @@ Disable apache (if apache is installed)
 ```
 update-rc.d apache2 disable
 ```
-Disable ipv6 (causes issues with the mailer)
+Disable ipv6 (otherwise you will find issues with the mailer)
 ```
 echo 'net.ipv6.conf.all.disable_ipv6 = 1
 net.ipv6.conf.default.disable_ipv6 = 1
