@@ -92,7 +92,7 @@ Install curl and wget
 apt-get install -y curl wget
 ```
 
-Install Postgres apt
+Install Postgres repo
 
 ```
 echo 'deb http://apt.postgresql.org/pub/repos/apt/ wheezy-pgdg main' >> /etc/apt/sources.list.d/pgdg.list
@@ -100,9 +100,13 @@ wget https://www.postgresql.org/media/keys/ACCC4CF8.asc
 apt-key add ACCC4CF8.asc
 ```
 
-Install nodejs apt
+Install nodejs repo
 ```
 curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+
+```
+Install programs from apt
+```
 apt-get update
 apt-get install -y git nano unzip postgresql postgresql-contrib postgresql-server-dev-9.5 redis-server nodejs tmux
 ```
