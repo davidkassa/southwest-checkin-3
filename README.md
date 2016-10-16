@@ -174,7 +174,7 @@ tmux new -s sidekiq -d
 sleep 2
 echo Starting sidekiq
 tmux send-keys  -t sidekiq "cd /root/southwest-checkin" C-m
-tmux send-keys  -t sidekiq "bundle exec sidekiq &"" C-m' > /root/start.sh
+tmux send-keys  -t sidekiq "bundle exec sidekiq &" C-m' > /root/start.sh
 ```
 Make it executable
 ```
