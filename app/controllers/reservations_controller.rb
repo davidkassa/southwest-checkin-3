@@ -48,10 +48,12 @@ class ReservationsController < ApplicationController
 
   def reservations
     if current_user.admin? && show_all?
-      Reservation.includes(:flights).page(params[:page])
+      query = Reservation
     else
-      @user.reservations.includes(:flights).page(params[:page])
+      query = @user.reservations
     end
+
+    query.includes(:flights).order("flights.departure_time DESC").page(params[:page])
   end
 
   def show_all?
