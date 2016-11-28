@@ -28,19 +28,19 @@
               },
               "secureFlightMiddleName": {
                 "id": "secureFlightMiddleName",
-                "type": "string"
+                "type": ["string", "null"]
               },
               "secureFlightSuffix": {
                 "id": "secureFlightSuffix",
-                "type": "string"
+                "type": ["string", "null"]
               },
               "loyaltyAccountNumber": {
                 "id": "loyaltyAccountNumber",
-                "type": "string"
+                "type": ["string", "null"]
               },
               "tier": {
                 "id": "tier",
-                "type": "string"
+                "type": ["string", "null"]
               },
               "birthDate": {
                 "id": "birthDate",
@@ -118,11 +118,11 @@
                 },
                 "gate": {
                   "id": "gate",
-                  "type": "null"
+                  "type": ["string", "null"]
                 },
                 "flightNumber": {
                   "id": "flightNumber",
-                  "type": "string"
+                  "type": ["string", "null"]
                 },
                 "hasPreCheck": {
                   "id": "hasPreCheck",
@@ -152,7 +152,7 @@
                 },
                 "drinkCouponBarCode": {
                   "id": "drinkCouponBarCode",
-                  "type": "null"
+                  "type": ["string", "null"]
                 },
                 "issued": {
                   "id": "issued",

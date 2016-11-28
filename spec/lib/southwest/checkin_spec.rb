@@ -10,14 +10,58 @@ RSpec.describe Southwest::Checkin do
 
   subject(:checkin) {
     Southwest::Checkin.new(
-      last_name: last_name,
-      first_name: first_name,
-      record_locator: record_locator)
+      names: [{
+        last_name: last_name,
+        first_name: first_name,
+      }],
+      record_locator: record_locator
+    )
   }
 
   describe '.checkin' do
-    it 'matches the JSON schema for boarding passes' do
+    it 'standard flight' do
       VCR.use_cassette cassette do
+        expect(subject.checkin.body).to match_json_schema(:record_locator_boarding_passes)
+      end
+    end
+
+    describe 'multi-passenger domestic' do
+      let(:cassette) { '2016-11-28 multi-passenger checkin mci' }
+
+      subject(:checkin) {
+        Southwest::Checkin.new(
+          names: [{
+            last_name: 'Bar',
+            first_name: 'Fuu',
+          }, {
+            last_name: 'Bar',
+            first_name: 'Qix',
+          }],
+          record_locator: 'ABC123'
+        )
+      }
+
+      it 'matches the json schema' do
+        VCR.use_cassette cassette do
+          expect(subject.checkin.body).to match_json_schema(:record_locator_boarding_passes)
+        end
+      end
+
+      it 'contains both passengers on the reservation' do
+        VCR.use_cassette cassette do
+          expect(subject.checkin.body['passengerCheckInDocuments'].count).to eq(2)
+        end
+      end
+    end
+
+    it 'international multi passenger' do
+      VCR.use_cassette 'international multi passenger 2016-07-09' do
+        expect(subject.checkin.body).to match_json_schema(:record_locator_boarding_passes)
+      end
+    end
+
+    it 'international single passenger' do
+      VCR.use_cassette 'international single passenger 2016-07-09' do
         expect(subject.checkin.body).to match_json_schema(:record_locator_boarding_passes)
       end
     end

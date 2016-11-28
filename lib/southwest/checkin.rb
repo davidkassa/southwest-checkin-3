@@ -1,29 +1,39 @@
 module Southwest
   class Checkin < Request
-    def self.checkin(last_name:, first_name:, record_locator:)
-      new(last_name: last_name,
-          first_name: first_name,
-          record_locator: record_locator).checkin(email_boarding_pass: email_boarding_pass)
+    def self.checkin(names:, record_locator:)
+      new(names: names, record_locator: record_locator)
+      .checkin(email_boarding_pass: email_boarding_pass)
+    end
+
+    attr_reader :names
+    attr_reader :record_locator
+
+    def initialize(names:, record_locator:)
+      unless names && record_locator
+        raise Southwest::RequestArgumentError, "names, record_locator are required"
+      end
+
+      @names = names
+      @record_locator = record_locator
     end
 
     def checkin(email_boarding_pass: true)
-      body = JSON.dump({
-        names: [{ 'firstName' => first_name, 'lastName' => last_name }]
-      })
+      body = JSON.dump({ names: names_json })
 
       Response.new(make_request(checkin_url, body, checkin_content_type))
     end
 
     def email_boarding_passes(email)
-      body = JSON.dump({
-        names: [{ 'firstName' => first_name, 'lastName' => last_name }],
-        'emailAddress' => email
-      })
+      body = JSON.dump({ names: names_json, 'emailAddress' => email })
 
       Response.new(make_request(email_boarding_passes_url, body, email_content_type))
     end
 
     private
+
+    def names_json
+      @names_json ||= names.map {|n| { firstName: n[:first_name], lastName: n[:last_name] }}
+    end
 
     def checkin_url
       "/reservations/record-locator/#{record_locator}/boarding-passes"

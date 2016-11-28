@@ -2,20 +2,6 @@ require_relative './errors'
 
 module Southwest
   class Request
-    attr_reader :last_name
-    attr_reader :first_name
-    attr_reader :record_locator
-
-    def initialize(last_name:, first_name:, record_locator:)
-      unless last_name && first_name && record_locator
-        raise Southwest::RequestArgumentError, "last_name, first_name, record_locator are required"
-      end
-
-      @last_name = last_name
-      @first_name = first_name
-      @record_locator = record_locator
-    end
-
     protected
 
     def make_request(path, params, content_type)

@@ -39,6 +39,15 @@ $Reservation-bg-color: darken($logo-blue, 10%);
   }
 }
 
+.Reservation-notice {
+  background-color: $yellow;
+  max-width: 300px;
+  margin: 0 auto 20px auto;
+  padding: 20px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+
 .ReservationCard-label,
 .ReservationCard-flight-group-title {
   color: $wild-rice;
