@@ -3,7 +3,9 @@ class CheckinJob < ActiveJob::Base
   queue_as :checkin
 
   def perform(flight)
-    sleep(flight.departure_time - 1.day - Time.now)
+    if flight.departure_time - 1.day > Time.now
+      sleep(flight.departure_time - 1.day - Time.now)
+    end
 
     checkin = Southwest::Checkin.new(
       names: flight.reservation.passengers.map {|p|
