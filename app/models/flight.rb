@@ -37,7 +37,7 @@ class Flight < ActiveRecord::Base
   end
 
   def schedule_checkin
-    schedule_at = departure_time - 1.day + 1.second
+    schedule_at = departure_time - 1.day
     job = CheckinJob.set(wait_until: schedule_at).perform_later(self)
     checkin = Checkin.find_or_initialize_by(flight: self)
     checkin.update({
