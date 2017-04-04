@@ -138,15 +138,15 @@ RSpec.describe Reservation, type: :model do
         end
       end
 
-      it 'enqueues the checkin 23hr59m59s before departure' do
+      it 'enqueues the checkin 24hrs before departure' do
         VCR.use_cassette(cassette) do
           Timecop.freeze(Time.zone.parse('1 Jan 2015')) do
             subject
             jobs = ActiveJob::Base.queue_adapter.enqueued_jobs.sort_by {|j| j[:at] }
             enqueued_at = Time.zone.at(jobs.first[:at])
             enqueued_at_2 = Time.zone.at(jobs.last[:at])
-            expect(enqueued_at).to eq(Time.zone.parse("Wed, 23 Mar 2016 22:05:01 UTC +00:00"))
-            expect(enqueued_at_2).to eq(Time.zone.parse("Sun, 27 Mar 2016 12:35:01 UTC +00:00"))
+            expect(enqueued_at).to eq(Time.zone.parse("Wed, 23 Mar 2016 22:05:00 UTC +00:00"))
+            expect(enqueued_at_2).to eq(Time.zone.parse("Sun, 27 Mar 2016 12:35:00 UTC +00:00"))
           end
         end
       end
