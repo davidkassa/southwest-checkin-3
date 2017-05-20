@@ -58,6 +58,34 @@ RSpec.describe Reservation, type: :model do
           end
         end
       end
+
+      # Confirmation numbers may be re-used
+      context 'reservation already exists' do
+        # Flight checkins are not scheduled unless they are in the future
+        let(:before_all_departure_times) { Time.zone.parse('1 Jan 2015') }
+        let(:cassette) { 'record locator view multi LAX 2016-03-18' }
+
+        around :each do |example|
+          VCR.use_cassette(cassette, allow_playback_repeats: true) do
+            Timecop.freeze(before_all_departure_times) do
+              example.run
+            end
+          end
+        end
+
+        let!(:existing_reservation) { Reservation.create!(valid_attributes) }
+        subject(:duplicate_reservation) { Reservation.create(valid_attributes) }
+
+        it 'does not support an already scheduled reservation' do
+          expect(subject.errors[:confirmation_number]).to include('is already scheduled')
+        end
+
+        context 'when existing reservation has already been processed' do
+          before { existing_reservation.checkins.update_all(completed_at: Time.now) }
+
+          it { is_expected.to be_valid }
+        end
+      end
     end
 
     context 'international flight' do
