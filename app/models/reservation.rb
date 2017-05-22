@@ -20,6 +20,8 @@ class Reservation < ActiveRecord::Base
             :payload,
             presence: true
 
+  validate :validate_unique_active_confirmation, on: :create
+
   scope :ordered_by_departure_time, -> { includes(:flights).order("flights.departure_time") }
 
   def departure_flights
@@ -95,5 +97,12 @@ class Reservation < ActiveRecord::Base
 
   def send_new_reservation_email
     ReservationMailer.new_reservation(self).deliver_later
+  end
+
+  def validate_unique_active_confirmation
+    any = Checkin.joins(:reservation).not_completed.where('reservations.confirmation_number' => confirmation_number).exists?
+    if any
+      errors.add(:confirmation_number, 'is already scheduled')
+    end
   end
 end
