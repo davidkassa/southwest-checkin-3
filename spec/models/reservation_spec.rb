@@ -58,6 +58,34 @@ RSpec.describe Reservation, type: :model do
           end
         end
       end
+
+      # Confirmation numbers may be re-used
+      context 'reservation already exists' do
+        # Flight checkins are not scheduled unless they are in the future
+        let(:before_all_departure_times) { Time.zone.parse('1 Jan 2015') }
+        let(:cassette) { 'record locator view multi LAX 2016-03-18' }
+
+        around :each do |example|
+          VCR.use_cassette(cassette, allow_playback_repeats: true) do
+            Timecop.freeze(before_all_departure_times) do
+              example.run
+            end
+          end
+        end
+
+        let!(:existing_reservation) { Reservation.create!(valid_attributes) }
+        subject(:duplicate_reservation) { Reservation.create(valid_attributes) }
+
+        it 'does not support an already scheduled reservation' do
+          expect(subject.errors[:confirmation_number]).to include('is already scheduled')
+        end
+
+        context 'when existing reservation has already been processed' do
+          before { existing_reservation.checkins.update_all(completed_at: Time.now) }
+
+          it { is_expected.to be_valid }
+        end
+      end
     end
 
     context 'international flight' do
@@ -138,15 +166,15 @@ RSpec.describe Reservation, type: :model do
         end
       end
 
-      it 'enqueues the checkin 23hr59m59s before departure' do
+      it 'enqueues the checkin 24hrs before departure' do
         VCR.use_cassette(cassette) do
           Timecop.freeze(Time.zone.parse('1 Jan 2015')) do
             subject
             jobs = ActiveJob::Base.queue_adapter.enqueued_jobs.sort_by {|j| j[:at] }
             enqueued_at = Time.zone.at(jobs.first[:at])
             enqueued_at_2 = Time.zone.at(jobs.last[:at])
-            expect(enqueued_at).to eq(Time.zone.parse("Wed, 23 Mar 2016 22:05:01 UTC +00:00"))
-            expect(enqueued_at_2).to eq(Time.zone.parse("Sun, 27 Mar 2016 12:35:01 UTC +00:00"))
+            expect(enqueued_at).to eq(Time.zone.parse("Wed, 23 Mar 2016 22:05:00 UTC +00:00"))
+            expect(enqueued_at_2).to eq(Time.zone.parse("Sun, 27 Mar 2016 12:35:00 UTC +00:00"))
           end
         end
       end
