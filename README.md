@@ -129,12 +129,12 @@ sleep 2
 echo Starting rails
 tmux new -s rails  -d
 tmux send-keys  -t rails "cd /root/southwest-checkin/app" C-m
-tmux send-keys  -t rails "rails s -b 0.0.0.0 -p 80 -e development" C-m
+tmux send-keys  -t rails "/root/.rbenv/shims/rails s -b 0.0.0.0 -p 80 -e development" C-m
 tmux new -s sidekiq -d
 sleep 2
 echo Starting sidekiq
 tmux send-keys  -t sidekiq "cd /root/southwest-checkin" C-m
-tmux send-keys  -t sidekiq "bundle exec sidekiq &" C-m' > /root/start.sh
+tmux send-keys  -t sidekiq "/root/.rbenv/shims/bundle exec sidekiq &" C-m' > /root/start.sh
 ```
 Make it executable
 ```
