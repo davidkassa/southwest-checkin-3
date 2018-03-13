@@ -2,8 +2,6 @@
 
 [![Build Status](https://travis-ci.org/aortbals/southwest-checkin.svg?branch=master)](https://travis-ci.org/aortbals/southwest-checkin) [![Coverage Status](https://coveralls.io/repos/aortbals/southwest-checkin/badge.svg?branch=master&service=github)](https://coveralls.io/github/aortbals/southwest-checkin?branch=master)
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
-
 Automatically checks in passengers for their Southwest Flight.
 
 Version 2.0 of this project is a complete rewrite of the service. The brittle HTML parsing and form submissions are a thing of the past. A much better approach is being taken to automate checkins. And, importantly, the new version has a robust test suite. It is even written in a new language (Ruby) and framework (Rails).
@@ -26,66 +24,6 @@ If you are interested in the old version, see the [1.0 branch](https://github.co
 - Full test suite
 
 
-## Local Installation
-
-1. While not strictly required, it is recommended to install [`rbenv`](https://github.com/sstephenson/rbenv) and [`ruby-build`](https://github.com/sstephenson/ruby-build) to manage ruby versions in development. Ruby 2.2 or greater is required.
-
-2. Required dependencies
-
-    - Ruby 2.2 or greater
-    - Postgres
-    - Redis
-
-3. After installing the aforementioned dependencies, install the ruby dependencies:
-
-    ```shell
-    bundle install
-    ```
-
-4. Create and seed the database:
-
-    ```shell
-    rake db:create db:migrate db:seed
-    ```
-
-5. Adding some basic test data for development:
-
-    ```shell
-    rake dev:prime
-    ```
-
-6. Copy `.env.example` to `.env`. The defaults should work in development.
-
-    ```shell
-    cp .env.example .env
-    ```
-7. Run the tests:
-
-    ```shell
-    rspec
-    ```
-
-8. Run the development server:
-
-    ```
-    rails s
-    ```
-
-9. Run sidekiq to process jobs:
-
-    ```
-    bundle exec sidekiq
-    ```
-
-## Contributing
-
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Write rspec tests
-5. Push to the branch (`git push origin my-new-feature`)
-6. Create new Pull Request
-
 ## Debian 7 x64 Installation
 
 Install curl and wget
@@ -102,45 +40,65 @@ wget https://www.postgresql.org/media/keys/ACCC4CF8.asc
 apt-key add ACCC4CF8.asc
 ```
 
-Install nodejs repo to apt
+Install stuff
+
 ```
 curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
-```
-Install programs from apt
-```
 apt-get update
-apt-get install -y git nano unzip postgresql postgresql-contrib postgresql-server-dev-9.5 redis-server nodejs tmux
+apt-get install -y nodejs git git-core nano unzip postgresql postgresql-contrib postgresql-server-dev-9.5 redis-server tmux autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm3 libgdbm-dev
 ```
-Install rvm (run these individually)
+
+rbenv doesn't provide any installer, so we have to get use the source from Github. So, we need to clone it in our home directory.
+Then add to PATH
+
 ```
-gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
-curl -L https://get.rvm.io | bash -s stable --rails
-source /usr/local/rvm/scripts/rvm
-rvm install ruby-2.2.3
-rvm use 2.2.3
+git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
+echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
+echo 'eval "$(rbenv init -)"' >> ~/.bashrc
+git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
+```
+
+** Restart your shell **
+Now we need to install Ruby 2.2.1
+
+```
+apt-get install build-essential libssl-dev libcurl4-openssl-dev libreadline-dev -y
+rbenv install 2.2.1 -k
+rbenv global 2.2.1
+gem install rails --version 4.2.10
 gem install bundler
 ```
+
 Grab the source for checkin
+
 ```
-git clone https://github.com/aortbals/southwest-checkin.git
+git clone https://github.com/flyize/southwest-checkin.git
 cd southwest-checkin
 ```
+
 Install the bundled gems
+
 ```
 bundle install
 ```
-Create a db user and give them create privileges
+
+Create a db user and give them create privileges (ignore any directory errors)
+
 ````
 sudo -u postgres createuser root
 sudo -u postgres psql -c 'ALTER USER root CREATEDB'
 # this fixes db encoding
 sed -i -e 's/*default/*default\n  template: template0/g' config/database.yml
 ```
+
 Populate the db
+
 ```
 rake db:create db:migrate db:seed
 ```
+
 Create a config file replace your website, email, and email server. It must accept mail on port 587 with tls.
+
 ```
 echo 'SITE_NAME=Southwest Checkin
 SITE_URL=http://mywebsite.com
@@ -258,7 +216,9 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 end
 ```
+
 Reboot
+
 ```
 reboot
 ```
