@@ -84,7 +84,7 @@ bundle install
 
 Create a db user and give them create privileges (ignore any directory errors)
 
-````
+```
 sudo -u postgres createuser root
 sudo -u postgres psql -c 'ALTER USER root CREATEDB'
 # this fixes db encoding
