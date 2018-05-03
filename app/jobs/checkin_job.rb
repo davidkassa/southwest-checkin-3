@@ -23,6 +23,7 @@ class CheckinJob < ActiveJob::Base
     end
 
     if checkin_response.code >= 400
+      perform(flight)
       raise Southwest::FailedCheckin, "The checkin for reservation '#{flight.reservation.id}' and flight '#{flight.id}' failed. Checkin record '#{checkin_record.id}' contains the payload.\n\nError:\n\t#{checkin_response.body['message']}\n\n"
     end
 

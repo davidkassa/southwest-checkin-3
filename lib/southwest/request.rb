@@ -20,7 +20,8 @@ module Southwest
     end
 
     def base_uri
-      'https://api-extensions.southwest.com/v1/mobile'
+      # 'https://api-extensions.southwest.com/v1/mobile'
+      'https://mobile.southwest.com/api/extensions/v1/mobile'
     end
 
     def user_agent
@@ -28,7 +29,8 @@ module Southwest
     end
 
     def api_key
-      "l7xx8d8bfce4ee874269bedc02832674129b"
+      # "l7xx8d8bfce4ee874269bedc02832674129b"
+      'l7xx12ebcbc825eb480faa276e7f192d98d1'
     end
   end
 end
