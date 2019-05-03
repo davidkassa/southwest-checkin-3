@@ -92,3 +92,5 @@ group :developement do
   gem 'guard'
   gem 'guard-rspec'
 end
+
+gem "tzinfo-data", "~> 1.2019"

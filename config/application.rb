@@ -29,9 +29,6 @@ module SouthwestCheckin
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    # Do not swallow errors in after_commit/after_rollback callbacks.
-    config.active_record.raise_in_transactional_callbacks = true
-
     config.autoload_paths << Rails.root.join('app', 'parsers')
     require Rails.root.join('lib', 'southwest.rb')
     require Rails.root.join('lib', 'errors.rb')
