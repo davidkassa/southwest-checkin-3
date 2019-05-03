@@ -2,7 +2,7 @@ language: ruby
 rvm:
   - "2.6.3"
 addons:
-  postgresql: "9.4"
+  postgresql: "9.5"
 env:
   - COVERAGE=true SITE_NAME=Southwest Checkin SITE_URL=http://localhost:3000
 script:
