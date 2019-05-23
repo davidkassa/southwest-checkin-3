@@ -1,6 +1,8 @@
-# Southwest Checkin 2.0
+# Southwest Checkin 2.X
 
-[![Build Status](https://travis-ci.org/aortbals/southwest-checkin.svg?branch=master)](https://travis-ci.org/aortbals/southwest-checkin) [![Coverage Status](https://coveralls.io/repos/aortbals/southwest-checkin/badge.svg?branch=master&service=github)](https://coveralls.io/github/aortbals/southwest-checkin?branch=master)
+Deploys to Heroku, Rails 5
+
+---
 
 Automatically checks in passengers for their Southwest Flight.
 
@@ -11,18 +13,17 @@ If you are interested in the old version, see the [1.0 branch](https://github.co
 ## Features
 
 - Accounts
-    - an easy and convient way to manage your reservations
-    - view or remove your reservations at any time
-    - increased security
+  - an easy and convient way to manage your reservations
+  - view or remove your reservations at any time
+  - increased security
 - Email Notifications
-    - Notified when a reservation is added
-    - Notified on successful checkin
+  - Notified when a reservation is added
+  - Notified on successful checkin
 - Checks in all passengers for a given confirmation number
 - Secured via HTTPS
 - Modern UI
 - Modern background processing and job scheduling
 - Full test suite
-
 
 ## Debian 7 x64 Installation
 
@@ -120,7 +121,9 @@ DEPLOY_USE_RBENV=true
 MAILER_DEFAULT_PROTOCOL=http
 MAILER_DEFAULT_HOST=mywebsite.com' > .env
 ```
+
 Create a script to launch everything
+
 ```
 echo '#!/bin/sh
 service postgresql restart
@@ -136,27 +139,37 @@ echo Starting sidekiq
 tmux send-keys  -t sidekiq "cd /root/southwest-checkin" C-m
 tmux send-keys  -t sidekiq "/root/.rbenv/shims/bundle exec sidekiq &" C-m' > /root/start.sh
 ```
+
 Make it executable
+
 ```
 chmod +x /root/start.sh
 ```
+
 Make the script run on boot
+
 ```
 sed -i -e 's|"exit 0"|removed|g' /etc/rc.local
 sed -i -e 's|exit 0|/root/start.sh\nexit 0|g' /etc/rc.local
 ```
+
 Disable apache (if apache is installed)
+
 ```
 update-rc.d apache2 disable
 ```
+
 Disable ipv6 (otherwise you will find issues with the mailer)
+
 ```
 echo 'net.ipv6.conf.all.disable_ipv6 = 1
 net.ipv6.conf.default.disable_ipv6 = 1
 net.ipv6.conf.lo.disable_ipv6 = 1' >> /etc/sysctl.conf
 ```
+
 Enable Email in Dev Mode (update action_mailer settings)
 nano config/environments/development.rb
+
 ```
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.

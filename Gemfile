@@ -7,7 +7,7 @@ gem 'rails', '5.2.3'
 # Use postgresql as the database for Active Record
 gem 'pg'
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 5.0.7'
+gem 'sassc-rails', '~> 2.1.1'
 gem "autoprefixer-rails"
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
@@ -19,11 +19,11 @@ gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks', '~>5.2.0'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.8.0'
+gem 'jbuilder', '~> 2.9.1'
 # bundle exec rake doc:rails generates the API under doc/api.
-gem 'sdoc', '~> 0.4.0', group: :doc
+gem 'sdoc', '~> 1.0.0', group: :doc
 
-gem 'typhoeus', '~> 0.7' # HTTP request client
+gem 'typhoeus', '~> 1.3.1' # HTTP request client
 
 gem 'devise', '~> 4.6.2' # Authentication
 
@@ -35,6 +35,8 @@ gem 'roadie-rails', '~> 2.1' # Inline styles for emails
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
+# gem "bcrypt-ruby", :require => "bcrypt"
+# gem 'bcrypt', platforms: :ruby
 
 # Use Puma as the app server
 gem 'puma'
@@ -63,17 +65,16 @@ gem 'kaminari'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.0'
+  gem 'rails-controller-testing'
   gem 'awesome_print'
-  gem 'vcr', '~> 2.9'
+  gem 'vcr', '~> 4.0'
 
   gem 'letter_opener'
 
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
   gem 'pry'
-
-  # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console', '~> 3.7'
+  
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
@@ -91,6 +92,9 @@ end
 group :developement do
   gem 'guard'
   gem 'guard-rspec'
+
+  # Access an IRB console on exception pages or by using <%= console %> in views
+  gem 'web-console', '~> 3.7'
 end
 
 gem "tzinfo-data", "~> 1.2019"
