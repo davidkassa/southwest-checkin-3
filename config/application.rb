@@ -35,5 +35,8 @@ module SouthwestCheckin
     require Rails.root.join('lib', 'southwest', 'errors.rb')
 
     config.active_job.queue_adapter = :sidekiq
+
+    config.i18n.fallbacks = [I18n.default_locale]
+
   end
 end
