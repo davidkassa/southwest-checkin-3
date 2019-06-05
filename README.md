@@ -1,15 +1,16 @@
-# Southwest Checkin 2.X
+# Southwest Checkin 3.X
 
-[![Build Status](https://travis-ci.org/davidkassa/southwest-checkin.svg?branch=master)](https://travis-ci.org/davidkassa/southwest-checkin)
-[![Coverage Status](https://coveralls.io/repos/github/davidkassa/southwest-checkin/badge.svg?branch=master)](https://coveralls.io/github/davidkassa/southwest-checkin?branch=master)
+[![Build Status](https://travis-ci.org/davidkassa/southwest-checkin-3.svg?branch=master)](https://travis-ci.org/davidkassa/southwest-checkin-3)
+[![Coverage Status](https://coveralls.io/repos/github/davidkassa/southwest-checkin-3/badge.svg?branch=master)](https://coveralls.io/github/davidkassa/southwest-checkin-3?branch=master)
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
 Automatically checks in passengers for their Southwest Flight.
 
-Version 2.0 of this project is a complete rewrite of the service. The brittle HTML parsing and form submissions are a thing of the past. A much better approach is being taken to automate checkins. And, importantly, the new version has a robust test suite. It is even written in a new language (Ruby) and framework (Rails).
+Version 3 is a upgrade of v2 to maintain support with the latest ruby and rails for Heroku hosting. I've cloned for some tools such as GitGuardian and so there are no issues if upstream repos archive or delete.
 
-If you are interested in the old version, see the [1.0 branch](https://github.com/aortbals/southwest-checkin/tree/1.0).
+If you are interested in the old version, see the [2.0 branch](https://github.com/davidkassa/southwest-checkin/).
+If you are interested in the old version, see the [1.0 branch](https://github.com/davidkassa/southwest-checkin/tree/1.0).
 
 ## Features
 
@@ -34,8 +35,8 @@ Updated for Ruby 2.6.3, Rails 5.2.3 by a non-Rails person
 Grab the source for checkin
 
 ```
-git clone https://github.com/davidkassa/southwest-checkin.git
-cd southwest-checkin
+git clone https://github.com/davidkassa/southwest-checkin-3.git
+cd southwest-checkin-3
 ```
 
 Install the bundled gems
