@@ -2,8 +2,8 @@
   "name": "Southwest Checkin",
   "description": "This app automatically checks you into a southwest airlines flight.",
   "keywords": ["southwest airlines", "checkin", "rails"],
-  "website": "https://github.com/davidkassa/southwest-checkin",
-  "repository": "https://github.com/davidkassa/southwest-checkin",
+  "website": "https://github.com/davidkassa/southwest-checkin-3",
+  "repository": "https://github.com/davidkassa/southwest-checkin-3",
   "success_url": "/",
   "scripts": {
     "postdeploy": "bundle exec rake db:migrate db:seed"
