@@ -1,4 +1,4 @@
-class RemoveTripNameAndArrivalCityNameFromReservations < ActiveRecord::Migration
+class RemoveTripNameAndArrivalCityNameFromReservations < ActiveRecord::Migration[4.2]
   def up
     remove_columns :reservations, :trip_name, :arrival_city_name
   end

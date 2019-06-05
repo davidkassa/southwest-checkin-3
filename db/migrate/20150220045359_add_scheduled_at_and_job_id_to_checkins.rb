@@ -1,4 +1,4 @@
-class AddScheduledAtAndJobIdToCheckins < ActiveRecord::Migration
+class AddScheduledAtAndJobIdToCheckins < ActiveRecord::Migration[4.2]
   class Checkin < ActiveRecord::Base
   end
 

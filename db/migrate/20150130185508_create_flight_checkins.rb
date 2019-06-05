@@ -1,4 +1,4 @@
-class CreateFlightCheckins < ActiveRecord::Migration
+class CreateFlightCheckins < ActiveRecord::Migration[4.2]
   def change
     create_table :flight_checkins do |t|
       t.string :flight_number, null: false

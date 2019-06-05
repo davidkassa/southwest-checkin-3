@@ -1,4 +1,4 @@
-class CreateCheckins < ActiveRecord::Migration
+class CreateCheckins < ActiveRecord::Migration[4.2]
   def change
     create_table :checkins do |t|
       t.belongs_to :reservation, index: true, null: false

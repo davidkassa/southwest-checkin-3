@@ -1,4 +1,4 @@
-class ChangeReservationIdToFlightIdForCheckins < ActiveRecord::Migration
+class ChangeReservationIdToFlightIdForCheckins < ActiveRecord::Migration[4.2]
   class Reservation < ActiveRecord::Base
     has_many :flights, inverse_of: :reservation, autosave: true
     has_one :checkin

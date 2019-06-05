@@ -1,4 +1,4 @@
-class CreateAirports < ActiveRecord::Migration
+class CreateAirports < ActiveRecord::Migration[4.2]
   def change
     create_table :airports do |t|
       t.string :name
