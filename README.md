@@ -1,6 +1,6 @@
 # Southwest Checkin 3.X
 
-[![Build Status](https://travis-ci.org/davidkassa/southwest-checkin-3.svg?branch=master)](https://travis-ci.org/davidkassa/southwest-checkin-3)
+[![Build Status](https://travis-ci.com/davidkassa/southwest-checkin-3.svg?branch=master)](https://travis-ci.com/davidkassa/southwest-checkin-3)
 [![Coverage Status](https://coveralls.io/repos/github/davidkassa/southwest-checkin-3/badge.svg?branch=master)](https://coveralls.io/github/davidkassa/southwest-checkin-3?branch=master)
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
