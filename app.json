@@ -33,5 +33,5 @@
       "required": false
     }
   },
-  "addons": ["rediscloud:30", "heroku-postgresql", "mailgun:starter"]
+  "addons": ["rediscloud:30", "heroku-postgresql", "mailgun:starter", "fixie:tricycle"]
 }
