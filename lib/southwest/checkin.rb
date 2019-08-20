@@ -45,6 +45,7 @@ module Southwest
 
     def make_request(path, body, content_type)
       Typhoeus::Request.post("#{base_uri}#{path}", {
+        proxy: ENV["FIXIE_URL"],
         body: body, headers: headers(content_type)
       })
     end
