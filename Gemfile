@@ -27,7 +27,7 @@ gem 'typhoeus', '~> 1.3.1' # HTTP request client
 
 gem 'devise', '~> 4.7.0' # Authentication
 
-gem 'sidekiq', '~> 5.2.7' # Background job processing queue
+gem 'sidekiq', '~> 6.0.0' # Background job processing queue
 gem 'sinatra', :require => nil # Required for sidekiq web UI
 gem 'sidekiq-failures' # Track sidekiq failures
 
