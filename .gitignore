@@ -20,3 +20,5 @@
 !.env.example
 
 coverage/
+
+public/
