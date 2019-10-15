@@ -164,7 +164,7 @@ GEM
     minitest (5.11.3)
     mustermann (1.0.3)
     nenv (0.3.0)
-    newrelic_rpm (6.5.0.357)
+    newrelic_rpm (6.7.0.359)
     nio4r (2.5.2)
     nokogiri (1.10.4)
       mini_portile2 (~> 2.4.0)
