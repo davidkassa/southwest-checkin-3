@@ -77,7 +77,7 @@ GEM
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     crass (1.0.6)
-    css_parser (1.7.0)
+    css_parser (1.7.1)
       addressable
     devise (4.7.1)
       bcrypt (~> 3.0)
@@ -239,12 +239,12 @@ GEM
     responders (3.0.0)
       actionpack (>= 5.0)
       railties (>= 5.0)
-    roadie (3.5.1)
+    roadie (4.0.0)
       css_parser (~> 1.4)
       nokogiri (~> 1.8)
-    roadie-rails (2.1.0)
+    roadie-rails (2.1.1)
       railties (>= 5.1, < 6.1)
-      roadie (~> 3.1)
+      roadie (>= 3.1, < 5.0)
     rspec (3.9.0)
       rspec-core (~> 3.9.0)
       rspec-expectations (~> 3.9.0)
@@ -347,7 +347,7 @@ GEM
     websocket-driver (0.7.1)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.4)
-    zeitwerk (2.2.2)
+    zeitwerk (2.3.0)
 
 PLATFORMS
   ruby
