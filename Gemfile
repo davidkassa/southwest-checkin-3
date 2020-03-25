@@ -64,7 +64,7 @@ gem 'kaminari'
 # gem 'lograge', '~> 0.3.1'
 
 group :development, :test do
-  gem 'rspec-rails', '~> 3.9'
+  gem 'rspec-rails', '~> 4.0'
   gem 'rails-controller-testing'
   gem 'awesome_print'
   gem 'vcr', '~> 5.1'
