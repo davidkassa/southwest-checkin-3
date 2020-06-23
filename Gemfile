@@ -97,4 +97,4 @@ group :developement do
   gem 'web-console', '~> 4.0'
 end
 
-gem "tzinfo-data", "~> 1.2019"
+gem "tzinfo-data", "~> 1.2020"
