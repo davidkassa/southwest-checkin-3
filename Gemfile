@@ -94,7 +94,7 @@ group :developement do
   gem 'guard-rspec'
 
   # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console', '~> 4.0'
+  gem 'web-console', '~> 4.1'
 end
 
 gem "tzinfo-data", "~> 1.2020"
