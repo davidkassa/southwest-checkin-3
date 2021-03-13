@@ -67,7 +67,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 4.0'
   gem 'rails-controller-testing'
   gem 'awesome_print'
-  gem 'vcr', '~> 5.1'
+  gem 'vcr', '~> 6.0'
 
   gem 'letter_opener'
 
