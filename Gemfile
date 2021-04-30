@@ -25,7 +25,7 @@ gem 'sdoc', '~> 1.1.0', group: :doc
 
 gem 'typhoeus', '~> 1.4.0' # HTTP request client
 
-gem 'devise', '~> 4.7.1' # Authentication
+gem 'devise', '~> 4.8.0' # Authentication
 
 gem 'sidekiq', '~> 6.1.3' # Background job processing queue
 gem 'sinatra', :require => nil # Required for sidekiq web UI
